@@ -26,9 +26,14 @@ export async function proxy(request: NextRequest) {
   const { isAuthenticated } = await verifySession();
   const isAuthPage = AUTH_ROUTES.includes(pathname);
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
+  const isPublicPrefix = pathname.startsWith("/i/");
 
   // Allow public routes regardless of auth state.
-  if (isPublicRoute && !isAuthenticated) return NextResponse.next();
+  if ((isPublicRoute || isPublicPrefix) && !isAuthenticated) {
+    return NextResponse.next();
+  }
+  // Authenticated visitors can also browse the public preview without redirect.
+  if (isPublicPrefix) return NextResponse.next();
 
   // Logged-in user on auth page → bounce home.
   if (isAuthenticated && isAuthPage) {
