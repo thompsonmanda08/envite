@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Plus } from "lucide-react";
 import {
@@ -17,6 +17,9 @@ const EMPTY = {
   max_free_invitations: 0,
 };
 
+const inputCls =
+  "rounded-lg border border-hairline bg-surface px-4 py-3 text-sm focus:border-foreground/40 focus:outline-none";
+
 export default function EventTypesList({
   initialData,
 }: {
@@ -26,6 +29,26 @@ export default function EventTypesList({
   const create = useCreateEventTypeMutation();
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState(EMPTY);
+  const titleId = useId();
+  const firstFieldRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    firstFieldRef.current?.focus();
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  function setNum<K extends "price_per_invitation" | "max_free_invitations">(
+    k: K,
+    v: string,
+  ) {
+    const n = v === "" ? 0 : Number(v);
+    setDraft((d) => ({ ...d, [k]: Number.isFinite(n) ? n : 0 }));
+  }
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
@@ -98,18 +121,24 @@ export default function EventTypesList({
           <form
             onSubmit={save}
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={titleId}
             className="w-full max-w-lg rounded-3xl border border-hairline bg-background p-8"
           >
-            <h2 className="font-display text-2xl font-medium">New template</h2>
+            <h2 id={titleId} className="font-display text-2xl font-medium">
+              New template
+            </h2>
             <div className="mt-6 flex flex-col gap-4">
               <input
+                ref={firstFieldRef}
                 placeholder="Name"
                 required
                 value={draft.name}
                 onChange={(e) =>
                   setDraft((d) => ({ ...d, name: e.target.value }))
                 }
-                className="rounded-lg border border-hairline bg-surface px-4 py-3 text-sm focus:border-foreground/40 focus:outline-none"
+                className={inputCls}
               />
               <textarea
                 placeholder="Description"
@@ -118,15 +147,16 @@ export default function EventTypesList({
                   setDraft((d) => ({ ...d, description: e.target.value }))
                 }
                 rows={3}
-                className="rounded-lg border border-hairline bg-surface px-4 py-3 text-sm focus:border-foreground/40 focus:outline-none"
+                className={inputCls}
               />
               <input
                 placeholder="Icon URL"
+                type="url"
                 value={draft.icon_url}
                 onChange={(e) =>
                   setDraft((d) => ({ ...d, icon_url: e.target.value }))
                 }
-                className="rounded-lg border border-hairline bg-surface px-4 py-3 text-sm focus:border-foreground/40 focus:outline-none"
+                className={inputCls}
               />
               <div className="grid grid-cols-2 gap-3">
                 <input
@@ -136,12 +166,9 @@ export default function EventTypesList({
                   placeholder="Price/invite"
                   value={draft.price_per_invitation}
                   onChange={(e) =>
-                    setDraft((d) => ({
-                      ...d,
-                      price_per_invitation: Number(e.target.value),
-                    }))
+                    setNum("price_per_invitation", e.target.value)
                   }
-                  className="rounded-lg border border-hairline bg-surface px-4 py-3 text-sm focus:border-foreground/40 focus:outline-none"
+                  className={inputCls}
                 />
                 <input
                   type="number"
@@ -149,12 +176,9 @@ export default function EventTypesList({
                   placeholder="Free invites"
                   value={draft.max_free_invitations}
                   onChange={(e) =>
-                    setDraft((d) => ({
-                      ...d,
-                      max_free_invitations: Number(e.target.value),
-                    }))
+                    setNum("max_free_invitations", e.target.value)
                   }
-                  className="rounded-lg border border-hairline bg-surface px-4 py-3 text-sm focus:border-foreground/40 focus:outline-none"
+                  className={inputCls}
                 />
               </div>
             </div>
