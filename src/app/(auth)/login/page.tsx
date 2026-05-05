@@ -301,8 +301,8 @@ function SignupForm({
   setError: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [formData, setFormData] = useState<SignUpData>({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     phone: "",
     password: "",
@@ -357,10 +357,10 @@ function SignupForm({
             name="name"
             placeholder="Enter your full name"
             type="text"
-            value={formData.firstName}
-            onChange={(e) => updateFormData({ firstName: e.target.value })}
+            value={formData.first_name}
+            onChange={(e) => updateFormData({ first_name: e.target.value })}
           />
-          {formData.firstName && (
+          {formData.first_name && (
             <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
               <Check className="h-5 w-5 text-green-500" />
             </div>
