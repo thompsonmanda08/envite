@@ -36,6 +36,9 @@ export type ErrorState = {
 export type UserRole = "admin" | "host" | "guest" | "planner";
 export type UserType = UserRole;
 
+// `role` is optional because backend `/profile` may omit it on first
+// login until a tenant-scoped role is assigned. Callers gating on role
+// must handle `undefined` (treat as least-privileged).
 export type AuthUser = {
   id: string;
   email: string;
@@ -50,7 +53,6 @@ export type AuthUser = {
   created_at?: string;
   updated_at?: string;
   last_login?: string;
-  [x: string]: any;
 };
 
 export type AuthSession = {
@@ -98,15 +100,16 @@ export type EventRecord = {
   status: EventStatus;
   created_at?: string;
   updated_at?: string;
-  [x: string]: any;
 };
 
 export type RsvpStatus = "pending" | "going" | "maybe" | "declined";
 
+// Guest endpoints are stubbed in the Postman collection. `invitation_id`
+// has been dropped here until the backend documents the guest <-> invitation
+// relationship explicitly.
 export type Guest = {
   id: string;
   event_id: string;
-  invitation_id?: string;
   name: string;
   email?: string;
   phone?: string;
@@ -116,7 +119,6 @@ export type Guest = {
   notes?: string;
   invited_at?: string;
   responded_at?: string;
-  [x: string]: any;
 };
 
 export type EventType = {
@@ -149,6 +151,8 @@ export type EventSession = {
   updated_at?: string;
 };
 
+// `status` is intentionally omitted — Postman invitation responses do not
+// expose a status field. Re-add when backend confirms the contract.
 export type Invitation = {
   id: string;
   event_id: string;
@@ -156,10 +160,8 @@ export type Invitation = {
   custom_image_url?: string;
   sessions: string[]; // session ids
   share_url?: string;
-  status?: "draft" | "published" | "archived";
   created_at?: string;
   updated_at?: string;
-  [x: string]: any;
 };
 
 // ─── Legacy shopify-ish (kept for existing components) ──────────────────────
