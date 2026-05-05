@@ -1,0 +1,12 @@
+// Centralised cache tags — used by `revalidateTag` after mutations and as
+// `next.tags` on read fetches so server-side caches invalidate cleanly.
+export const CACHE_TAGS = {
+  EVENTS: "events",
+  EVENT: (id: string) => `event:${id}`,
+  INVITATIONS: "invitations",
+  INVITATION: (id: string) => `invitation:${id}`,
+  GUESTS: "guests",
+  GUESTS_BY_EVENT: (eventId: string) => `guests:event:${eventId}`,
+  USER: "user",
+  AUTH: "auth",
+} as const;

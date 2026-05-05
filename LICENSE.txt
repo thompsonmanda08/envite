@@ -1,0 +1,6 @@
+# LICENSE AND USE POLICY FOR PAYBOSS
+
+This app is developed and powered by BGS-PayBoss Core backend
+
+Developers:
+@thompsonmanda08

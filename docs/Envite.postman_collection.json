@@ -1,0 +1,1148 @@
+{
+	"info": {
+		"_postman_id": "fa8d3fcb-68df-41d8-82da-5417c72cce14",
+		"name": "Envite",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12584233"
+	},
+	"item": [
+		{
+			"name": "user management",
+			"item": [
+				{
+					"name": "registration",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"lawrencekasalwe@gmail.com\",\n\t\"password\":\"12345678Law.\",\n\t\"first_name\":\"Lawrence\",\n\t\"last_name\" :\"Kasalwe\",\n\t\"phone\":\"0973010942\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/v1/user/registration",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"registration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "authentication",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"lawrencekasalwe@gmail.com\",\n\t\"password\":\"12345678Law.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/v1/user/authentication",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"authentication"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resent password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"lawrencekasalwe@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/v1/user/password/reset",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"password",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "view profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiIwZmNhZjA5YS1kNjhiLTQ0YzMtODFjNi1hNjNlNzZmZDUyMTIiLCJleHBpcmVzQXQiOjE3NjA2MTMwNDR9.LQcIjr8pVmbtRKbHZwCLS82c8fpBZ1wJkJKm3VaeU9A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/v1/user/profile",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQwNDE2MTd9.H3GQlvwCegAmCmNnIFPuhK4Vl86OyzQb-lDKU2Pkt4Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"lawrencekasalwe@gmail.com\",\n\t\"first_name\":\"Law\",\n\t\"last_name\" :\"Kasalwe\",\n\t\"phone\":\"0973010942\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/v1/user/profile",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQwNDE2MTd9.H3GQlvwCegAmCmNnIFPuhK4Vl86OyzQb-lDKU2Pkt4Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"lawrencekasalwe@gmail.com\",\n\t\"password\":\"12345678Law\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/v1/user/password",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "event type",
+			"item": [
+				{
+					"name": "get all event types",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQyMzM2NTV9.q-wYCzJORfBzpoRns-_SBW2BgUpY0egXhrjTA1bGFj8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"lawrencekasalwe@gmail.com\",\n\t\"first_name\":\"Law\",\n\t\"last_name\" :\"Kasalwe\",\n\t\"phone\":\"0973010942\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/v1/event-type/list",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"event-type",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get event type details",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQwNTY5NTl9.D-ehYjRvo2J7WI-VSwLgGYN_STjUC5UrA5kannETswU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"lawrencekasalwe@gmail.com\",\n\t\"first_name\":\"Law\",\n\t\"last_name\" :\"Kasalwe\",\n\t\"phone\":\"0973010942\"\n}"
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/v1/event-type/0760b81c-ec12-48ef-9af5-6c604db9af26/details",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"event-type",
+								"0760b81c-ec12-48ef-9af5-6c604db9af26",
+								"details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create event type",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQwNTY5NTl9.D-ehYjRvo2J7WI-VSwLgGYN_STjUC5UrA5kannETswU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Wedding\",\n    \"description\": \"A wedding is a celebration where two people get married and invite their friends and family to join them for a party\",\n    \"icon_url\": \"http://localhost:8090/icon_url\",\n    \"price_per_invitation\": 10.00,\n    \"max_free_invitations\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/v1/event-type/new",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"event-type",
+								"new"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "events",
+			"item": [
+				{
+					"name": "step 1 - create event",
+					"item": [
+						{
+							"name": "create event",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQyMzM2NTV9.q-wYCzJORfBzpoRns-_SBW2BgUpY0egXhrjTA1bGFj8",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"event_type_id\":\"0760b81c-ec12-48ef-9af5-6c604db9af26\",\n    \"title\":\"Lawrence and Taonga's Union\",\n    \"description\":\"A captivating convergence of two souls, Lawrence and Taonga's union is a beautiful mosaic of love, laughter, and an unbreakable bond, crafting a future as vibrant as their shared dreams.\",\n    \"theme\":\"Sapphire & Sunset\",\n    \"dress_code\":\"For the ladies: A cocktail dress in sapphire blue, a fiery orange, or a warm coral would be perfect. A classic black or navy dress with a colorful clutch or shoes would also work beautifully. For the gentlemen: A suit or a blazer with dress pants is ideal. They can incorporate the theme with a sapphire blue tie, a pocket square with sunset tones, or even a colorful pair of socks.\",\n    \"venue\":\"Granddaddys\",\n    \"venue_address\":\"Salama Park Road, Plot 206, Lusaka\",\n    \"venue_map_pin\":\"https://www.google.com/maps/place/Grandaddy%E2%80%99s+Shoka+Nyama/@-15.3971344,28.3941023,18.62z/data=!4m6!3m5!1s0x19408987793806fb:0xdcc9001726a7ccd5!8m2!3d-15.3962482!4d28.3943023!16s%2Fg%2F11f66g26_1?entry=ttu&g_ep=EgoyMDI1MDczMC4wIKXMDSoASAFQAw%3D%3D\",\n    \"start_date\":\"2025-08-09\",\n    \"end_date\":\"2025-08-09\",\n    \"rsvp_deadline\":\"2025-08-06\",\n    \"max_attendees\":50,\n    \"special_instructions\":\"\",\n    \"dietary_restrictions_note\":\"\",\n    \"parking_info\":\"\",\n    \"contact_person\":\"Lawrence\",\n    \"contact_phone\":\"0973010942\",\n    \"contact_email\":\"lawrencekasalwe@gmail.com\",\n    \"requires_rsvp\":true,\n    \"is_multi_day\":false,\n    \"duration_days\":1,\n    \"banner_url\":\"http://localhost:8090/somebanner\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/v1/events/new",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"events",
+										"new"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update event",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQyNDUyMjZ9.TdUT3wY0w_2N9jnpIDZgChCWIj60h3No4EwY6Q_-A6A",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"event_type_id\":\"0760b81c-ec12-48ef-9af5-6c604db9af26\",\n    \"title\":\"Lawrence and Taonga's Union\",\n    \"description\":\"A captivating convergence of two souls, Lawrence and Taonga's union is a beautiful mosaic of love, laughter, and an unbreakable bond, crafting a future as vibrant as their shared dreams.\",\n    \"theme\":\"Sapphire & Sunset\",\n    \"dress_code\":\"For the ladies: A cocktail dress in sapphire blue, a fiery orange, or a warm coral would be perfect. A classic black or navy dress with a colorful clutch or shoes would also work beautifully. For the gentlemen: A suit or a blazer with dress pants is ideal.\",\n    \"venue\":\"Granddaddys\",\n    \"venue_address\":\"Salama Park Road, Plot 206, Lusaka\",\n    \"venue_map_pin\":\"https://www.google.com/maps/place/Grandaddy%E2%80%99s+Shoka+Nyama/@-15.3971344,28.3941023,18.62z/data=!4m6!3m5!1s0x19408987793806fb:0xdcc9001726a7ccd5!8m2!3d-15.3962482!4d28.3943023!16s%2Fg%2F11f66g26_1?entry=ttu&g_ep=EgoyMDI1MDczMC4wIKXMDSoASAFQAw%3D%3D\",\n    \"start_date\":\"2025-08-09\",\n    \"end_date\":\"2025-08-09\",\n    \"rsvp_deadline\":\"2025-08-06\",\n    \"max_attendees\":50,\n    \"special_instructions\":\"\",\n    \"dietary_restrictions_note\":\"\",\n    \"parking_info\":\"\",\n    \"contact_person\":\"Lawrence\",\n    \"contact_phone\":\"0973010942\",\n    \"contact_email\":\"lawrencekasalwe@gmail.com\",\n    \"requires_rsvp\":true,\n    \"is_multi_day\":false,\n    \"duration_days\":1,\n    \"banner_url\":\"http://localhost:8090/somebanner\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/v1/events/ea08409b-ef7e-4c73-917c-8f5e60ce442e",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"events",
+										"ea08409b-ef7e-4c73-917c-8f5e60ce442e"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete event",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQyNDUyMjZ9.TdUT3wY0w_2N9jnpIDZgChCWIj60h3No4EwY6Q_-A6A",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"event_type_id\":\"0760b81c-ec12-48ef-9af5-6c604db9af26\",\n    \"title\":\"Lawrence and Taonga's Union\",\n    \"description\":\"A captivating convergence of two souls, Lawrence and Taonga's union is a beautiful mosaic of love, laughter, and an unbreakable bond, crafting a future as vibrant as their shared dreams.\",\n    \"theme\":\"Sapphire & Sunset\",\n    \"dress_code\":\"For the ladies: A cocktail dress in sapphire blue, a fiery orange, or a warm coral would be perfect. A classic black or navy dress with a colorful clutch or shoes would also work beautifully. For the gentlemen: A suit or a blazer with dress pants is ideal.\",\n    \"venue\":\"Granddaddys\",\n    \"venue_address\":\"Salama Park Road, Plot 206, Lusaka\",\n    \"venue_map_pin\":\"https://www.google.com/maps/place/Grandaddy%E2%80%99s+Shoka+Nyama/@-15.3971344,28.3941023,18.62z/data=!4m6!3m5!1s0x19408987793806fb:0xdcc9001726a7ccd5!8m2!3d-15.3962482!4d28.3943023!16s%2Fg%2F11f66g26_1?entry=ttu&g_ep=EgoyMDI1MDczMC4wIKXMDSoASAFQAw%3D%3D\",\n    \"start_date\":\"2025-08-09\",\n    \"end_date\":\"2025-08-09\",\n    \"rsvp_deadline\":\"2025-08-06\",\n    \"max_attendees\":50,\n    \"special_instructions\":\"\",\n    \"dietary_restrictions_note\":\"\",\n    \"parking_info\":\"\",\n    \"contact_person\":\"Lawrence\",\n    \"contact_phone\":\"0973010942\",\n    \"contact_email\":\"lawrencekasalwe@gmail.com\",\n    \"requires_rsvp\":true,\n    \"is_multi_day\":false,\n    \"duration_days\":1,\n    \"banner_url\":\"http://localhost:8090/somebanner\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/v1/events/ea08409b-ef7e-4c73-917c-8f5e60ce442e",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"events",
+										"ea08409b-ef7e-4c73-917c-8f5e60ce442e"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cancel event",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQyNDUyMjZ9.TdUT3wY0w_2N9jnpIDZgChCWIj60h3No4EwY6Q_-A6A",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"event_type_id\":\"0760b81c-ec12-48ef-9af5-6c604db9af26\",\n    \"title\":\"Lawrence and Taonga's Union\",\n    \"description\":\"A captivating convergence of two souls, Lawrence and Taonga's union is a beautiful mosaic of love, laughter, and an unbreakable bond, crafting a future as vibrant as their shared dreams.\",\n    \"theme\":\"Sapphire & Sunset\",\n    \"dress_code\":\"For the ladies: A cocktail dress in sapphire blue, a fiery orange, or a warm coral would be perfect. A classic black or navy dress with a colorful clutch or shoes would also work beautifully. For the gentlemen: A suit or a blazer with dress pants is ideal.\",\n    \"venue\":\"Granddaddys\",\n    \"venue_address\":\"Salama Park Road, Plot 206, Lusaka\",\n    \"venue_map_pin\":\"https://www.google.com/maps/place/Grandaddy%E2%80%99s+Shoka+Nyama/@-15.3971344,28.3941023,18.62z/data=!4m6!3m5!1s0x19408987793806fb:0xdcc9001726a7ccd5!8m2!3d-15.3962482!4d28.3943023!16s%2Fg%2F11f66g26_1?entry=ttu&g_ep=EgoyMDI1MDczMC4wIKXMDSoASAFQAw%3D%3D\",\n    \"start_date\":\"2025-08-09\",\n    \"end_date\":\"2025-08-09\",\n    \"rsvp_deadline\":\"2025-08-06\",\n    \"max_attendees\":50,\n    \"special_instructions\":\"\",\n    \"dietary_restrictions_note\":\"\",\n    \"parking_info\":\"\",\n    \"contact_person\":\"Lawrence\",\n    \"contact_phone\":\"0973010942\",\n    \"contact_email\":\"lawrencekasalwe@gmail.com\",\n    \"requires_rsvp\":true,\n    \"is_multi_day\":false,\n    \"duration_days\":1,\n    \"banner_url\":\"http://localhost:8090/somebanner\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/v1/events/1efddd31-19cc-4125-b853-ba7fcd64c3c8",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"events",
+										"1efddd31-19cc-4125-b853-ba7fcd64c3c8"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "step 2 - create event sessions",
+					"item": [
+						{
+							"name": "create event session",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQzMTcwNTF9.SU-BVxpujMS3Us3QwWeIFd5vHszDzl1DU2K4hkMc-GQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"session_name\": \"Reception Service\",\n    \"description\": \"With grateful hearts, we invite you to celebrate the union of John and Jane.\",\n    \"session_date\": \"2025-08-09\",\n    \"start_time\": \"15:00\",\n    \"end_time\": \"19:00\",\n    \"venue\": \"Grandaddy's\",\n    \"venue_address\": \"Salama Park Road, Plot 206, Lusaka\",\n    \"dress_code\": \"For the ladies: A cocktail dress in sapphire blue, a fiery orange, or a warm coral would be perfect. A classic black or navy dress with a colorful clutch or shoes would also work beautifully. For the gentlemen: A suit or a blazer with dress pants is ideal. They can incorporate the theme with a sapphire blue tie, a pocket square with sunset tones, or even a colorful pair of socks.\",\n    \"max_attendees\": 30,\n    \"special_notes\": \"Children are not allowed\",\n    \"session_order\": 2\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/v1/event-sessions/1efddd31-19cc-4125-b853-ba7fcd64c3c8",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"event-sessions",
+										"1efddd31-19cc-4125-b853-ba7fcd64c3c8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update event session",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQzMTcwNTF9.SU-BVxpujMS3Us3QwWeIFd5vHszDzl1DU2K4hkMc-GQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"session_name\": \"Church Service\",\n    \"description\": \"With grateful hearts, we invite you to witness the sacred blessing and union of John and Jane.\",\n    \"session_date\": \"2025-08-09\",\n    \"start_time\": \"10:00\",\n    \"end_time\": \"11:30\",\n    \"venue\": \"church\",\n    \"venue_address\": \"At church\",\n    \"dress_code\": \"Suites\",\n    \"max_attendees\": 20,\n    \"special_notes\": \"\",\n    \"session_order\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/v1/event-sessions/81f951c0-67db-4893-9a62-33d05046ea8b",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"event-sessions",
+										"81f951c0-67db-4893-9a62-33d05046ea8b"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete event session",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQzMTcwNTF9.SU-BVxpujMS3Us3QwWeIFd5vHszDzl1DU2K4hkMc-GQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    //not all fields are required in the query params\n    \"hard_delete\": \"true\" //oneof= true, false\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/v1/event-sessions/6f9667f7-b4a0-4232-be43-0e0519c75458?hard_delete=true",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"event-sessions",
+										"6f9667f7-b4a0-4232-be43-0e0519c75458"
+									],
+									"query": [
+										{
+											"key": "hard_delete",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get event session details",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQzMTcwNTF9.SU-BVxpujMS3Us3QwWeIFd5vHszDzl1DU2K4hkMc-GQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/v1/event-sessions/d23e1e72-5459-489a-a2ba-15b270fbea73",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"event-sessions",
+										"d23e1e72-5459-489a-a2ba-15b270fbea73"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all event sessions",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQzMTcwNTF9.SU-BVxpujMS3Us3QwWeIFd5vHszDzl1DU2K4hkMc-GQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    //not all fields are required in the query params\n    \"page\":1,\n    \"page_size\":20,\n    \"is_active\":\"true\",//oneof= true, false\n    \"start_date\":\"\",//date format: 2025-01-01\n    \"end_date\":\"\",//date format: 2025-01-01\n    \"sort_by\":\"created_at\",//oneof= created_at, session_date, session_name, session_order\n    \"sort_order\":\"desc\" // oneof = asc, desc\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/v1/event-sessions/1efddd31-19cc-4125-b853-ba7fcd64c3c8/list?page=1&page_size=100&is_active=true&start_date=2025-07-01&end_date=2025-08-10&sort_by=session_order&sort_order=asc",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"event-sessions",
+										"1efddd31-19cc-4125-b853-ba7fcd64c3c8",
+										"list"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "page_size",
+											"value": "100"
+										},
+										{
+											"key": "is_active",
+											"value": "true"
+										},
+										{
+											"key": "start_date",
+											"value": "2025-07-01"
+										},
+										{
+											"key": "end_date",
+											"value": "2025-08-10"
+										},
+										{
+											"key": "sort_by",
+											"value": "session_order"
+										},
+										{
+											"key": "sort_order",
+											"value": "asc"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "step 3 - create invitations",
+					"item": [
+						{
+							"name": "create invitation",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQzNDI5Njd9.y4ZolZwG2W4H3uKIjKTU2cNkNnzTZblLYjIFM4kTXHQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"invitation_type\": \"All access pass\",\n    \"custom_image_url\": \"http://localhost:8090/api/files/82atu44v61l7q29/yf0v8y9w9d62xne/gemini_generated_image_nrot3dnrot3dnrot_bi25snHlN4.png\",\n    \"sessions\": [\n        \"81f951c0-67db-4893-9a62-33d05046ea8b\",\"d23e1e72-5459-489a-a2ba-15b270fbea73\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/v1/invitations/1efddd31-19cc-4125-b853-ba7fcd64c3c8",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"invitations",
+										"1efddd31-19cc-4125-b853-ba7fcd64c3c8"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all invitations",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQzNDI5Njd9.y4ZolZwG2W4H3uKIjKTU2cNkNnzTZblLYjIFM4kTXHQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"invitation_type\": \"All access pass\",\n    \"custom_image_url\": \"http://localhost:8090/api/files/82atu44v61l7q29/yf0v8y9w9d62xne/gemini_generated_image_nrot3dnrot3dnrot_bi25snHlN4.png\",\n    \"sessions\": [\n        \"81f951c0-67db-4893-9a62-33d05046ea8b\",\"d23e1e72-5459-489a-a2ba-15b270fbea73\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/v1/invitations/1efddd31-19cc-4125-b853-ba7fcd64c3c8/list",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"invitations",
+										"1efddd31-19cc-4125-b853-ba7fcd64c3c8",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get invitation details",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQzNDI5Njd9.y4ZolZwG2W4H3uKIjKTU2cNkNnzTZblLYjIFM4kTXHQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"invitation_type\": \"All access pass\",\n    \"custom_image_url\": \"http://localhost:8090/api/files/82atu44v61l7q29/yf0v8y9w9d62xne/gemini_generated_image_nrot3dnrot3dnrot_bi25snHlN4.png\",\n    \"sessions\": [\n        \"81f951c0-67db-4893-9a62-33d05046ea8b\",\"d23e1e72-5459-489a-a2ba-15b270fbea73\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/v1/invitations/c5ad3583-78e6-4acc-860d-c1bc016af9e4",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"invitations",
+										"c5ad3583-78e6-4acc-860d-c1bc016af9e4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update invitation",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQzNDI5Njd9.y4ZolZwG2W4H3uKIjKTU2cNkNnzTZblLYjIFM4kTXHQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"invitation_type\": \"All access pass\",\n    \"custom_image_url\": \"http://localhost:8090/api/files/82atu44v61l7q29/yf0v8y9w9d62xne/gemini_generated_image_nrot3dnrot3dnrot_bi25snHlN4.png\",\n    \"sessions\": [\n        \"81f951c0-67db-4893-9a62-33d05046ea8b\",\"d23e1e72-5459-489a-a2ba-15b270fbea73\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/v1/invitations/c5ad3583-78e6-4acc-860d-c1bc016af9e4",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"invitations",
+										"c5ad3583-78e6-4acc-860d-c1bc016af9e4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete invitation",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQzNDI5Njd9.y4ZolZwG2W4H3uKIjKTU2cNkNnzTZblLYjIFM4kTXHQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"invitation_type\": \"All access pass\",\n    \"custom_image_url\": \"http://localhost:8090/api/files/82atu44v61l7q29/yf0v8y9w9d62xne/gemini_generated_image_nrot3dnrot3dnrot_bi25snHlN4.png\",\n    \"sessions\": [\n        \"81f951c0-67db-4893-9a62-33d05046ea8b\",\"d23e1e72-5459-489a-a2ba-15b270fbea73\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/v1/invitations/c5ad3583-78e6-4acc-860d-c1bc016af9e4",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"invitations",
+										"c5ad3583-78e6-4acc-860d-c1bc016af9e4"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "step 4 - upload guests",
+					"item": [
+						{
+							"name": "upload guests",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "get all events",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQyMzM2NTV9.q-wYCzJORfBzpoRns-_SBW2BgUpY0egXhrjTA1bGFj8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    //not all fields are required in the query params\n    \"page\":1,\n    \"page_size\":20,\n    \"status\":\"published\",//oneof= draft, published, cancelled\n    \"event_type_id\":\"\",\n    \"start_date\":\"\",//date format: 2025-01-01\n    \"end_date\":\"\",//date format: 2025-01-01\n    \"search\":\"\",//seach title or description\n    \"sort_by\":\"created_at\",//oneof= created_at, start_date, title\n    \"sort_order\":\"desc\" // oneof = asc, desc\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/v1/events/whole-list?page=1&page_size=20&status=draft&event_type_id=0760b81c-ec12-48ef-9af5-6c604db9af26&start_date=2025-07-01&end_date=2025-08-10&sort_by=created_at&sort_order=desc",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"events",
+								"whole-list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "page_size",
+									"value": "20"
+								},
+								{
+									"key": "status",
+									"value": "draft"
+								},
+								{
+									"key": "event_type_id",
+									"value": "0760b81c-ec12-48ef-9af5-6c604db9af26"
+								},
+								{
+									"key": "start_date",
+									"value": "2025-07-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2025-08-10"
+								},
+								{
+									"key": "sort_by",
+									"value": "created_at"
+								},
+								{
+									"key": "sort_order",
+									"value": "desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all events by user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQyMzM2NTV9.q-wYCzJORfBzpoRns-_SBW2BgUpY0egXhrjTA1bGFj8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    //not all fields are required in the query params\n    \"page\":1,\n    \"page_size\":20,\n    \"status\":\"published\",//oneof= draft, published, cancelled\n    \"event_type_id\":\"\",\n    \"start_date\":\"\",//date format: 2025-01-01\n    \"end_date\":\"\",//date format: 2025-01-01\n    \"search\":\"\",//seach title or description\n    \"sort_by\":\"created_at\",//oneof= created_at, start_date, title\n    \"sort_order\":\"desc\" // oneof = asc, desc\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/v1/events/list?page=1&page_size=20&status=draft&event_type_id=0760b81c-ec12-48ef-9af5-6c604db9af26&start_date=2025-07-01&end_date=2025-08-10&sort_by=created_at&sort_order=desc",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"events",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "page_size",
+									"value": "20"
+								},
+								{
+									"key": "status",
+									"value": "draft"
+								},
+								{
+									"key": "event_type_id",
+									"value": "0760b81c-ec12-48ef-9af5-6c604db9af26"
+								},
+								{
+									"key": "start_date",
+									"value": "2025-07-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2025-08-10"
+								},
+								{
+									"key": "sort_by",
+									"value": "created_at"
+								},
+								{
+									"key": "sort_order",
+									"value": "desc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get event details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiJiOGMwYTYyMi1lNDQ3LTRhNzgtYTAyNS1lYTg2YWZkNmIzYzMiLCJleHBpcmVzQXQiOjE3NTQyNDUyMjZ9.TdUT3wY0w_2N9jnpIDZgChCWIj60h3No4EwY6Q_-A6A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/v1/events/1efddd31-19cc-4125-b853-ba7fcd64c3c8",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"events",
+								"1efddd31-19cc-4125-b853-ba7fcd64c3c8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "localhost:4000",
+			"type": "default"
+		}
+	]
+}
