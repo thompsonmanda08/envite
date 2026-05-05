@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import { getEvent } from "@/app/_actions/events";
+import { getEventSessions } from "@/app/_actions/event-sessions";
 import { getInvitations } from "@/app/_actions/invitations";
 import { InvitationsManager } from "./_components/invitations-manager";
 
@@ -12,13 +13,17 @@ export default async function EventInvitationsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [eventRes, invRes] = await Promise.all([
+  const [eventRes, invRes, sessionsRes] = await Promise.all([
     getEvent(id),
     getInvitations(id).catch(() => ({ success: false, data: [] as any[] })),
+    getEventSessions(id, { sort_by: "session_order", sort_order: "asc" }).catch(
+      () => ({ success: false, data: [] as any[] }),
+    ),
   ]);
   if (!eventRes.success || !eventRes.data) notFound();
   const event = eventRes.data;
   const invitations = (invRes.success ? invRes.data : []) ?? [];
+  const sessions = (sessionsRes.success ? sessionsRes.data : []) ?? [];
 
   return (
     <div className="space-y-10">
@@ -39,7 +44,11 @@ export default async function EventInvitationsPage({
         </h1>
       </header>
 
-      <InvitationsManager eventId={id} initial={invitations} />
+      <InvitationsManager
+        eventId={id}
+        initial={invitations}
+        sessions={sessions}
+      />
     </div>
   );
 }

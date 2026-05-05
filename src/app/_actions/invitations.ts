@@ -1,31 +1,33 @@
 "use server";
 
-import type { APIResponse, Invitation } from "@/types";
-
 import { revalidateTag } from "next/cache";
 
 import { CACHE_TAGS } from "@/lib/cache-tags";
+import type { APIResponse, Invitation } from "@/types";
 
 import authenticatedApiClient, {
+  badRequestResponse,
   fromBackend,
   handleError,
-  badRequestResponse,
 } from "./api-config";
 
-export async function getInvitations(
-  eventId?: string,
-): Promise<APIResponse<Invitation[]>> {
-  const url = eventId
-    ? `/api/v1/events/${eventId}/invitations`
-    : "/api/v1/invitations";
+export type InvitationInput = {
+  invitation_type: string;
+  custom_image_url?: string;
+  sessions: string[];
+};
 
+export async function getInvitations(
+  eventId: string,
+): Promise<APIResponse<Invitation[]>> {
+  if (!eventId) return badRequestResponse("Event ID required");
+  const url = `/api/v1/invitations/${eventId}/list`;
   try {
     const res = await authenticatedApiClient({
       url,
       method: "GET",
       next: { tags: [CACHE_TAGS.INVITATIONS], revalidate: 60 },
     });
-
     return fromBackend<Invitation[]>(res);
   } catch (error: any) {
     return handleError(error, "GET", url);
@@ -35,73 +37,63 @@ export async function getInvitations(
 export async function getInvitation(
   id: string,
 ): Promise<APIResponse<Invitation>> {
-  if (!id) return badRequestResponse("Invitation ID is required");
+  if (!id) return badRequestResponse("Invitation ID required");
   const url = `/api/v1/invitations/${id}`;
-
   try {
     const res = await authenticatedApiClient({
       url,
       method: "GET",
       next: { tags: [CACHE_TAGS.INVITATION(id)], revalidate: 60 },
     });
-
     return fromBackend<Invitation>(res);
   } catch (error: any) {
     return handleError(error, "GET", url);
   }
 }
 
-export async function sendInvitations(data: {
-  eventId: string;
-  guestIds: string[];
-  channel: "email" | "sms" | "link";
-  message?: string;
-}): Promise<APIResponse<Invitation[]>> {
-  if (!data?.eventId || !data?.guestIds?.length) {
-    return badRequestResponse("Event ID and guest IDs are required");
-  }
-  const url = `/api/v1/events/${data.eventId}/invitations/send`;
+export async function createInvitation(
+  eventId: string,
+  data: InvitationInput,
+): Promise<APIResponse<Invitation>> {
+  if (!eventId) return badRequestResponse("Event ID required");
+  if (!data?.invitation_type)
+    return badRequestResponse("Invitation type required");
+  if (!data?.sessions?.length)
+    return badRequestResponse("At least one session required");
 
+  const url = `/api/v1/invitations/${eventId}`;
   try {
     const res = await authenticatedApiClient({ url, method: "POST", data });
-
     revalidateTag(CACHE_TAGS.INVITATIONS, "max");
-    revalidateTag(CACHE_TAGS.GUESTS_BY_EVENT(data.eventId), "max");
-
-    return fromBackend<Invitation[]>(res);
-  } catch (error: any) {
-    return handleError(error, "POST", url);
-  }
-}
-
-export async function resendInvitation(
-  id: string,
-): Promise<APIResponse<Invitation>> {
-  if (!id) return badRequestResponse("Invitation ID is required");
-  const url = `/api/v1/invitations/${id}/resend`;
-
-  try {
-    const res = await authenticatedApiClient({ url, method: "POST" });
-
-    revalidateTag(CACHE_TAGS.INVITATION(id), "max");
-    revalidateTag(CACHE_TAGS.INVITATIONS, "max");
-
     return fromBackend<Invitation>(res);
   } catch (error: any) {
     return handleError(error, "POST", url);
   }
 }
 
-export async function cancelInvitation(id: string): Promise<APIResponse> {
-  if (!id) return badRequestResponse("Invitation ID is required");
+export async function updateInvitation(
+  id: string,
+  data: Partial<InvitationInput>,
+): Promise<APIResponse<Invitation>> {
+  if (!id) return badRequestResponse("Invitation ID required");
   const url = `/api/v1/invitations/${id}`;
-
   try {
-    const res = await authenticatedApiClient({ url, method: "DELETE" });
-
+    const res = await authenticatedApiClient({ url, method: "PUT", data });
     revalidateTag(CACHE_TAGS.INVITATION(id), "max");
     revalidateTag(CACHE_TAGS.INVITATIONS, "max");
+    return fromBackend<Invitation>(res);
+  } catch (error: any) {
+    return handleError(error, "PUT", url);
+  }
+}
 
+export async function deleteInvitation(id: string): Promise<APIResponse> {
+  if (!id) return badRequestResponse("Invitation ID required");
+  const url = `/api/v1/invitations/${id}`;
+  try {
+    const res = await authenticatedApiClient({ url, method: "DELETE" });
+    revalidateTag(CACHE_TAGS.INVITATION(id), "max");
+    revalidateTag(CACHE_TAGS.INVITATIONS, "max");
     return fromBackend(res);
   } catch (error: any) {
     return handleError(error, "DELETE", url);
