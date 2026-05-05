@@ -164,23 +164,3 @@ export type Invitation = {
   updated_at?: string;
 };
 
-// ─── Legacy shopify-ish (kept for existing components) ──────────────────────
-export type Order = {
-  id: string;
-  orderNumber: string;
-  customerName: string;
-  total: number;
-  status: "PENDING" | "PROCESSING" | "SHIPPED" | "DELIVERED" | "CANCELLED";
-  items: OrderItem[];
-  currency: string;
-  createdAt: string | Date;
-  updatedAt: string | Date;
-};
-
-export type OrderItem = {
-  id: string;
-  productName: string;
-  quantity: number;
-  unitPrice: number;
-  totalPrice: number;
-};
