@@ -65,24 +65,27 @@ export async function getEventSession(
   }
 }
 
-export type CreateEventSessionInput = Pick<
-  EventSession,
-  "session_name" | "session_date" | "start_time"
+// Single source of truth for which EventSession fields callers may mutate.
+// Adding a new server-managed field to EventSession should NOT require editing
+// each input type — just keep it out of this union.
+type MutableEventSessionFields =
+  | "session_name"
+  | "session_date"
+  | "start_time"
+  | "end_time"
+  | "venue"
+  | "venue_address"
+  | "dress_code"
+  | "max_attendees"
+  | "special_notes"
+  | "session_order"
+  | "is_active"
+  | "description";
+
+export type CreateEventSessionInput = Required<
+  Pick<EventSession, "session_name" | "session_date" | "start_time">
 > &
-  Partial<
-    Pick<
-      EventSession,
-      | "description"
-      | "end_time"
-      | "venue"
-      | "venue_address"
-      | "dress_code"
-      | "max_attendees"
-      | "special_notes"
-      | "session_order"
-      | "is_active"
-    >
-  >;
+  Partial<Pick<EventSession, MutableEventSessionFields>>;
 
 export async function createEventSession(
   eventId: string,
@@ -105,7 +108,7 @@ export async function createEventSession(
 }
 
 export type UpdateEventSessionInput = Partial<
-  Omit<EventSession, "id" | "event_id" | "created_at" | "updated_at">
+  Pick<EventSession, MutableEventSessionFields>
 >;
 
 export async function updateEventSession(
