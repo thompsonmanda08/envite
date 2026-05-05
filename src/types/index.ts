@@ -121,6 +121,25 @@ export type EventType = {
   updated_at?: string;
 };
 
+export type EventSession = {
+  id: string;
+  event_id: string;
+  session_name: string;
+  description?: string;
+  session_date: string;
+  start_time: string;
+  end_time?: string;
+  venue?: string;
+  venue_address?: string;
+  dress_code?: string;
+  max_attendees?: number;
+  special_notes?: string;
+  session_order: number;
+  is_active?: boolean;
+  created_at?: string;
+  updated_at?: string;
+};
+
 export type Invitation = {
   id: string;
   eventId: string;
