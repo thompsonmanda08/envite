@@ -52,7 +52,8 @@ export default function Signup() {
     });
 
     if (response.success) {
-      router.push("/dashboard?account=new");
+      // registerUser does not auto-login; send the user to the login screen.
+      router.push("/login?registered=1");
     } else {
       setMessage(`Error: ${response.message}`);
       setIsSubmitting(false);

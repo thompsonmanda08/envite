@@ -30,8 +30,19 @@ export type UpdateProfileData = Partial<
 
 export type UpdatePasswordData = { email: string; password: string };
 
-// Decode the unverified JWT payload to extract `expiresAt` (epoch seconds).
-// The backend signs these — we only need the claim, not signature verification.
+/**
+ * Decode the unverified JWT payload to extract `expiresAt` (epoch seconds).
+ *
+ * Security model: we deliberately do NOT verify the signature. This is safe
+ * because (a) the token arrives from our own backend over HTTPS in the same
+ * request flow, (b) we never trust the `expiresAt` claim for authorization —
+ * we re-encrypt the session inside our own `lib/auth` cookie wrapper using
+ * `AUTH_SECRET`, and (c) a forged or stale `expiresAt` only changes when our
+ * cookie expires; the next API call would 401 and we'd delete the session.
+ *
+ * Do NOT replace this with `jose.jwtVerify` — we don't have the backend's
+ * signing key, and we don't need it.
+ */
 function decodeJwtExpiry(token: string): number | undefined {
   try {
     const [, payload] = token.split(".");
@@ -168,10 +179,14 @@ export async function resetPassword(_data: {
   token: string;
   password: string;
 }): Promise<APIResponse> {
+  console.warn(
+    "[auth] resetPassword called but is not wired — backend has no token-based reset endpoint. " +
+      "Use requestPasswordReset(email) for the email request, or updatePassword(authenticated) " +
+      "to change the current user's password.",
+  );
   return {
     success: false,
-    message:
-      "Token-based password reset is not yet supported by the backend; use updatePassword(authenticated) or requestPasswordReset(email) instead.",
+    message: "Password reset is temporarily unavailable. Please try again later.",
     data: null,
   };
 }

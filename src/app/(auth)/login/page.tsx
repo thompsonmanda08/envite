@@ -342,7 +342,7 @@ function SignupForm({
 
   return (
     <form className="space-y-6" onSubmit={handleSignup}>
-      {/* Full Name Field */}
+      {/* First Name Field */}
       <div className="space-y-2">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -352,15 +352,41 @@ function SignupForm({
             required
             className="pl-12 pr-12 h-14 rounded-2xl border-gray-200 focus:border-blue-500 focus:ring-blue-500"
             disabled={isLoading}
-            id="signup-name"
-            label="Full Name"
-            name="name"
-            placeholder="Enter your full name"
+            id="signup-first-name"
+            label="First Name"
+            name="first_name"
+            placeholder="Enter your first name"
             type="text"
             value={formData.first_name}
             onChange={(e) => updateFormData({ first_name: e.target.value })}
           />
           {formData.first_name && (
+            <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
+              <Check className="h-5 w-5 text-green-500" />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Last Name Field */}
+      <div className="space-y-2">
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <User className="h-5 w-5 text-gray-400" />
+          </div>
+          <Input
+            required
+            className="pl-12 pr-12 h-14 rounded-2xl border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+            disabled={isLoading}
+            id="signup-last-name"
+            label="Last Name"
+            name="last_name"
+            placeholder="Enter your last name"
+            type="text"
+            value={formData.last_name}
+            onChange={(e) => updateFormData({ last_name: e.target.value })}
+          />
+          {formData.last_name && (
             <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
               <Check className="h-5 w-5 text-green-500" />
             </div>
