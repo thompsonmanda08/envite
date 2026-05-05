@@ -1,11 +1,8 @@
 "use client";
-import { LANDING_PAGE as mockData } from "@/configs/data";
 import { ArrowRight, Upload, Users, Send, Star, Check } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
-import Logo from "./base/logo";
-import HeroSection from "./landing-page/hero";
-import Navbar from "./landing-page/navbar";
+
+import { LANDING_PAGE as mockData } from "@/configs/data";
 
 const LandingPage = () => {
   const [selectedPlan, setSelectedPlan] = useState("starter");
@@ -14,8 +11,8 @@ const LandingPage = () => {
     <div className="">
       {/* How It Works - Mobile First */}
       <section
-        id="how-it-works"
         className="py-12 sm:py-16 md:py-20 lg:py-24 xl:py-30"
+        id="how-it-works"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="text-center mb-8 sm:mb-12 md:mb-16 lg:mb-20 max-w-3xl mx-auto">
@@ -35,13 +32,13 @@ const LandingPage = () => {
               >
                 <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 text-primary">
                   {step.icon === "upload" && (
-                    <Upload size={20} className="sm:w-6 sm:h-6" />
+                    <Upload className="sm:w-6 sm:h-6" size={20} />
                   )}
                   {step.icon === "users" && (
-                    <Users size={20} className="sm:w-6 sm:h-6" />
+                    <Users className="sm:w-6 sm:h-6" size={20} />
                   )}
                   {step.icon === "send" && (
-                    <Send size={20} className="sm:w-6 sm:h-6" />
+                    <Send className="sm:w-6 sm:h-6" size={20} />
                   )}
                 </div>
                 <div className="absolute top-3 sm:top-4 right-3 sm:right-4 text-xs font-semibold text-text-light">
@@ -74,8 +71,8 @@ const LandingPage = () => {
                     className="flex items-start gap-3 sm:gap-4 py-2 sm:py-3 md:py-4"
                   >
                     <Check
-                      size={18}
                       className="sm:w-5 sm:h-5 text-text-meta mt-1 flex-shrink-0"
+                      size={18}
                     />
                     <div>
                       <h4 className="text-base sm:text-lg font-medium leading-normal text-primary mb-1 sm:mb-2">
@@ -112,7 +109,7 @@ const LandingPage = () => {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-30 ">
+      <section className="py-30 " id="pricing">
         <div className="max-w-7xl mx-auto px-10 lg:px-6 md:px-4">
           <div className="text-center mb-20 max-w-2xl mx-auto">
             <h2 className="text-4xl lg:text-3xl font-medium leading-tight text-primary mb-4">
@@ -151,7 +148,7 @@ const LandingPage = () => {
                 <div className="text-left mb-8 flex flex-col gap-3">
                   {plan.features.map((feature, idx) => (
                     <div key={idx} className="flex items-center gap-2 text-sm">
-                      <Check size={16} className="text-text-meta" />
+                      <Check className="text-text-meta" size={16} />
                       <span className="text-primary">{feature}</span>
                     </div>
                   ))}
@@ -167,7 +164,7 @@ const LandingPage = () => {
       </section>
 
       {/* Sample Designs */}
-      <section id="designs" className="py-30 bg-secondary/5">
+      <section className="py-30 bg-secondary/5" id="designs">
         <div className="max-w-7xl mx-auto px-10 lg:px-6 md:px-4">
           <div className="text-center mb-20 max-w-2xl mx-auto">
             <h2 className="text-4xl lg:text-3xl font-medium leading-tight text-primary mb-4">
@@ -235,7 +232,7 @@ const LandingPage = () => {
               >
                 <div className="flex justify-center gap-1 mb-6 text-yellow-600">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={16} fill="currentColor" />
+                    <Star key={i} fill="currentColor" size={16} />
                   ))}
                 </div>
                 <p className="text-base leading-relaxed italic mb-6 text-primary">
@@ -273,7 +270,7 @@ const LandingPage = () => {
               </button>
               <button className="bg-transparent border-none px-4 py-3 text-sm text-foreground cursor-pointer relative transition-colors duration-200 group">
                 Schedule a Demo
-                <span className="absolute bottom-2 left-4 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-[calc(100%-2rem)]"></span>
+                <span className="absolute bottom-2 left-4 w-0 h-px bg-foreground transition-all duration-300 group-hover:w-[calc(100%-2rem)]" />
               </button>
             </div>
           </div>
@@ -299,20 +296,20 @@ const LandingPage = () => {
                   Product
                 </h4>
                 <a
-                  href="#"
                   className="block text-text-secondary no-underline text-sm mb-2 transition-colors duration-200 hover:text-primary"
+                  href="#"
                 >
                   Features
                 </a>
                 <a
-                  href="#"
                   className="block text-text-secondary no-underline text-sm mb-2 transition-colors duration-200 hover:text-primary"
+                  href="#"
                 >
                   Pricing
                 </a>
                 <a
-                  href="#"
                   className="block text-text-secondary no-underline text-sm mb-2 transition-colors duration-200 hover:text-primary"
+                  href="#"
                 >
                   Templates
                 </a>
@@ -322,20 +319,20 @@ const LandingPage = () => {
                   Support
                 </h4>
                 <a
-                  href="#"
                   className="block text-text-secondary no-underline text-sm mb-2 transition-colors duration-200 hover:text-primary"
+                  href="#"
                 >
                   Help Center
                 </a>
                 <a
-                  href="#"
                   className="block text-text-secondary no-underline text-sm mb-2 transition-colors duration-200 hover:text-primary"
+                  href="#"
                 >
                   Contact
                 </a>
                 <a
-                  href="#"
                   className="block text-text-secondary no-underline text-sm mb-2 transition-colors duration-200 hover:text-primary"
+                  href="#"
                 >
                   FAQ
                 </a>
@@ -345,20 +342,20 @@ const LandingPage = () => {
                   Company
                 </h4>
                 <a
-                  href="#"
                   className="block text-text-secondary no-underline text-sm mb-2 transition-colors duration-200 hover:text-primary"
+                  href="#"
                 >
                   About
                 </a>
                 <a
-                  href="#"
                   className="block text-text-secondary no-underline text-sm mb-2 transition-colors duration-200 hover:text-primary"
+                  href="#"
                 >
                   Privacy
                 </a>
                 <a
-                  href="#"
                   className="block text-text-secondary no-underline text-sm mb-2 transition-colors duration-200 hover:text-primary"
+                  href="#"
                 >
                   Terms
                 </a>

@@ -8,6 +8,7 @@ import {
   Send,
   Users,
 } from "lucide-react";
+
 import { Container, Eyebrow, Reveal, Section } from "./section";
 
 const FEATURES = [

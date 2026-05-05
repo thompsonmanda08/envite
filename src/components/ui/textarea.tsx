@@ -1,7 +1,7 @@
 import { TextareaHTMLAttributes, forwardRef } from "react";
+import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
 
 type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   label?: string;
@@ -96,6 +96,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
         {((errorText && (isInvalid || onError)) || descriptionText) && (
           <motion.span
+            animate={{ scale: 1, opacity: 1 }}
             className={cn(
               "ml-1 flex items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400",
               {
@@ -105,7 +106,6 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               classNames?.errorText,
             )}
             initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.2 }}
           >
             <span>{errorText ? errorText : descriptionText}</span>

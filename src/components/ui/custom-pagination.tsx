@@ -1,3 +1,5 @@
+import type { Pagination } from "@/types";
+
 import * as React from "react";
 import {
   ChevronLeftIcon,
@@ -7,7 +9,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
-import type { Pagination } from "@/types";
+
 import {
   Select,
   SelectContent,
@@ -19,10 +21,10 @@ import {
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
     <nav
-      role="navigation"
       aria-label="pagination"
-      data-slot="pagination"
       className={cn("mx-auto flex w-full justify-center", className)}
+      data-slot="pagination"
+      role="navigation"
       {...props}
     />
   );
@@ -34,8 +36,8 @@ function PaginationContent({
 }: React.ComponentProps<"ul">) {
   return (
     <ul
-      data-slot="pagination-content"
       className={cn("flex flex-row items-center gap-1", className)}
+      data-slot="pagination-content"
       {...props}
     />
   );
@@ -59,15 +61,15 @@ function PaginationLink({
   return (
     <a
       aria-current={isActive ? "page" : undefined}
-      data-slot="pagination-link"
-      data-active={isActive}
       className={cn(
         buttonVariants({
           variant: isActive ? "outline" : "ghost",
           size,
         }),
-        className
+        className,
       )}
+      data-active={isActive}
+      data-slot="pagination-link"
       {...props}
     />
   );
@@ -80,8 +82,8 @@ function PaginationPrevious({
   return (
     <PaginationLink
       aria-label="Go to previous page"
-      size="default"
       className={cn("gap-1 px-2.5 sm:pl-2.5", className)}
+      size="default"
       {...props}
     >
       <ChevronLeftIcon />
@@ -97,8 +99,8 @@ function PaginationNext({
   return (
     <PaginationLink
       aria-label="Go to next page"
-      size="default"
       className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
+      size="default"
       {...props}
     >
       <span className="hidden sm:block">Next</span>
@@ -114,8 +116,8 @@ function PaginationEllipsis({
   return (
     <span
       aria-hidden
-      data-slot="pagination-ellipsis"
       className={cn("flex size-9 items-center justify-center", className)}
+      data-slot="pagination-ellipsis"
       {...props}
     >
       <MoreHorizontalIcon className="size-4" />
@@ -153,7 +155,7 @@ const CustomPagination = ({
           "items-center justify-between": showDetails || allowSetPageSize,
         },
         className,
-        classNames?.wrapper
+        classNames?.wrapper,
       )}
     >
       {allowSetPageSize && (
@@ -168,12 +170,13 @@ const CustomPagination = ({
               })
             }
           >
-            <SelectTrigger size="sm" className="w-[65px]">
+            <SelectTrigger className="w-[65px]" size="sm">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="min-w-0">
               {Array.from({ length: 5 }).map((_, index: number) => {
                 const pageSize = (index + 1) * 10;
+
                 return (
                   <SelectItem key={pageSize} value={String(pageSize)}>
                     {pageSize}
@@ -193,11 +196,13 @@ const CustomPagination = ({
       )}
       <div className="order-1 flex items-center space-x-1 sm:order-2 sm:space-x-2">
         <Button
-          onClick={() => updatePagination({ page: (pagination?.page ?? 1) - 1 })}
+          className={cn("", classNames?.previous)}
           disabled={!pagination.has_prev}
           size={"sm"}
           variant={"outline"}
-          className={cn("", classNames?.previous)}
+          onClick={() =>
+            updatePagination({ page: (pagination?.page ?? 1) - 1 })
+          }
         >
           <span className="hidden sm:inline">Previous</span>
           <span className="sm:hidden">Prev</span>
@@ -206,7 +211,7 @@ const CustomPagination = ({
         <div
           className={cn(
             "flex items-center space-x-1",
-            classNames?.pagesWrapper
+            classNames?.pagesWrapper,
           )}
         >
           {Array.from(
@@ -214,6 +219,7 @@ const CustomPagination = ({
             (_, i) => {
               const totalPages = pagination?.total_pages ?? 1;
               let pageNum;
+
               if (totalPages <= 3) {
                 pageNum = i + 1;
               } else if ((pagination.page ?? 1) <= 2) {
@@ -226,25 +232,25 @@ const CustomPagination = ({
 
               return (
                 <Button
-                  size={"sm"}
                   key={pageNum}
+                  className={cn(``, classNames?.current)}
+                  size={"sm"}
                   variant={pagination.page === pageNum ? "default" : "outline"}
                   onClick={() => updatePagination({ page: pageNum })}
-                  className={cn(``, classNames?.current)}
                 >
                   {pageNum}
                 </Button>
               );
-            }
+            },
           )}
         </div>
 
         <Button
+          className={cn("", classNames?.next)}
+          disabled={!pagination.has_next}
           size={"sm"}
           variant={"outline"}
           onClick={() => updatePagination({ page: (pagination.page ?? 1) + 1 })}
-          disabled={!pagination.has_next}
-          className={cn("", classNames?.next)}
         >
           <span className="hidden sm:inline">Next</span>
           <span className="sm:hidden">Next</span>

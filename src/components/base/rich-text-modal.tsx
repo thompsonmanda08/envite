@@ -10,6 +10,7 @@ import Paragraph from "@editorjs/paragraph";
 import InlineCode from "@editorjs/inline-code";
 // import TextColor from "editorjs-text-color-plugin";
 import Delimiter from "@editorjs/delimiter";
+
 import {
   Dialog,
   DialogContent,
@@ -21,6 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
 import Spinner from "../ui/spinner";
 
 interface RichTextDialogProps {
@@ -125,6 +127,7 @@ export function RichTextDialog({
         data: initialData || { blocks: [] },
         placeholder,
       });
+
       editorRef.current = editor;
     }
 
@@ -141,6 +144,7 @@ export function RichTextDialog({
 
     try {
       const savedData = await editorRef.current.save();
+
       await onSave(savedData);
       onOpenChange(false);
     } catch (error) {
@@ -153,12 +157,12 @@ export function RichTextDialog({
       {showTrigger && (
         <DialogTrigger asChild>
           <Button
-            size={triggerSize}
-            disabled={false}
             className={cn(
               "font-semibold w-full md:max-w-sm",
-              classNames?.trigger
+              classNames?.trigger,
             )}
+            disabled={false}
+            size={triggerSize}
           >
             {triggerText}
           </Button>
@@ -171,8 +175,8 @@ export function RichTextDialog({
         </DialogHeader>
         <div className="flex-1 overflow-auto">
           <div
-            id="editorjs"
             className=" w-full bg-slate-50/40 rounded-md px-4 py-2  overflow-y-scroll"
+            id="editorjs"
           />
         </div>
         <DialogFooter>
@@ -183,10 +187,10 @@ export function RichTextDialog({
           >
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={isSaving}>
+          <Button disabled={isSaving} onClick={handleSave}>
             {isSaving ? (
               <span className="flex items-center gap-1 ">
-                <Spinner size={"sm"} color="white" /> Saving...
+                <Spinner color="white" size={"sm"} /> Saving...
               </span>
             ) : (
               "Save Changes"

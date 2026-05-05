@@ -10,8 +10,7 @@ export const EVENTS_KEYS = {
 
 export const INVITATIONS_KEYS = {
   all: ["invitations"] as const,
-  list: (eventId?: string) =>
-    ["invitations", "list", eventId ?? null] as const,
+  list: (eventId?: string) => ["invitations", "list", eventId ?? null] as const,
   detail: (id: string) => ["invitations", id] as const,
 };
 

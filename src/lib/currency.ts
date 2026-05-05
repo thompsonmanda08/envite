@@ -19,6 +19,7 @@ export function formatCurrency(
       maximumFractionDigits: 2,
     })}`;
   }
+
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -51,13 +52,16 @@ export async function fetchLiveExchangeRate(
   if (from === to) return 1;
   try {
     const res = await fetch(`https://open.er-api.com/v6/latest/${from}`);
+
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
+
     if (data.result === "success" && data.rates?.[to]) {
       return data.rates[to] as number;
     }
   } catch {
     // fall through to fallback
   }
+
   return FALLBACK_RATES[`${from}_${to}`] ?? 1;
 }

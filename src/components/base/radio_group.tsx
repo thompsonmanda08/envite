@@ -19,6 +19,7 @@ interface OptionProps {
 }
 const Option = (props: OptionProps) => {
   const isSelected = props.index === props.selectedIndex;
+
   return (
     <div
       className={`flex items-center gap-2 cursor-pointer transition duration-300  mx-1 rounded-md p-2 py-3  flex-1 text-xs font-bold text-slate-600 lg:font-normal w-full min-w-fit lg:text-sm hover:shadow-md border border-slate-900/5 hover:border-slate-900/10 ${
@@ -50,12 +51,14 @@ const RadioGroup = ({
   required,
 }: IProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
-    value || 0
+    value || 0,
   );
+
   function onSelect(index: number) {
     setSelectedIndex(index);
     onChange?.(index);
   }
+
   return (
     <div className="flex flex-col gap-y-2 w-full">
       {labelText && (
@@ -79,4 +82,5 @@ const RadioGroup = ({
     </div>
   );
 };
+
 export default RadioGroup;

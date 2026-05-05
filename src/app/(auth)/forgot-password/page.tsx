@@ -1,16 +1,15 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
-import { loginUser, sendResetEmail } from "@/app/_actions/auth";
+import { toast } from "sonner";
+
+import { sendResetEmail } from "@/app/_actions/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/ui/spinner";
 import RadioGroup from "@/components/base/radio_group";
-import { s } from "node_modules/framer-motion/dist/types.d-Bq-Qm38R";
-import { toast } from "sonner";
 
 export default function ForgotPasswordPage() {
   const [username, setUsername] = useState("");
@@ -29,15 +28,17 @@ export default function ForgotPasswordPage() {
 
     if (!username && !email) {
       setMessage("Please provide your username or email.");
+
       return;
     }
 
     setIsSubmitting(true);
 
-    const response = await sendResetEmail({ username, email });
+    const response = await sendResetEmail(email || username);
 
     if (response.success) {
       const token = response.data.token;
+
       // Redirect to reset password page with token
       router.push(`/?password_reset_link_sent=${true}`);
       toast.success("Password reset link sent successfully!");
@@ -61,10 +62,10 @@ export default function ForgotPasswordPage() {
         <p className="text-gray-600">Forgot your Password?</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4 w-full ">
+      <form className="space-y-4 w-full " onSubmit={handleSubmit}>
         <RadioGroup
-          labelText="Email/Username"
           required
+          labelText="Email/Username"
           options={["email ", "username"]?.map((item, index) => (
             <div
               key={index}
@@ -82,18 +83,6 @@ export default function ForgotPasswordPage() {
           }}
         />
         <Input
-          type={selectedOption.name === "username" ? "text" : "email"}
-          id={selectedOption.name}
-          label={
-            selectedOption.name === "username" ? "Username" : "Email Address"
-          }
-          value={selectedOption.name === "username" ? username : email}
-          onChange={(e) =>
-            selectedOption.name === "username"
-              ? setUsername(e.target.value)
-              : setEmail(e.target.value)
-          }
-          placeholder={`Enter your ${selectedOption.name}`}
           required
           descriptionText={
             selectedOption.name === "username"
@@ -101,11 +90,23 @@ export default function ForgotPasswordPage() {
               : "Enter your email address to receive a reset link."
           }
           disabled={isSubmitting}
+          id={selectedOption.name}
+          label={
+            selectedOption.name === "username" ? "Username" : "Email Address"
+          }
+          placeholder={`Enter your ${selectedOption.name}`}
+          type={selectedOption.name === "username" ? "text" : "email"}
+          value={selectedOption.name === "username" ? username : email}
+          onChange={(e) =>
+            selectedOption.name === "username"
+              ? setUsername(e.target.value)
+              : setEmail(e.target.value)
+          }
         />
-        <Button type="submit" disabled={isSubmitting} className="w-full">
+        <Button className="w-full" disabled={isSubmitting} type="submit">
           {isSubmitting ? (
             <span className="flex items-center gap-1">
-              <Spinner size={"sm"} color="white" /> Submitting...
+              <Spinner color="white" size={"sm"} /> Submitting...
             </span>
           ) : (
             "Submit"
@@ -129,8 +130,8 @@ export default function ForgotPasswordPage() {
         <p className="text-gray-600">
           Don't have an account?{" "}
           <Link
-            href="/apply"
             className="text-black font-medium hover:underline"
+            href="/apply"
           >
             Apply to join
           </Link>
@@ -139,8 +140,8 @@ export default function ForgotPasswordPage() {
 
       <div className="mt-6 text-center">
         <Link
-          href="/login"
           className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          href="/login"
         >
           Oh! I remember my password
         </Link>

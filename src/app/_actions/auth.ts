@@ -1,23 +1,30 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
 import type { APIResponse, AuthUser } from "@/types";
+
+import { revalidateTag } from "next/cache";
+
+import { createAuthSession, deleteSession, getCurrentUser } from "@/lib/auth";
+import { CACHE_TAGS } from "@/lib/cache-tags";
+
 import authenticatedApiClient, {
   axios,
   fromBackend,
   handleError,
   badRequestResponse,
 } from "./api-config";
-import { createAuthSession, deleteSession, getCurrentUser } from "@/lib/auth";
-import { CACHE_TAGS } from "@/lib/cache-tags";
 
 export type LoginData = { email: string; password: string };
 export type SignUpData = {
-  firstName: string;
-  lastName: string;
-  phone: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
   email: string;
   password: string;
+  username?: string;
+  shopName?: string;
+  description?: string;
+  whatsapp?: string;
 };
 
 export async function loginUser(data: LoginData): Promise<APIResponse> {
@@ -25,6 +32,7 @@ export async function loginUser(data: LoginData): Promise<APIResponse> {
     return badRequestResponse("Email and password are required");
   }
   const url = "/api/v1/auth/login";
+
   try {
     const res = await axios.post(url, data);
     const body = res.data?.data || res.data;
@@ -38,7 +46,8 @@ export async function loginUser(data: LoginData): Promise<APIResponse> {
       user: body?.user,
     });
 
-    revalidateTag(CACHE_TAGS.AUTH);
+    revalidateTag(CACHE_TAGS.AUTH, "max");
+
     return fromBackend(res, "Login successful");
   } catch (error: any) {
     return handleError(error, "POST", url);
@@ -50,6 +59,7 @@ export async function registerUser(data: SignUpData): Promise<APIResponse> {
     return badRequestResponse("Email and password are required");
   }
   const url = "/api/v1/auth/signup";
+
   try {
     const res = await axios.post(url, data);
     const body = res.data?.data || res.data;
@@ -65,7 +75,8 @@ export async function registerUser(data: SignUpData): Promise<APIResponse> {
       });
     }
 
-    revalidateTag(CACHE_TAGS.AUTH);
+    revalidateTag(CACHE_TAGS.AUTH, "max");
+
     return fromBackend(res, "Signup successful");
   } catch (error: any) {
     return handleError(error, "POST", url);
@@ -74,30 +85,37 @@ export async function registerUser(data: SignUpData): Promise<APIResponse> {
 
 export async function logoutUser(): Promise<APIResponse> {
   const url = "/api/v1/auth/logout";
+
   try {
     await authenticatedApiClient({ url, method: "POST" }).catch(() => null);
     await deleteSession();
-    revalidateTag(CACHE_TAGS.AUTH);
+    revalidateTag(CACHE_TAGS.AUTH, "max");
+
     return { success: true, message: "Logout successful", data: null };
   } catch (error: any) {
     await deleteSession();
+
     return handleError(error, "POST", url);
   }
 }
 
 export async function getMe(): Promise<APIResponse<AuthUser>> {
   const url = "/api/v1/auth/me";
+
   try {
     const res = await authenticatedApiClient({
       url,
       method: "GET",
       next: { tags: [CACHE_TAGS.USER], revalidate: 60 },
     });
+
     return fromBackend<AuthUser>(res);
   } catch (error: any) {
     // Fall back to in-cookie user if backend /me is unreachable.
     const user = await getCurrentUser();
+
     if (user) return { success: true, message: "OK", data: user };
+
     return handleError(error, "GET", url);
   }
 }
@@ -107,8 +125,10 @@ export async function requestPasswordReset(
 ): Promise<APIResponse> {
   if (!email) return badRequestResponse("Email is required");
   const url = "/api/v1/auth/forgot-password";
+
   try {
     const res = await axios.post(url, { email });
+
     return fromBackend(res, "Reset email sent");
   } catch (error: any) {
     return handleError(error, "POST", url);
@@ -123,10 +143,20 @@ export async function resetPassword(data: {
     return badRequestResponse("Token and password are required");
   }
   const url = "/api/v1/auth/reset-password";
+
   try {
     const res = await axios.post(url, data);
+
     return fromBackend(res, "Password updated");
   } catch (error: any) {
     return handleError(error, "POST", url);
   }
+}
+
+export async function createNewAccount(data: SignUpData): Promise<APIResponse> {
+  return registerUser(data);
+}
+
+export async function sendResetEmail(email: string): Promise<APIResponse> {
+  return requestPasswordReset(email);
 }

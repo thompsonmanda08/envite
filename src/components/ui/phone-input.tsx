@@ -1,6 +1,7 @@
-import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import * as React from "react";
+
+import { cn } from "@/lib/utils";
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   id?: string;
@@ -41,17 +42,13 @@ const PhoneInput = React.forwardRef<HTMLInputElement, InputProps>(
       errorText = "",
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <div
-        className={cn(
-          "flex w-full max-w-lg flex-col",
-          classNames?.wrapper,
-          {
-            "cursor-not-allowed opacity-50": isDisabled,
-          }
-        )}
+        className={cn("flex w-full max-w-lg flex-col", classNames?.wrapper, {
+          "cursor-not-allowed opacity-50": isDisabled,
+        })}
       >
         {label && (
           <label
@@ -60,7 +57,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, InputProps>(
               {
                 "text-red-500": onError || isInvalid,
                 "opacity-50": isDisabled || props?.disabled,
-              }
+              },
             )}
             htmlFor={name}
           >
@@ -72,11 +69,6 @@ const PhoneInput = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <input
           ref={ref}
-          id={id}
-          name={name}
-          placeholder={placeholder}
-          type="tel"
-          disabled={isDisabled || props?.disabled}
           className={cn(
             "flex items-center h-12 text-lg rounded-lg border border-border bg-foreground/5 px-3 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50",
             {
@@ -84,8 +76,13 @@ const PhoneInput = React.forwardRef<HTMLInputElement, InputProps>(
                 onError || isInvalid,
             },
             className,
-            classNames?.input
+            classNames?.input,
           )}
+          disabled={isDisabled || props?.disabled}
+          id={id}
+          name={name}
+          placeholder={placeholder}
+          type="tel"
           {...props}
         />
 
@@ -97,7 +94,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, InputProps>(
                 "text-red-600 dark:text-red-400": onError || isInvalid,
               },
               classNames?.descriptionText,
-              classNames?.errorText
+              classNames?.errorText,
             )}
             whileInView={{
               scale: [0, 1],
@@ -110,7 +107,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 PhoneInput.displayName = "PhoneInput";

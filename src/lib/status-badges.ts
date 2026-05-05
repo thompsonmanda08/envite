@@ -333,6 +333,7 @@ export const HEALTH_STATUS_CONFIG: Record<
  */
 export function getDocumentStatusVariant(status: string): BadgeVariant {
   const config = DOCUMENT_STATUS_CONFIG[status.toUpperCase() as DocumentStatus];
+
   return config?.variant || "outline";
 }
 
@@ -341,6 +342,7 @@ export function getDocumentStatusVariant(status: string): BadgeVariant {
  */
 export function getDocumentStatusLabel(status: string): string {
   const config = DOCUMENT_STATUS_CONFIG[status.toUpperCase() as DocumentStatus];
+
   return config?.label || status;
 }
 
@@ -349,6 +351,7 @@ export function getDocumentStatusLabel(status: string): string {
  */
 export function getActivityActionVariant(action: string): BadgeVariant {
   const config = ACTIVITY_ACTION_CONFIG[action as ActivityAction];
+
   return config?.variant || "outline";
 }
 
@@ -357,6 +360,7 @@ export function getActivityActionVariant(action: string): BadgeVariant {
  */
 export function getActivityActionLabel(action: string): string {
   const config = ACTIVITY_ACTION_CONFIG[action as ActivityAction];
+
   return config?.label || action;
 }
 
@@ -364,7 +368,9 @@ export function getActivityActionLabel(action: string): string {
  * Helper function to get execution status variant
  */
 export function getExecutionStatusVariant(status: string): BadgeVariant {
-  const config = EXECUTION_STATUS_CONFIG[status.toUpperCase() as ExecutionStatus];
+  const config =
+    EXECUTION_STATUS_CONFIG[status.toUpperCase() as ExecutionStatus];
+
   return config?.variant || "outline";
 }
 
@@ -373,6 +379,7 @@ export function getExecutionStatusVariant(status: string): BadgeVariant {
  */
 export function getApprovalStatusVariant(status: string): BadgeVariant {
   const config = APPROVAL_STATUS_CONFIG[status.toUpperCase() as ApprovalStatus];
+
   return config?.variant || "outline";
 }
 
@@ -381,6 +388,7 @@ export function getApprovalStatusVariant(status: string): BadgeVariant {
  */
 export function getComplianceStatusVariant(status: string): BadgeVariant {
   const config = COMPLIANCE_STATUS_CONFIG[status as ComplianceStatus];
+
   return config?.variant || "outline";
 }
 
@@ -389,6 +397,7 @@ export function getComplianceStatusVariant(status: string): BadgeVariant {
  */
 export function getUserRoleVariant(role: string): BadgeVariant {
   const config = USER_ROLE_CONFIG[role as UserRole];
+
   return config?.variant || "outline";
 }
 
@@ -397,5 +406,6 @@ export function getUserRoleVariant(role: string): BadgeVariant {
  */
 export function getHealthStatusVariant(status: string): BadgeVariant {
   const config = HEALTH_STATUS_CONFIG[status as HealthStatus];
+
   return config?.variant || "outline";
 }

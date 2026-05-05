@@ -40,10 +40,10 @@ function Providers({
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemesProvider
+      disableTransitionOnChange
       enableSystem
       attribute="class"
       defaultTheme="system"
-      disableTransitionOnChange
       {...props}
     >
       {children}

@@ -1,6 +1,9 @@
 "use client";
 
+import type { AuthUser } from "@/types";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import {
   getMe,
   loginUser,
@@ -11,7 +14,6 @@ import {
   type LoginData,
   type SignUpData,
 } from "@/app/_actions/auth";
-import type { AuthUser } from "@/types";
 import { AUTH_KEYS } from "@/lib/query-keys";
 
 export function useMeQuery(initialData?: AuthUser) {
@@ -19,7 +21,9 @@ export function useMeQuery(initialData?: AuthUser) {
     queryKey: AUTH_KEYS.me,
     queryFn: async () => {
       const res = await getMe();
+
       if (!res.success) throw new Error(res.message);
+
       return res.data as AuthUser;
     },
     initialData,
@@ -30,6 +34,7 @@ export function useMeQuery(initialData?: AuthUser) {
 
 export function useLoginMutation() {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: (data: LoginData) => loginUser(data),
     onSuccess: (res) => {
@@ -40,6 +45,7 @@ export function useLoginMutation() {
 
 export function useRegisterMutation() {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: (data: SignUpData) => registerUser(data),
     onSuccess: (res) => {
@@ -50,6 +56,7 @@ export function useRegisterMutation() {
 
 export function useLogoutMutation() {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: () => logoutUser(),
     onSuccess: () => {

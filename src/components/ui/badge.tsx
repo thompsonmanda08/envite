@@ -19,8 +19,7 @@ const badgeVariants = cva(
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         warning:
           "border-amber-200 bg-amber-50 text-amber-900 hover:bg-amber-100 dark:border-amber-900/30 dark:bg-amber-900/20 dark:text-amber-300 dark:hover:bg-amber-900/30",
-        info:
-          "border-blue-200 bg-blue-50 text-blue-900 hover:bg-blue-100 dark:border-blue-900/30 dark:bg-blue-900/20 dark:text-blue-300 dark:hover:bg-blue-900/30",
+        info: "border-blue-200 bg-blue-50 text-blue-900 hover:bg-blue-100 dark:border-blue-900/30 dark:bg-blue-900/20 dark:text-blue-300 dark:hover:bg-blue-900/30",
         success:
           "border-emerald-200 bg-emerald-50 text-emerald-900 hover:bg-emerald-100 dark:border-emerald-900/30 dark:bg-emerald-900/20 dark:text-emerald-300 dark:hover:bg-emerald-900/30",
       },
@@ -28,7 +27,7 @@ const badgeVariants = cva(
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 );
 
 function Badge({
@@ -42,8 +41,8 @@ function Badge({
 
   return (
     <Comp
-      data-slot="badge"
       className={cn(badgeVariants({ variant }), className)}
+      data-slot="badge"
       {...props}
     />
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+
 import { SidebarInset, useSidebar } from "../ui/sidebar";
 
 interface DashboardLayoutProps {

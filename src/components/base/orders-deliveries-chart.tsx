@@ -2,6 +2,7 @@
 
 import { TrendingDown, TrendingUp } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { useState } from "react";
 
 import {
   Card,
@@ -17,11 +18,16 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { CurrencyKey, OrdersVsDeliveries } from "@/types";
-import { useState } from "react";
-import { SelectField } from "../ui/select-field";
-import { C } from "node_modules/tailwindcss/dist/resolve-config-QUZ9b-Gn.mjs";
 import { cn } from "@/lib/utils";
+
+import { SelectField } from "../ui/select-field";
+
+type CurrencyKey = "ZMW" | "USD";
+type OrdersVsDeliveries = {
+  month: string;
+  orders: number;
+  deliveries: number;
+};
 
 export const description = "A linear line chart";
 
@@ -71,6 +77,7 @@ export function OrdersVsDeliveredChart({
   chartData: Record<CurrencyKey, OrdersVsDeliveries[]>;
 }) {
   const [currency, setCurrency] = useState<CurrencyKey>("USD");
+
   return (
     <Card className="relative max-w-lg md:max-w-full">
       <CardHeader className="flex flex-row justify-between w-full gap-2 ">
@@ -87,12 +94,12 @@ export function OrdersVsDeliveredChart({
           classNames={{
             wrapper: "scale-75 md:scale-100 w-max z-10",
           }}
-          value={currency}
           defaultValue={currency}
           options={[
-            { id: "ZMW", name: "ZMW" },
-            { id: "USD", name: "USD" },
+            { id: "ZMW", name: "ZMW", value: "ZMW" },
+            { id: "USD", name: "USD", value: "USD" },
           ]}
+          value={currency}
           onValueChange={(value) => setCurrency(value as CurrencyKey)}
         />
       </CardHeader>
@@ -108,29 +115,29 @@ export function OrdersVsDeliveredChart({
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
-              tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              dataKey="month"
               tickFormatter={(value) => value.slice(0, 3)}
+              tickLine={false}
+              tickMargin={8}
             />
             <ChartTooltip
-              cursor={false}
               content={<ChartTooltipContent hideLabel />}
+              cursor={false}
             />
             <Line
               dataKey="orders"
-              type="linear"
+              dot={true}
               stroke="var(--color-orders)"
               strokeWidth={2}
-              dot={true}
+              type="linear"
             />
             <Line
               dataKey="delivered"
-              type="linear"
+              dot={true}
               stroke="var(--color-delivered)"
               strokeWidth={2}
-              dot={true}
+              type="linear"
             />
           </LineChart>
         </ChartContainer>
@@ -146,7 +153,8 @@ export function OrdersVsDeliveredChart({
           const Icon = isUp
             ? TrendingUp
             : // Use Lucide's TrendingDown icon if available, otherwise fallback to a down arrow
-              TrendingDown ?? (() => <span>↓</span>);
+              (TrendingDown ?? (() => <span>↓</span>));
+
           return (
             <div
               className={`flex gap-2 leading-none font-medium text-muted-foreground`}
@@ -155,14 +163,14 @@ export function OrdersVsDeliveredChart({
               <span
                 className={cn(
                   "flex gap-2 items-center",
-                  isUp ? "text-green-600" : "text-red-600"
+                  isUp ? "text-green-600" : "text-red-600",
                 )}
               >
                 {Math.abs(percent).toFixed(1)}%{" "}
                 <Icon
                   className={cn(
                     "h-4 w-4",
-                    isUp ? "text-green-600" : "text-red-600"
+                    isUp ? "text-green-600" : "text-red-600",
                   )}
                 />
               </span>{" "}

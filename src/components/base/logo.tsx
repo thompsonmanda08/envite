@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+
+import { cn } from "@/lib/utils";
 
 function Logo({
   href = "/",
@@ -52,16 +52,16 @@ function Logo({
 
   return (
     <Link
-      href={href}
       className={cn(`w-full min-w-fit max-w-max flex items-center`, className)}
+      href={href}
     >
       <Image
-        className="object-contain transition-all duration-300 ease-in-out sm:h-14 "
-        src={src || logoUrl}
-        alt="e-nvite logo"
-        width={120}
-        height={60}
         unoptimized
+        alt="e-nvite logo"
+        className="object-contain transition-all duration-300 ease-in-out sm:h-14 "
+        height={60}
+        src={src || logoUrl}
+        width={120}
       />
     </Link>
   );

@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
 import { fromBackend, handleError } from "./response-helpers";
 
 describe("fromBackend", () => {
@@ -6,6 +7,7 @@ describe("fromBackend", () => {
     const result = fromBackend({
       data: { success: true, message: "ok", data: { id: "1" } },
     });
+
     expect(result.success).toBe(true);
     expect(result.data).toEqual({ id: "1" });
     expect(result.message).toBe("ok");
@@ -26,6 +28,7 @@ describe("fromBackend", () => {
         },
       },
     });
+
     expect(result.pagination?.page_size).toBe(20);
     expect(result.pagination?.total_pages).toBe(5);
     expect(result.pagination?.totalCount).toBe(100);
@@ -35,17 +38,20 @@ describe("fromBackend", () => {
 
   it("falls back to success=false when backend omits flag", () => {
     const result = fromBackend({ data: { data: null } });
+
     expect(result.success).toBe(false);
   });
 
   it("omits pagination when backend has none", () => {
     const result = fromBackend({ data: { success: true, data: [] } });
+
     expect(result.pagination).toBeUndefined();
   });
 });
 
 describe("handleError", () => {
   let errSpy: ReturnType<typeof vi.spyOn>;
+
   beforeEach(() => {
     errSpy = vi.spyOn(console, "error").mockImplementation(() => {});
   });
@@ -59,6 +65,7 @@ describe("handleError", () => {
       "GET",
       "/x",
     );
+
     expect(r.success).toBe(false);
     expect(r.message).toBe("Token expired");
   });
@@ -76,11 +83,8 @@ describe("handleError", () => {
   });
 
   it("returns 403 default message when backend omits one", () => {
-    const r = handleError(
-      { response: { status: 403, data: {} } },
-      "GET",
-      "/x",
-    );
+    const r = handleError({ response: { status: 403, data: {} } }, "GET", "/x");
+
     expect(r.success).toBe(false);
     expect(r.message).toMatch(/permission/i);
   });
@@ -91,6 +95,7 @@ describe("handleError", () => {
       "GET",
       "/x",
     );
+
     expect(r.success).toBe(false);
     expect(r.message).toBe("fetch failed");
   });
@@ -101,6 +106,7 @@ describe("handleError", () => {
       "GET",
       "/x",
     );
+
     expect(r.success).toBe(false);
     expect(r.message).toBe("boom");
   });

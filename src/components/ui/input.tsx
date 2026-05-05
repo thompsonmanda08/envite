@@ -1,6 +1,7 @@
-import { cn } from "@/lib/utils";
 import * as React from "react";
 import { motion } from "framer-motion";
+
+import { cn } from "@/lib/utils";
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
@@ -106,8 +107,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             )}
             disabled={isDisabled || props?.disabled}
             id={name}
-            maxLength={maxLength}
             max={max}
+            maxLength={maxLength}
             min={min}
             name={name}
             type={type}
@@ -122,6 +123,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
         {((errorText && (isInvalid || onError)) || descriptionText) && (
           <motion.span
+            animate={{ scale: 1, opacity: 1 }}
             className={cn(
               "ml-1 text-xs text-slate-500 dark:text-slate-400",
               {
@@ -131,7 +133,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               classNames?.errorText,
             )}
             initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.2 }}
           >
             {errorText ? errorText : descriptionText}

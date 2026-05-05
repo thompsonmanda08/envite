@@ -1,6 +1,9 @@
 "use client";
 
+import type { EventRecord } from "@/types";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import {
   createEvent,
   deleteEvent,
@@ -9,7 +12,6 @@ import {
   publishEvent,
   updateEvent,
 } from "@/app/_actions/events";
-import type { EventRecord } from "@/types";
 import { EVENTS_KEYS } from "@/lib/query-keys";
 
 export function useEventsQuery(
@@ -20,7 +22,9 @@ export function useEventsQuery(
     queryKey: EVENTS_KEYS.list(params),
     queryFn: async () => {
       const res = await getEvents({ params });
+
       if (!res.success) throw new Error(res.message);
+
       return (res.data ?? []) as EventRecord[];
     },
     initialData,
@@ -33,7 +37,9 @@ export function useEventQuery(id: string) {
     queryKey: EVENTS_KEYS.detail(id),
     queryFn: async () => {
       const res = await getEvent(id);
+
       if (!res.success) throw new Error(res.message);
+
       return res.data as EventRecord;
     },
     enabled: !!id,
@@ -43,6 +49,7 @@ export function useEventQuery(id: string) {
 
 export function useCreateEventMutation() {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: (data: Partial<EventRecord>) => createEvent(data),
     onSuccess: (res) => {
@@ -53,6 +60,7 @@ export function useCreateEventMutation() {
 
 export function useUpdateEventMutation() {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<EventRecord> }) =>
       updateEvent(id, data),
@@ -67,6 +75,7 @@ export function useUpdateEventMutation() {
 
 export function useDeleteEventMutation() {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: (id: string) => deleteEvent(id),
     onSuccess: (res, id) => {
@@ -80,6 +89,7 @@ export function useDeleteEventMutation() {
 
 export function usePublishEventMutation() {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: (id: string) => publishEvent(id),
     onSuccess: (res, id) => {

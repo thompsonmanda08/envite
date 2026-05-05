@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
+
 import { Container, Reveal, Section } from "./section";
 import { PillButton } from "./primitives";
-import Link from "next/link";
 
 export default function CTA() {
   return (
@@ -25,14 +26,14 @@ export default function CTA() {
               </p>
               <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
                 <PillButton
-                  href="/login?signup=true"
                   className="bg-background text-foreground hover:bg-background/90"
+                  href="/login?signup=true"
                 >
                   Start your first event
                 </PillButton>
                 <Link
-                  href="#stories"
                   className="px-3 py-3 text-sm text-background/80 transition-colors hover:text-background"
+                  href="#stories"
                 >
                   Read host stories →
                 </Link>

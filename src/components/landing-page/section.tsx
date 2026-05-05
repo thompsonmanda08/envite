@@ -1,8 +1,9 @@
 "use client";
 
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
+
+import { cn } from "@/lib/utils";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -35,14 +36,15 @@ export function Reveal({
 }) {
   const reduce = useReducedMotion();
   const Comp = motion[as] as typeof motion.div;
+
   return (
     <Comp
-      initial={reduce ? false : "hidden"}
-      whileInView="show"
-      viewport={{ once: true, margin: "-80px" }}
-      variants={fadeUp}
-      transition={{ delay }}
       className={className}
+      initial={reduce ? false : "hidden"}
+      transition={{ delay }}
+      variants={fadeUp}
+      viewport={{ once: true, margin: "-80px" }}
+      whileInView="show"
     >
       {children}
     </Comp>
@@ -62,12 +64,12 @@ export function Section({
 }) {
   return (
     <section
-      id={id}
       className={cn(
         "relative",
         bleed ? "" : "py-20 md:py-28 lg:py-32",
         className,
       )}
+      id={id}
     >
       {children}
     </section>

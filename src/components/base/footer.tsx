@@ -4,7 +4,7 @@ function Footer() {
   return (
     <footer className="text-center pt-20 pb-12">
       <div className="max-w-md mx-auto">
-        <div className="w-16 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mb-6"></div>
+        <div className="w-16 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mb-6" />
         <p className="text-gray-400 text-sm font-light tracking-wide mb-4">
           Crafted with care, delivered with love
         </p>

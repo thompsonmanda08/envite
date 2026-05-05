@@ -61,6 +61,7 @@ export function DateTimePicker({
         return undefined;
       }
     }
+
     return undefined;
   }, [value, stringValue]);
 
@@ -73,6 +74,7 @@ export function DateTimePicker({
   function handleDateSelect(selectedDate?: Date) {
     if (!selectedDate) {
       emit(undefined);
+
       return;
     }
     const current = resolvedDate || new Date();
@@ -84,12 +86,14 @@ export function DateTimePicker({
       current.getMinutes(),
       0,
     );
+
     emit(newDate);
     setOpen(false);
   }
 
   function handleTimeChange(e: React.ChangeEvent<HTMLInputElement>) {
     const timeValue = e.target.value;
+
     if (!timeValue) return;
     const [hours, minutes] = timeValue.split(":").map(Number);
     const current = resolvedDate || new Date();
@@ -101,6 +105,7 @@ export function DateTimePicker({
       minutes,
       0,
     );
+
     emit(newDate);
   }
 
@@ -122,15 +127,15 @@ export function DateTimePicker({
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <button
-              id={name}
-              type="button"
-              disabled={disabled}
               className={cn(
                 "flex flex-1 items-center gap-2 px-4 py-1.75 text-sm",
                 inputBase,
                 !(resolvedDate && !isNaN(resolvedDate.getTime())) &&
                   "text-slate-400 dark:text-foreground/30",
               )}
+              disabled={disabled}
+              id={name}
+              type="button"
             >
               <CalendarIcon className="h-4 w-4 shrink-0 text-slate-400 dark:text-foreground/40" />
               <span className="flex-1 text-left">
@@ -140,23 +145,23 @@ export function DateTimePicker({
               </span>
             </button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent align="start" className="w-auto p-0">
             <Calendar
+              disabled={disabled}
               mode="single"
               selected={resolvedDate}
               onSelect={handleDateSelect}
-              disabled={disabled}
             />
           </PopoverContent>
         </Popover>
 
         {/* Time input — styled like Input */}
         <input
+          className={cn("w-28 px-3 py-1.75 text-sm", inputBase)}
+          disabled={disabled}
           type="time"
           value={resolvedDate ? format(resolvedDate, "HH:mm") : ""}
           onChange={handleTimeChange}
-          disabled={disabled}
-          className={cn("w-28 px-3 py-1.75 text-sm", inputBase)}
         />
       </div>
     </div>

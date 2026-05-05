@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { motion } from "framer-motion";
+
+import { cn } from "@/lib/utils";
+
 import { Container, Eyebrow, Reveal, Section } from "./section";
 import { PillButton } from "./primitives";
-import { cn } from "@/lib/utils";
 
 const PLANS = [
   {
@@ -76,19 +78,20 @@ export default function Pricing() {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {PLANS.map((p, i) => {
             const isActive = active === p.id;
+
             return (
               <Reveal key={p.id} delay={i * 0.06}>
                 <button
-                  type="button"
-                  onMouseEnter={() => setActive(p.id)}
-                  onFocus={() => setActive(p.id)}
-                  onClick={() => setActive(p.id)}
                   className={cn(
                     "group relative flex h-full w-full flex-col rounded-3xl border p-8 text-left transition-all duration-500",
                     isActive
                       ? "-translate-y-1 border-foreground/30 bg-surface shadow-[0_30px_70px_-30px_color-mix(in_oklch,var(--foreground)_30%,transparent)]"
                       : "border-hairline bg-surface/60 hover:bg-surface",
                   )}
+                  type="button"
+                  onClick={() => setActive(p.id)}
+                  onFocus={() => setActive(p.id)}
+                  onMouseEnter={() => setActive(p.id)}
                 >
                   {p.popular && (
                     <span className="absolute right-6 top-6 rounded-full bg-foreground px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-background">
@@ -112,8 +115,8 @@ export default function Pricing() {
                       <li key={f} className="flex items-start gap-3 text-sm">
                         <span className="mt-0.5 grid h-4 w-4 flex-none place-items-center rounded-full bg-foreground/8">
                           <Check
-                            size={10}
                             className="text-foreground/70"
+                            size={10}
                             strokeWidth={3}
                           />
                         </span>
@@ -127,10 +130,10 @@ export default function Pricing() {
                       transition={{ duration: 0.3 }}
                     >
                       <PillButton
-                        href="/login?signup=true"
-                        variant={isActive ? "solid" : "outline"}
                         className="w-full justify-center"
+                        href="/login?signup=true"
                         icon={false}
+                        variant={isActive ? "solid" : "outline"}
                       >
                         Choose {p.name}
                       </PillButton>

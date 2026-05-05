@@ -27,15 +27,15 @@ export function DashboardSkeleton() {
             <div className="border border-green-200 shadow-none hover:shadow-sm transition-shadow duration-200 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg md:max-w-sm flex-1">
               <div className="p-6 pb-4">
                 <div className="flex items-center mb-2">
-                  <div className="w-5 h-5 bg-green-600 rounded mr-2"></div>
+                  <div className="w-5 h-5 bg-green-600 rounded mr-2" />
                   <Skeleton className="h-5 w-20" />
                 </div>
                 <Skeleton className="h-4 w-full mb-4" />
               </div>
               <div className="px-6 pb-6">
                 <div className="w-full h-10 bg-gradient-to-r from-green-600 to-green-700 rounded-md flex items-center justify-center gap-2">
-                  <div className="w-5 h-5 bg-white/20 rounded"></div>
-                  <div className="w-36 h-3 bg-white/20 rounded"></div>
+                  <div className="w-5 h-5 bg-white/20 rounded" />
+                  <div className="w-36 h-3 bg-white/20 rounded" />
                 </div>
               </div>
             </div>
@@ -58,7 +58,7 @@ export function DashboardSkeleton() {
                     <Skeleton className="h-2 lg:h-3 w-12 lg:w-20" />
                   </div>
                   <div className="w-8 h-8 lg:w-12 lg:h-12 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <div className="w-4 h-4 lg:w-6 lg:h-6 bg-white/20 rounded"></div>
+                    <div className="w-4 h-4 lg:w-6 lg:h-6 bg-white/20 rounded" />
                   </div>
                 </div>
               </div>
@@ -72,7 +72,7 @@ export function DashboardSkeleton() {
                     <Skeleton className="h-2 lg:h-3 w-10 lg:w-16 bg-green-200" />
                   </div>
                   <div className="w-8 h-8 lg:w-12 lg:h-12 bg-green-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <div className="w-4 h-4 lg:w-6 lg:h-6 bg-white/20 rounded"></div>
+                    <div className="w-4 h-4 lg:w-6 lg:h-6 bg-white/20 rounded" />
                   </div>
                 </div>
               </div>
@@ -86,7 +86,7 @@ export function DashboardSkeleton() {
                     <Skeleton className="h-2 lg:h-3 w-10 lg:w-16" />
                   </div>
                   <div className="w-8 h-8 lg:w-12 lg:h-12 bg-purple-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <div className="w-4 h-4 lg:w-6 lg:h-6 bg-white/20 rounded"></div>
+                    <div className="w-4 h-4 lg:w-6 lg:h-6 bg-white/20 rounded" />
                   </div>
                 </div>
               </div>
@@ -100,7 +100,7 @@ export function DashboardSkeleton() {
                     <Skeleton className="h-2 lg:h-3 w-20 lg:w-28" />
                   </div>
                   <div className="w-8 h-8 lg:w-12 lg:h-12 bg-orange-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <div className="w-4 h-4 lg:w-6 lg:h-6 bg-white/20 rounded"></div>
+                    <div className="w-4 h-4 lg:w-6 lg:h-6 bg-white/20 rounded" />
                   </div>
                 </div>
               </div>
@@ -131,10 +131,10 @@ export function DashboardSkeleton() {
                             i === 0
                               ? "bg-green-200"
                               : i === 1 || i === 3
-                              ? "bg-yellow-200"
-                              : i === 2
-                              ? "bg-red-200"
-                              : "bg-green-200"
+                                ? "bg-yellow-200"
+                                : i === 2
+                                  ? "bg-red-200"
+                                  : "bg-green-200"
                           }`}
                         />
                       </div>
@@ -169,10 +169,10 @@ export function DashboardSkeleton() {
                               i === 0
                                 ? "bg-green-200"
                                 : i === 1 || i === 3
-                                ? "bg-yellow-200"
-                                : i === 2
-                                ? "bg-red-200"
-                                : "bg-green-200"
+                                  ? "bg-yellow-200"
+                                  : i === 2
+                                    ? "bg-red-200"
+                                    : "bg-green-200"
                             }`}
                           />
                         </div>
@@ -199,7 +199,7 @@ export function DashboardSkeleton() {
                       } flex items-center justify-center flex-shrink-0`}
                     >
                       {i < 3 && (
-                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                        <div className="w-2 h-2 bg-white rounded-full" />
                       )}
                     </div>
                     <Skeleton className="h-4 flex-1" />
@@ -242,7 +242,7 @@ export function DashboardSkeleton() {
                       } flex items-center justify-center flex-shrink-0`}
                     >
                       {i < 3 && (
-                        <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                        <div className="w-1.5 h-1.5 bg-white rounded-full" />
                       )}
                     </div>
                     <Skeleton className="h-3 flex-1" />

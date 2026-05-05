@@ -56,14 +56,17 @@ export function DatePicker({
         return undefined;
       }
     }
+
     return undefined;
   }, [value, stringValue]);
 
   const disabledDates = React.useMemo(() => {
     if (!minDate && !maxDate) return undefined;
+
     return (date: Date) => {
       if (minDate && date < minDate) return true;
       if (maxDate && date > maxDate) return true;
+
       return false;
     };
   }, [minDate, maxDate]);
@@ -91,9 +94,6 @@ export function DatePicker({
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
-            id={name}
-            type="button"
-            disabled={disabled}
             className={cn(
               // Match Input base styles
               "w-full flex items-center gap-2 px-4 py-1.75 text-base",
@@ -106,6 +106,9 @@ export function DatePicker({
                 ? "text-slate-900 dark:text-slate-100"
                 : "text-slate-400 dark:text-foreground/30",
             )}
+            disabled={disabled}
+            id={name}
+            type="button"
           >
             <CalendarIcon className="h-4 w-4 shrink-0 text-slate-400 dark:text-foreground/40" />
             <span className="flex-1 text-left text-sm">
@@ -115,14 +118,14 @@ export function DatePicker({
             </span>
           </button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
+        <PopoverContent align="start" className="w-auto p-0">
           <Calendar
+            captionLayout="dropdown"
+            disabled={disabledDates || disabled}
+            endMonth={new Date(2099, 11)}
             mode="single"
             selected={resolvedDate}
-            disabled={disabledDates || disabled}
-            captionLayout="dropdown"
             startMonth={new Date(1900, 0)}
-            endMonth={new Date(2099, 11)}
             onSelect={handleSelect}
           />
         </PopoverContent>

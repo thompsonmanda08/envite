@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
+import { RotateCcw, Check, Upload, Pencil } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
-import { RotateCcw, Check, Upload, Pencil, UploadCloud } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -33,9 +34,11 @@ export function DigitalSignaturePad({
 
   useEffect(() => {
     const canvas = canvasRef.current;
+
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
+
     if (!ctx) return;
 
     // Set up canvas
@@ -55,6 +58,7 @@ export function DigitalSignaturePad({
       | React.TouchEvent<HTMLCanvasElement>,
   ) => {
     const canvas = canvasRef.current;
+
     if (!canvas) return { x: 0, y: 0 };
 
     const rect = canvas.getBoundingClientRect();
@@ -64,6 +68,7 @@ export function DigitalSignaturePad({
     if ("touches" in e) {
       // Touch event
       const touch = e.touches[0] || e.changedTouches[0];
+
       return {
         x: (touch.clientX - rect.left) * scaleX,
         y: (touch.clientY - rect.top) * scaleY,
@@ -87,6 +92,7 @@ export function DigitalSignaturePad({
     e.preventDefault();
     setIsDrawing(true);
     const pos = getEventPos(e);
+
     setLastPoint(pos);
   };
 
@@ -100,6 +106,7 @@ export function DigitalSignaturePad({
     e.preventDefault();
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
+
     if (!canvas || !ctx) return;
 
     const currentPos = getEventPos(e);
@@ -121,8 +128,10 @@ export function DigitalSignaturePad({
 
     // Convert canvas to base64 and notify parent
     const canvas = canvasRef.current;
+
     if (canvas && hasSignature) {
       const signature = canvas.toDataURL("image/png");
+
       onSignatureChange(signature);
     }
   };
@@ -130,6 +139,7 @@ export function DigitalSignaturePad({
   const clearSignature = () => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
+
     if (!canvas || !ctx) return;
 
     // Clear canvas
@@ -150,23 +160,28 @@ export function DigitalSignaturePad({
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
     if (!file) return;
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
       alert("Please upload an image file (PNG, JPG, etc.)");
+
       return;
     }
 
     // Validate file size (max 2MB)
     if (file.size > 2 * 1024 * 1024) {
       alert("File size must be less than 2MB");
+
       return;
     }
 
     const reader = new FileReader();
+
     reader.onload = (event) => {
       const imageData = event.target?.result as string;
+
       setUploadedImage(imageData);
       setHasSignature(true);
       onSignatureChange(imageData);
@@ -185,33 +200,33 @@ export function DigitalSignaturePad({
         onValueChange={(v) => setActiveTab(v as "draw" | "upload")}
       >
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="draw" className="flex items-center gap-2">
+          <TabsTrigger className="flex items-center gap-2" value="draw">
             <Pencil className="h-4 w-4" />
             Draw Signature
           </TabsTrigger>
-          <TabsTrigger value="upload" className="flex items-center gap-2">
+          <TabsTrigger className="flex items-center gap-2" value="upload">
             <Upload className="h-4 w-4" />
             Upload Image
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="draw" className="mt-2">
+        <TabsContent className="mt-2" value="draw">
           <div className="relative border-2 border-dashed border-border rounded-lg p-2 bg-background">
             <canvas
               ref={canvasRef}
-              width={width}
-              height={height}
               className={cn(
                 "block w-full cursor-crosshair touch-none",
                 disabled && "cursor-not-allowed opacity-50",
               )}
+              height={height}
+              width={width}
               onMouseDown={startDrawing}
+              onMouseLeave={stopDrawing}
               onMouseMove={draw}
               onMouseUp={stopDrawing}
-              onMouseLeave={stopDrawing}
-              onTouchStart={startDrawing}
-              onTouchMove={draw}
               onTouchEnd={stopDrawing}
+              onTouchMove={draw}
+              onTouchStart={startDrawing}
             />
 
             {!hasSignature && !disabled && (
@@ -224,35 +239,35 @@ export function DigitalSignaturePad({
           </div>
         </TabsContent>
 
-        <TabsContent value="upload" className="mt-2">
+        <TabsContent className="mt-2" value="upload">
           <div className="relative border-2 h-30 border-dashed border-border rounded-lg p-4 bg-background">
             <input
               ref={fileInputRef}
-              type="file"
               accept="image/*"
-              onChange={handleFileUpload}
-              disabled={disabled}
               className="hidden"
+              disabled={disabled}
+              type="file"
+              onChange={handleFileUpload}
             />
 
             {uploadedImage ? (
               <div className="flex flex-col items-center gap-2">
                 <img
-                  src={uploadedImage}
                   alt="Uploaded signature"
                   className="h-[200px] max-w-full object-contain"
+                  src={uploadedImage}
                 />
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center  gap-2">
                 <Upload className="h-8 w-8 text-muted-foreground" />
                 <Button
+                  className="mt-2"
+                  disabled={disabled}
+                  size={"sm"}
                   type="button"
                   variant="outline"
-                  size={"sm"}
                   onClick={triggerFileUpload}
-                  disabled={disabled}
-                  className="mt-2"
                 >
                   <Upload className="h-4 w-4 mr-2" />
                   Upload Signature
@@ -265,12 +280,12 @@ export function DigitalSignaturePad({
 
       <div className="flex justify-between items-center">
         <Button
+          className="flex items-center gap-1"
+          disabled={disabled || !hasSignature}
+          size="sm"
           type="button"
           variant="outline"
-          size="sm"
           onClick={clearSignature}
-          disabled={disabled || !hasSignature}
-          className="flex items-center gap-1"
         >
           <RotateCcw className="h-3 w-3" />
           Clear

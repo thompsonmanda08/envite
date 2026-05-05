@@ -2,12 +2,20 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+
 import { resetPassword } from "@/app/_actions/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/ui/spinner";
-import LoadingPage from "../apply/loading";
+import Spinner2 from "@/components/ui/spinner";
+
+function LoadingPage() {
+  return (
+    <div className="flex h-screen items-center justify-center">
+      <Spinner2 size="lg" />
+    </div>
+  );
+}
 import { toast } from "sonner";
 
 export default function ResetForgotPasswordPage() {
@@ -15,17 +23,17 @@ export default function ResetForgotPasswordPage() {
   const params = useSearchParams();
   const token = params.get("token") || "";
 
-  if (!token) {
-    // If no token is provided, redirect to forgot password page
-    router.push("/forgot-password");
-    toast.error("No reset token provided.");
-    return <LoadingPage />;
-  }
-
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  if (!token) {
+    router.push("/forgot-password");
+    toast.error("No reset token provided.");
+
+    return <LoadingPage />;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,20 +41,23 @@ export default function ResetForgotPasswordPage() {
 
     if (!newPassword || !confirmPassword) {
       setMessage("Please enter both newPassword and password.");
+
       return;
     }
 
     if (newPassword !== confirmPassword) {
       setMessage("Passwords do not match.");
+
       return;
     }
 
     setIsSubmitting(true);
 
-    const response = await resetPassword({ newPassword, token });
+    const response = await resetPassword({ password: newPassword, token });
 
     if (response.success) {
       const token = response.data.token;
+
       // Redirect to reset password page with token
       toast.success(response.message || "Password reset successfully!");
       setMessage("🎉 Password reset successfully! Redirecting...");
@@ -67,36 +78,36 @@ export default function ResetForgotPasswordPage() {
         <p className="text-gray-600">Change your Password?</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form className="space-y-4" onSubmit={handleSubmit}>
         <Input
-          type="password"
-          id="newPassword"
-          label="New Password"
-          value={newPassword}
-          isInvalid={newPassword.length < 6 && newPassword.length > 0}
-          errorText="Password must be at least 6 characters."
-          onChange={(e) => setNewPassword(e.target.value)}
-          placeholder="Enter your new password"
           disabled={isSubmitting}
+          errorText="Password must be at least 6 characters."
+          id="newPassword"
+          isInvalid={newPassword.length < 6 && newPassword.length > 0}
+          label="New Password"
+          placeholder="Enter your new password"
+          type="password"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
         />
         <Input
-          type="password"
+          disabled={isSubmitting}
+          errorText="Passwords do not match."
           id="confirmPassword"
-          label="Confirm Password"
-          value={confirmPassword}
           isInvalid={
             confirmPassword !== newPassword && confirmPassword.length > 6
           }
-          errorText="Passwords do not match."
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          label="Confirm Password"
           placeholder="Enter your password again"
-          disabled={isSubmitting}
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
 
-        <Button type="submit" disabled={isSubmitting} className="w-full">
+        <Button className="w-full" disabled={isSubmitting} type="submit">
           {isSubmitting ? (
             <span className="flex items-center gap-1 ">
-              <Spinner size={"sm"} color="white" /> Submitting...
+              <Spinner color="white" size={"sm"} /> Submitting...
             </span>
           ) : (
             "Change Password"

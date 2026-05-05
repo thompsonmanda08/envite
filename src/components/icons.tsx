@@ -1,5 +1,6 @@
-import { cn } from "@/lib/utils";
 import * as React from "react";
+
+import { cn } from "@/lib/utils";
 
 export interface IconSvgProps extends React.SVGProps<SVGSVGElement> {
   size?: number;
@@ -15,11 +16,11 @@ export const WhatsApp: React.FC<IconSvgProps> = ({
 }) => {
   return (
     <svg
+      className="w-5 h-5 transition-transform duration-300 ease-out group-hover:scale-110"
+      fill="currentColor"
       height={size || height}
       viewBox="0 0 24 24"
       width={size || width}
-      className="w-5 h-5 transition-transform duration-300 ease-out group-hover:scale-110"
-      fill="currentColor"
       {...props}
     >
       <path
@@ -175,20 +176,20 @@ export const StarFilledIcon = ({
 }: IconSvgProps) => (
   <svg
     aria-hidden="true"
+    className={cn("lucide lucide-star-icon lucide-star", props.className)}
     focusable="false"
     height={size || height}
     role="presentation"
     viewBox="0 0 24 24"
     width={size || width}
-    className={cn("lucide lucide-star-icon lucide-star", props.className)}
     {...props}
   >
     <path
+      d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
       fill="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}
-      d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
     />
   </svg>
 );

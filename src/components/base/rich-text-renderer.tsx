@@ -26,6 +26,7 @@ export function RichTextRenderer({
 
   const decodeHtmlEntities = (text: string) => {
     if (!text) return "";
+
     return String(text)
       .replace(/&nbsp;/g, " ")
       .replace(/&amp;/g, "&")
@@ -37,6 +38,7 @@ export function RichTextRenderer({
 
   const renderText = (text: string) => {
     const decodedText = decodeHtmlEntities(text || "");
+
     if (!decodedText.trim()) return null;
 
     const elements: React.ReactNode[] = [];
@@ -44,6 +46,7 @@ export function RichTextRenderer({
 
     while (remainingText.length > 0) {
       const boldMatch = remainingText.match(/\*\*(.*?)\*\*/);
+
       if (boldMatch) {
         const [fullMatch, boldContent] = boldMatch;
         const splitIndex = remainingText.indexOf(fullMatch);
@@ -55,13 +58,14 @@ export function RichTextRenderer({
         elements.push(
           <strong key={elements.length} className="font-semibold">
             {boldContent}
-          </strong>
+          </strong>,
         );
         remainingText = remainingText.substring(splitIndex + fullMatch.length);
         continue;
       }
 
       const italicMatch = remainingText.match(/_(.*?)_/);
+
       if (italicMatch) {
         const [fullMatch, italicContent] = italicMatch;
         const splitIndex = remainingText.indexOf(fullMatch);
@@ -73,7 +77,7 @@ export function RichTextRenderer({
         elements.push(
           <em key={elements.length} className="italic">
             {italicContent}
-          </em>
+          </em>,
         );
         remainingText = remainingText.substring(splitIndex + fullMatch.length);
         continue;
@@ -113,6 +117,7 @@ export function RichTextRenderer({
 
           case "paragraph":
             const paragraphContent = renderText(block.data.text || "");
+
             if (!paragraphContent) return null;
 
             return (

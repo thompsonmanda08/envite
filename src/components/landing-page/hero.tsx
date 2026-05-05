@@ -2,9 +2,10 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowDownRight, Calendar, MapPin, Sparkles } from "lucide-react";
+import Link from "next/link";
+
 import { Container } from "./section";
 import { PillButton, Badge } from "./primitives";
-import Link from "next/link";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -27,13 +28,13 @@ export default function HeroSection() {
 
       <Container className="relative pb-20 pt-12 md:pb-28 md:pt-16 lg:pt-20">
         <motion.div
-          initial={reduce ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease }}
           className="mb-8 flex items-center justify-center"
+          initial={reduce ? false : { opacity: 0, y: 12 }}
+          transition={{ duration: 0.6, ease }}
         >
           <Badge>
-            <Sparkles size={12} className="text-secondary" />
+            <Sparkles className="text-secondary" size={12} />
             Now with smart RSVP automation
           </Badge>
         </motion.div>
@@ -57,41 +58,41 @@ export default function HeroSection() {
         </h1>
 
         <motion.p
-          initial={reduce ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease, delay: 0.45 }}
           className="mx-auto mt-8 max-w-xl text-center text-base leading-relaxed text-mute md:text-lg"
+          initial={reduce ? false : { opacity: 0, y: 12 }}
+          transition={{ duration: 0.6, ease, delay: 0.45 }}
         >
           Design, send, and track digital invitations that feel as considered as
           the event itself. Built for hosts who care about the details.
         </motion.p>
 
         <motion.div
-          initial={reduce ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease, delay: 0.55 }}
           className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4"
+          initial={reduce ? false : { opacity: 0, y: 12 }}
+          transition={{ duration: 0.6, ease, delay: 0.55 }}
         >
           <PillButton href="/login?signup=true" variant="solid">
             Start creating
           </PillButton>
           <Link
-            href="#designs"
             className="group inline-flex items-center gap-2 px-3 py-3 text-sm text-foreground/80 transition-colors hover:text-foreground"
+            href="#designs"
           >
             Explore designs
             <ArrowDownRight
-              size={14}
               className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5"
+              size={14}
             />
           </Link>
         </motion.div>
 
         <motion.div
-          initial={reduce ? false : { opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease, delay: 0.7 }}
           className="relative mx-auto mt-20 max-w-4xl"
+          initial={reduce ? false : { opacity: 0, y: 28 }}
+          transition={{ duration: 0.9, ease, delay: 0.7 }}
         >
           <InvitationFrame />
         </motion.div>
@@ -102,13 +103,14 @@ export default function HeroSection() {
 
 function Word({ children, delay }: { children: string; delay: number }) {
   const reduce = useReducedMotion();
+
   return (
     <span className="inline-block overflow-hidden align-baseline">
       <motion.span
-        initial={reduce ? false : { y: "110%" }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.85, ease, delay }}
         className="inline-block pr-[0.25em]"
+        initial={reduce ? false : { y: "110%" }}
+        transition={{ duration: 0.85, ease, delay }}
       >
         {children}
       </motion.span>
@@ -121,10 +123,10 @@ function InvitationFrame() {
     <div className="relative grid grid-cols-12 items-center gap-4">
       <FloatingTag
         className="col-span-3 hidden md:block"
-        side="left"
-        title="June 15"
-        subtitle="Saturday, 5pm"
         icon={<Calendar size={14} />}
+        side="left"
+        subtitle="Saturday, 5pm"
+        title="June 15"
       />
 
       <div className="col-span-12 md:col-span-6">
@@ -163,10 +165,10 @@ function InvitationFrame() {
 
       <FloatingTag
         className="col-span-3 hidden md:block"
-        side="right"
-        title="142 going"
-        subtitle="38 awaiting"
         icon={<MapPin size={14} />}
+        side="right"
+        subtitle="38 awaiting"
+        title="142 going"
       />
     </div>
   );
@@ -188,13 +190,13 @@ function FloatingTag({
   return (
     <motion.div
       animate={{ y: [0, -8, 0] }}
+      className={`${className ?? ""} ${side === "right" ? "justify-self-start" : "justify-self-end"}`}
       transition={{
         duration: 6,
         repeat: Infinity,
         ease: "easeInOut",
         delay: side === "right" ? 1.5 : 0,
       }}
-      className={`${className ?? ""} ${side === "right" ? "justify-self-start" : "justify-self-end"}`}
     >
       <div className="rounded-2xl border border-hairline bg-surface/85 px-4 py-3 backdrop-blur shadow-sm">
         <div className="flex items-center gap-2 text-mute">

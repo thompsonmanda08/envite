@@ -2,8 +2,10 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-export interface ToggleProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onChange"> {
+export interface ToggleProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  "onChange"
+> {
   checked?: boolean;
   onChange?: (checked: boolean) => void;
   size?: "sm" | "md" | "lg";
@@ -24,7 +26,7 @@ const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(
       loading = false,
       ...props
     },
-    ref
+    ref,
   ) => {
     const handleClick = () => {
       if (!disabled && !loading && onChange) {
@@ -61,45 +63,45 @@ const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(
 
     return (
       <button
-        type="button"
+        ref={ref}
+        aria-checked={checked}
         className={cn(
           "relative inline-flex items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
           currentSize.track,
           currentVariant,
           (disabled || loading) && "opacity-50 cursor-not-allowed",
-          className
+          className,
         )}
-        onClick={handleClick}
         disabled={disabled || loading}
-        ref={ref}
         role="switch"
-        aria-checked={checked}
+        type="button"
+        onClick={handleClick}
         {...props}
       >
         <span
           className={cn(
             "transform rounded-full bg-white transition-transform flex items-center justify-center",
             currentSize.thumb,
-            currentSize.translate
+            currentSize.translate,
           )}
         >
           {loading && (
             <div className="flex items-center justify-center space-x-0.5">
-              <div className="w-1 h-1 bg-muted-foreground rounded-full animate-pulse"></div>
+              <div className="w-1 h-1 bg-muted-foreground rounded-full animate-pulse" />
               <div
                 className="w-1 h-1 bg-muted-foreground rounded-full animate-pulse"
                 style={{ animationDelay: "0.1s" }}
-              ></div>
+              />
               <div
                 className="w-1 h-1 bg-muted-foreground rounded-full animate-pulse"
                 style={{ animationDelay: "0.2s" }}
-              ></div>
+              />
             </div>
           )}
         </span>
       </button>
     );
-  }
+  },
 );
 
 Toggle.displayName = "Toggle";

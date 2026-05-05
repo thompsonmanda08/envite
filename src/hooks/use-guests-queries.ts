@@ -1,6 +1,9 @@
 "use client";
 
+import type { Guest, RsvpStatus } from "@/types";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import {
   addGuest,
   bulkAddGuests,
@@ -9,7 +12,6 @@ import {
   setRsvp,
   updateGuest,
 } from "@/app/_actions/guests";
-import type { Guest, RsvpStatus } from "@/types";
 import { GUESTS_KEYS } from "@/lib/query-keys";
 
 export function useGuestsQuery(
@@ -21,7 +23,9 @@ export function useGuestsQuery(
     queryKey: GUESTS_KEYS.list(eventId, params),
     queryFn: async () => {
       const res = await getGuests(eventId, { params });
+
       if (!res.success) throw new Error(res.message);
+
       return (res.data ?? []) as Guest[];
     },
     enabled: !!eventId,
@@ -32,6 +36,7 @@ export function useGuestsQuery(
 
 export function useAddGuestMutation(eventId: string) {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: (data: Partial<Guest>) => addGuest(eventId, data),
     onSuccess: (res) => {
@@ -44,6 +49,7 @@ export function useAddGuestMutation(eventId: string) {
 
 export function useBulkAddGuestsMutation(eventId: string) {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: (guests: Array<Partial<Guest>>) =>
       bulkAddGuests(eventId, guests),
@@ -57,6 +63,7 @@ export function useBulkAddGuestsMutation(eventId: string) {
 
 export function useUpdateGuestMutation(eventId: string) {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<Guest> }) =>
       updateGuest(eventId, id, data),
@@ -70,6 +77,7 @@ export function useUpdateGuestMutation(eventId: string) {
 
 export function useDeleteGuestMutation(eventId: string) {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: (id: string) => deleteGuest(eventId, id),
     onSuccess: (res) => {
@@ -82,6 +90,7 @@ export function useDeleteGuestMutation(eventId: string) {
 
 export function useSetRsvpMutation(eventId: string) {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: ({ id, rsvp }: { id: string; rsvp: RsvpStatus }) =>
       setRsvp(eventId, id, rsvp),

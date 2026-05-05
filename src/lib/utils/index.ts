@@ -84,7 +84,8 @@ export function generateMeta({
 // (Mr/Dr/Rev/...) are stripped before initials are taken so "Dr. E. Mwape"
 // returns "EM" rather than "DE". Prefer userInitials({ first_name, last_name })
 // from "@/lib/utils/names" when you already have the structured fields.
-export const getInitials = (fullName: string) => userInitials({ name: fullName });
+export const getInitials = (fullName: string) =>
+  userInitials({ name: fullName });
 
 export function generateRandomString(length = 10) {
   const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -101,6 +102,7 @@ export function generateRandomString(length = 10) {
 
   // Ensure at least one of each required type
   let randomString = "";
+
   randomString += uppercase[Math.floor(Math.random() * uppercase.length)];
   randomString += lowercase[Math.floor(Math.random() * lowercase.length)];
   randomString += numbers[Math.floor(Math.random() * numbers.length)];
@@ -109,6 +111,7 @@ export function generateRandomString(length = 10) {
   // Fill the rest with random characters
   for (let i = 4; i < length; i++) {
     const randomIndex = Math.floor(Math.random() * allCharacters.length);
+
     randomString += allCharacters[randomIndex];
   }
 

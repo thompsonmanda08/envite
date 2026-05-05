@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
+
 import { Button } from "./button";
 
 interface DropdownProps {
@@ -30,16 +31,17 @@ export function Dropdown({
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div ref={dropdownRef} className="relative">
       <Button
+        className="p-2 rounded-md hover:bg-accent transition-colors"
         size="sm"
         variant="ghost"
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 rounded-md hover:bg-accent transition-colors"
       >
         {trigger}
       </Button>
@@ -48,7 +50,7 @@ export function Dropdown({
         <div
           className={cn(
             "fixed bg-popover rounded-md shadow-xl border border-border py-1 z-[9999] min-w-[140px] max-w-sm",
-            align === "right" ? "right-0" : "left-0"
+            align === "right" ? "right-0" : "left-0",
           )}
           style={{
             top:
@@ -85,12 +87,12 @@ export function DropdownItem({
 }: DropdownItemProps) {
   return (
     <button
-      onClick={onClick}
       className={cn(
         "w-full text-left px-3 py-2 text-sm hover:bg-accent transition-colors",
         variant === "default" && "text-popover-foreground",
-        variant === "destructive" && "text-destructive hover:bg-destructive/10"
+        variant === "destructive" && "text-destructive hover:bg-destructive/10",
       )}
+      onClick={onClick}
     >
       {children}
     </button>

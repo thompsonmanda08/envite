@@ -1,6 +1,8 @@
-import { cn } from "@/lib/utils";
 import * as React from "react";
 import { motion } from "framer-motion";
+import { Check, ChevronsUpDown } from "lucide-react";
+
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -15,7 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Check, ChevronsUpDown } from "lucide-react";
+
 import { Spinner } from "./spinner";
 
 type SelectInputProps = React.InputHTMLAttributes<HTMLSelectElement> & {
@@ -93,6 +95,7 @@ const SearchSelectField = React.forwardRef<HTMLSelectElement, SelectInputProps>(
       if (!searchValue.trim()) return options;
 
       const lowerSearchValue = searchValue.toLowerCase();
+
       return options.filter((item) => {
         const label =
           item?.[String(listItemName)] ||
@@ -138,10 +141,7 @@ const SearchSelectField = React.forwardRef<HTMLSelectElement, SelectInputProps>(
         <Popover modal={onModal} open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
-              variant="outline"
-              role="combobox"
               aria-expanded={open}
-              disabled={isDisabled}
               className={cn(
                 "justify-between",
                 {
@@ -151,6 +151,9 @@ const SearchSelectField = React.forwardRef<HTMLSelectElement, SelectInputProps>(
                 },
                 classNames?.input,
               )}
+              disabled={isDisabled}
+              role="combobox"
+              variant="outline"
             >
               {/* ADD LOADING STATE */}
               {isLoading ? (
@@ -167,6 +170,7 @@ const SearchSelectField = React.forwardRef<HTMLSelectElement, SelectInputProps>(
                             (item) =>
                               String(item.id || item.value) === selected,
                           );
+
                           if (!selectedItem)
                             return placeholder || "Select an item...";
 
@@ -189,8 +193,8 @@ const SearchSelectField = React.forwardRef<HTMLSelectElement, SelectInputProps>(
           <PopoverContent className="flex w-[var(--radix-popover-trigger-width)] p-0">
             <Command>
               <CommandInput
-                placeholder="Type here to search..."
                 className="h-9"
+                placeholder="Type here to search..."
                 value={searchValue}
                 onValueChange={setSearchValue}
               />

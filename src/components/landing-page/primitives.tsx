@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { ComponentProps, ReactNode } from "react";
+
+import { cn } from "@/lib/utils";
 
 export function PillButton({
   children,
@@ -34,8 +35,8 @@ export function PillButton({
       <span className="relative z-10">{children}</span>
       {icon && (
         <ArrowRight
-          size={14}
           className="relative z-10 transition-transform duration-300 group-hover:translate-x-0.5"
+          size={14}
         />
       )}
     </>
@@ -43,11 +44,12 @@ export function PillButton({
 
   if (href) {
     return (
-      <Link href={href} className={cn(base, variants[variant], className)}>
+      <Link className={cn(base, variants[variant], className)} href={href}>
         {content}
       </Link>
     );
   }
+
   return (
     <button className={cn(base, variants[variant], className)} {...props}>
       {content}

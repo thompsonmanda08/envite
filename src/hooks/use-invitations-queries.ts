@@ -1,6 +1,9 @@
 "use client";
 
+import type { Invitation } from "@/types";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import {
   cancelInvitation,
   getInvitation,
@@ -8,7 +11,6 @@ import {
   resendInvitation,
   sendInvitations,
 } from "@/app/_actions/invitations";
-import type { Invitation } from "@/types";
 import { INVITATIONS_KEYS } from "@/lib/query-keys";
 
 export function useInvitationsQuery(eventId?: string) {
@@ -16,7 +18,9 @@ export function useInvitationsQuery(eventId?: string) {
     queryKey: INVITATIONS_KEYS.list(eventId),
     queryFn: async () => {
       const res = await getInvitations(eventId);
+
       if (!res.success) throw new Error(res.message);
+
       return (res.data ?? []) as Invitation[];
     },
     staleTime: 60 * 1000,
@@ -28,7 +32,9 @@ export function useInvitationQuery(id: string) {
     queryKey: INVITATIONS_KEYS.detail(id),
     queryFn: async () => {
       const res = await getInvitation(id);
+
       if (!res.success) throw new Error(res.message);
+
       return res.data as Invitation;
     },
     enabled: !!id,
@@ -38,6 +44,7 @@ export function useInvitationQuery(id: string) {
 
 export function useSendInvitationsMutation() {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: (data: {
       eventId: string;
@@ -56,6 +63,7 @@ export function useSendInvitationsMutation() {
 
 export function useResendInvitationMutation() {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: (id: string) => resendInvitation(id),
     onSuccess: (res) => {
@@ -66,6 +74,7 @@ export function useResendInvitationMutation() {
 
 export function useCancelInvitationMutation() {
   const qc = useQueryClient();
+
   return useMutation({
     mutationFn: (id: string) => cancelInvitation(id),
     onSuccess: (res) => {

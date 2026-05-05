@@ -1,3 +1,6 @@
+import type { VariantProps } from "class-variance-authority";
+import type { badgeVariants } from "@/components/ui/badge";
+
 import { Badge } from "@/components/ui/badge";
 import {
   DOCUMENT_STATUS_CONFIG,
@@ -22,8 +25,6 @@ import {
   type UserRole,
   type HealthStatus,
 } from "@/lib/status-badges";
-import type { VariantProps } from "class-variance-authority";
-import type { badgeVariants } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 type BadgeVariant = VariantProps<typeof badgeVariants>["variant"];
@@ -52,7 +53,8 @@ export function StatusBadge({ status, type, className }: StatusBadgeProps) {
   switch (type) {
     case "document":
       variant = getDocumentStatusVariant(status);
-      label = DOCUMENT_STATUS_CONFIG[upperStatus as DocumentStatus]?.label || status;
+      label =
+        DOCUMENT_STATUS_CONFIG[upperStatus as DocumentStatus]?.label || status;
       break;
     case "action":
       variant = getActivityActionVariant(status);
@@ -60,11 +62,14 @@ export function StatusBadge({ status, type, className }: StatusBadgeProps) {
       break;
     case "execution":
       variant = getExecutionStatusVariant(status);
-      label = EXECUTION_STATUS_CONFIG[upperStatus as ExecutionStatus]?.label || status;
+      label =
+        EXECUTION_STATUS_CONFIG[upperStatus as ExecutionStatus]?.label ||
+        status;
       break;
     case "approval":
       variant = getApprovalStatusVariant(status);
-      label = APPROVAL_STATUS_CONFIG[upperStatus as ApprovalStatus]?.label || status;
+      label =
+        APPROVAL_STATUS_CONFIG[upperStatus as ApprovalStatus]?.label || status;
       break;
     case "compliance":
       variant = getComplianceStatusVariant(status);
@@ -83,8 +88,8 @@ export function StatusBadge({ status, type, className }: StatusBadgeProps) {
 
   return (
     <Badge
-      variant={variant}
       className={cn("capitalize px-3 py-1.5", className)}
+      variant={variant}
     >
       {label}
     </Badge>

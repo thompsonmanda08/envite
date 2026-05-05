@@ -83,6 +83,7 @@ export function CardGridSkeleton({
       : columns === 4
         ? "sm:grid-cols-2 lg:grid-cols-4"
         : "sm:grid-cols-2 lg:grid-cols-3";
+
   return (
     <div className={`grid gap-3 ${colClass}`}>
       {Array.from({ length: count }).map((_, i) => (
@@ -107,6 +108,7 @@ export function StatCardsSkeleton({ count = 3 }: { count?: number }) {
       : count === 4
         ? "sm:grid-cols-2 lg:grid-cols-4"
         : "sm:grid-cols-3";
+
   return (
     <div className={`grid gap-4 ${colClass}`}>
       {Array.from({ length: count }).map((_, i) => (
@@ -159,7 +161,7 @@ export function ListPageSkeleton({
     <div className="space-y-6">
       <PageHeaderSkeleton />
       <FilterBarSkeleton count={filterCount} />
-      <TableSkeleton rows={rows} columns={columns} />
+      <TableSkeleton columns={columns} rows={rows} />
     </div>
   );
 }
@@ -195,7 +197,7 @@ export function StatsPageSkeleton({
     <div className="space-y-6">
       <PageHeaderSkeleton />
       <StatCardsSkeleton count={statCount} />
-      <TableSkeleton rows={rows} columns={columns} />
+      <TableSkeleton columns={columns} rows={rows} />
     </div>
   );
 }

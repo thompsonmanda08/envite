@@ -1,11 +1,13 @@
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+
+import { NextResponse } from "next/server";
+
 import { verifySession } from "@/lib/auth";
 
 const AUTH_ROUTES = ["/login", "/forgot-password", "/reset-password"];
 const PUBLIC_ROUTES = ["/", "/support", ...AUTH_ROUTES];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (
@@ -31,7 +33,9 @@ export async function middleware(request: NextRequest) {
   // Logged-in user on auth page → bounce home.
   if (isAuthenticated && isAuthPage) {
     const url = request.nextUrl.clone();
+
     url.pathname = "/";
+
     return NextResponse.redirect(url);
   }
 

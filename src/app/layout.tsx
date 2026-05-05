@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+
 import { Fraunces, Manrope } from "next/font/google";
 import localFont from "next/font/local";
 
@@ -8,7 +9,6 @@ import Providers from "./providers";
 const display = Fraunces({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  axes: ["SOFT", "opsz"],
   variable: "--font-display",
   display: "swap",
 });
@@ -44,12 +44,12 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
       suppressHydrationWarning
       className={`${display.variable} ${body.variable} ${brand.variable}`}
+      lang="en"
     >
       <head>
-        <meta name="apple-mobile-web-app-title" content="e-nvite" />
+        <meta content="e-nvite" name="apple-mobile-web-app-title" />
       </head>
       <body className="min-h-screen antialiased">
         <Providers>{children}</Providers>

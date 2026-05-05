@@ -1,8 +1,10 @@
 "use client";
 
+import type { ComponentType, SVGProps } from "react";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ComponentType, SVGProps } from "react";
+
 import {
   Sidebar,
   SidebarContent,
@@ -38,13 +40,16 @@ export function AppSidebar({
   footer?: React.ReactNode;
 }) {
   const pathname = usePathname();
+
   return (
     <Sidebar collapsible="icon">
       {brand && <SidebarHeader>{brand}</SidebarHeader>}
       <SidebarContent>
         {groups.map((group, i) => (
           <SidebarGroup key={group.label ?? i}>
-            {group.label && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
+            {group.label && (
+              <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+            )}
             <SidebarGroupContent>
               <SidebarMenu>
                 {group.items.map((item) => {
@@ -52,6 +57,7 @@ export function AppSidebar({
                     pathname === item.href ||
                     pathname?.startsWith(item.href + "/");
                   const Icon = item.icon;
+
                   return (
                     <SidebarMenuItem key={item.href}>
                       <SidebarMenuButton
@@ -59,7 +65,7 @@ export function AppSidebar({
                         isActive={!!active}
                         tooltip={item.label}
                       >
-                        <Link href={item.href} className={cn()}>
+                        <Link className={cn()} href={item.href}>
                           {Icon && <Icon />}
                           <span>{item.label}</span>
                         </Link>

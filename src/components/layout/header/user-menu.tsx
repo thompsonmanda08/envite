@@ -1,11 +1,8 @@
 "use client";
 
 import { LogOutIcon, UserIcon } from "lucide-react";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -27,7 +24,7 @@ export function UserMenu({
   onSignOut,
 }: {
   user?: UserMenuUser;
-  onSignOut?: () => void;
+  onSignOut?: () => void | Promise<void>;
 }) {
   const initials = (user?.name ?? "?")
     .split(" ")
@@ -40,10 +37,12 @@ export function UserMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full">
+        <Button className="rounded-full" size="icon" variant="ghost">
           <Avatar className="size-8">
             {user?.avatarUrl && <AvatarImage src={user.avatarUrl} />}
-            <AvatarFallback>{initials || <UserIcon className="size-4" />}</AvatarFallback>
+            <AvatarFallback>
+              {initials || <UserIcon className="size-4" />}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -52,7 +51,9 @@ export function UserMenu({
           <div className="flex flex-col">
             <span className="text-sm font-medium">{user?.name ?? "Guest"}</span>
             {user?.email && (
-              <span className="text-muted-foreground text-xs">{user.email}</span>
+              <span className="text-muted-foreground text-xs">
+                {user.email}
+              </span>
             )}
           </div>
         </DropdownMenuLabel>

@@ -61,11 +61,7 @@ export function badRequestResponse(message: string): APIResponse {
   return { success: false, message, data: null };
 }
 
-export function handleError(
-  error: any,
-  method = "GET",
-  url = "",
-): APIResponse {
+export function handleError(error: any, method = "GET", url = ""): APIResponse {
   // Let Next.js navigation errors propagate.
   if (
     typeof error?.digest === "string" &&
@@ -76,6 +72,7 @@ export function handleError(
   }
 
   const errorLog: any = { endpoint: `${method} | ${url}` };
+
   if (error?.response) {
     errorLog.status = error.response.status;
     errorLog.statusText = error.response.statusText;

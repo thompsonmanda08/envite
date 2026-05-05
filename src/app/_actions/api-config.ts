@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "server-only";
 
+import type { AuthSession } from "@/types";
+
 import { verifySession, updateAuthSession } from "@/lib/auth";
 import { AUTH_SESSION } from "@/lib/constants";
-import type { AuthSession } from "@/types";
 
 const BASE_URL =
   process.env.BASE_URL ||
@@ -55,9 +56,10 @@ async function request(config: RequestConfig): Promise<FetchResponse> {
   const fetchOptions: RequestInit = {
     method,
     headers: {
-      ...(!isFormData && data !== undefined && {
-        "Content-Type": "application/json",
-      }),
+      ...(!isFormData &&
+        data !== undefined && {
+          "Content-Type": "application/json",
+        }),
       ...headers,
     },
     ...(data !== undefined && {
@@ -68,12 +70,14 @@ async function request(config: RequestConfig): Promise<FetchResponse> {
   };
 
   let res: Response;
+
   try {
     res = await fetch(fullUrl, fetchOptions);
   } catch (err: any) {
     const code =
       err?.cause?.code ||
       (err?.message?.includes("fetch failed") ? "ECONNREFUSED" : undefined);
+
     throw {
       code,
       message: err?.message || "Network request failed",
@@ -82,12 +86,14 @@ async function request(config: RequestConfig): Promise<FetchResponse> {
   }
 
   let body: any;
+
   if (responseType === "arraybuffer") {
     body = await res.arrayBuffer();
   } else if (responseType === "blob") {
     body = await res.blob();
   } else {
     const text = await res.text();
+
     try {
       body = text ? JSON.parse(text) : {};
     } catch {
@@ -159,6 +165,7 @@ async function silentRefresh(
     });
     const data = res.data?.data || res.data;
     const newAccess = data?.accessToken || data?.access_token;
+
     if (!newAccess) return null;
 
     const expiresIn: number | undefined = data?.expiresIn;
@@ -173,6 +180,7 @@ async function silentRefresh(
       expiresAt: newExpiresAt,
       expiresIn,
     });
+
     return updated ?? null;
   } catch {
     return null;
@@ -192,6 +200,7 @@ const authenticatedApiClient = async (
 
     if (!isAuthenticated && session?.refresh_token) {
       const refreshed = await silentRefresh(session);
+
       if (refreshed) {
         session = refreshed;
         isAuthenticated = true;
@@ -201,6 +210,7 @@ const authenticatedApiClient = async (
     if (!isAuthenticated || !session?.access_token) {
       if (retryCount < maxRetries) {
         await new Promise((r) => setTimeout(r, retryDelay));
+
         return authenticatedApiClient(reqConfig, retryCount + 1);
       }
       throw new Error("No valid session found");
@@ -211,6 +221,7 @@ const authenticatedApiClient = async (
       Authorization: `Bearer ${session.access_token}`,
       Cookie: `${AUTH_SESSION}=${session.access_token}`,
     };
+
     if (session.organization_id) {
       headers["X-Organization-ID"] = session.organization_id;
     }
@@ -225,14 +236,17 @@ const authenticatedApiClient = async (
   } catch (error: any) {
     if (error?.response?.status === 401 && retryCount === 0) {
       const { session } = await verifySession();
+
       if (session?.refresh_token) {
         const refreshed = await silentRefresh(session);
+
         if (refreshed) {
           return authenticatedApiClient(reqConfig, retryCount + 1);
         }
       }
       try {
         const { deleteSession } = await import("@/lib/auth");
+
         await deleteSession();
       } catch {
         // best-effort cleanup
@@ -244,6 +258,7 @@ const authenticatedApiClient = async (
       retryCount < maxRetries
     ) {
       await new Promise((r) => setTimeout(r, retryDelay * (retryCount + 1)));
+
       return authenticatedApiClient(reqConfig, retryCount + 1);
     }
     throw error;

@@ -1,5 +1,6 @@
-import { Mail } from "lucide-react";
 import type React from "react";
+
+import { Mail } from "lucide-react";
 export default function AuthLayout({
   children,
 }: {
@@ -26,9 +27,9 @@ export default function AuthLayout({
         </div>
 
         {/* Background Elements */}
-        <div className="absolute top-20 left-20 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
-        <div className="absolute bottom-20 right-20 w-48 h-48 bg-white/5 rounded-full blur-2xl"></div>
-        <div className="absolute top-1/2 left-10 w-24 h-24 bg-white/20 rounded-full blur-lg"></div>
+        <div className="absolute top-20 left-20 w-32 h-32 bg-white/10 rounded-full blur-xl" />
+        <div className="absolute bottom-20 right-20 w-48 h-48 bg-white/5 rounded-full blur-2xl" />
+        <div className="absolute top-1/2 left-10 w-24 h-24 bg-white/20 rounded-full blur-lg" />
       </div>
     </div>
   );

@@ -14,8 +14,8 @@ export default function SignupDisabled() {
         waitlist to be notified when we open up again.
       </p>
       <Link
-        href="/"
         className="inline-block bg-black text-white px-8 py-3 rounded-lg font-medium hover:bg-gray-900 transition-colors"
+        href="/"
       >
         Join Waitlist
       </Link>

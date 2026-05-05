@@ -48,6 +48,8 @@ export default function Search({
       onSubmit={resolveSearch}
     >
       <Input
+        className={cn(" ", base, input)}
+        placeholder={placeholder || "Search..."}
         startContent={
           <SearchIcon
             className={cn(
@@ -56,8 +58,6 @@ export default function Search({
             )}
           />
         }
-        className={cn(" ", base, input)}
-        placeholder={placeholder || "Search..."}
         value={value}
         onChange={(e: any) => onChange?.(e.target.value)}
         {...props}

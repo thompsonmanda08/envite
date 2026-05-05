@@ -1,8 +1,8 @@
 "use client";
 import React, { PropsWithChildren } from "react";
-
 import Link from "next/link";
 import { ArrowLeftIcon } from "lucide-react";
+
 import DramaticIcon from "../ui/dramatic-icon";
 import { Button } from "../ui/button";
 
@@ -21,9 +21,9 @@ function ErrorDisplay({
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50 flex items-center justify-center relative overflow-hidden">
       {/* Animated background elements */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-purple-200 to-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-      <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-200 to-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-      <div className="absolute bottom-1/4 left-1/2 w-96 h-96 bg-gradient-to-r from-red-200 to-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-purple-200 to-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000" />
+      <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-gradient-to-r from-blue-200 to-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000" />
+      <div className="absolute bottom-1/4 left-1/2 w-96 h-96 bg-gradient-to-r from-red-200 to-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob" />
 
       <div className="relative z-10 text-center max-w-2xl mx-auto p-8 animate-fade-in">
         {/* Dramatic Icon */}
@@ -51,8 +51,8 @@ function ErrorDisplay({
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             {!showBackButton ? (
               <Link
-                href="/"
                 className="inline-flex items-center gap-3 px-8 py-4 bg-black text-white rounded-full hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl font-medium text-lg group"
+                href="/"
               >
                 <ArrowLeftIcon className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
                 Go Home

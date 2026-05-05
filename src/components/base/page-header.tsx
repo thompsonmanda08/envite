@@ -1,8 +1,10 @@
 "use client";
 import { ArrowLeft } from "lucide-react";
-import { Button } from "../ui/button";
-import { StatusBadge } from "./status-badge";
 import { useRouter } from "next/navigation";
+
+import { Button } from "../ui/button";
+
+import { StatusBadge } from "./status-badge";
 
 interface TStatusBadge {
   status: string;
@@ -55,13 +57,17 @@ export function PageHeader({
 
   return (
     <header
-      data-tour="page-header"
       className="w-full mb-2 pb-3 border-b border-border"
+      data-tour="page-header"
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex items-start gap-3 min-w-0">
           {showBackButton && (
             <Button
+              aria-label="Go back"
+              className="shrink-0 mt-1 group"
+              size="icon"
+              variant="outline"
               onClick={() => {
                 if (onBackClick !== undefined) {
                   onBackClick?.();
@@ -69,10 +75,6 @@ export function PageHeader({
                   router.back();
                 }
               }}
-              variant="outline"
-              size="icon"
-              className="shrink-0 mt-1 group"
-              aria-label="Go back"
             >
               <ArrowLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
             </Button>

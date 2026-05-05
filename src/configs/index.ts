@@ -2,7 +2,6 @@ import {
   ChartColumnIcon,
   LayoutDashboardIcon,
   MessageCircleQuestionMarkIcon,
-  Package2Icon,
   SettingsIcon,
   ShoppingBasketIcon,
   FolderIcon,

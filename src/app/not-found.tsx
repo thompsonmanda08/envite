@@ -12,13 +12,13 @@ export default function NotFound() {
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
       <nav className="px-6 py-4 border-b border-gray-100">
-        <Link href="/" className="inline-block">
+        <Link className="inline-block" href="/">
           <Image
-            src="/logo/black-on-white-transparent.png"
             alt="xclsv"
-            width={120}
-            height={40}
             className="h-12 w-auto"
+            height={40}
+            src="/logo/black-on-white-transparent.png"
+            width={120}
           />
         </Link>
       </nav>
@@ -37,10 +37,10 @@ export default function NotFound() {
                 viewBox="0 0 24 24"
               >
                 <path
+                  d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={1.5}
-                  d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
             </div>
@@ -59,22 +59,22 @@ export default function NotFound() {
           {/* Actions */}
           <div className="space-y-4">
             <Link
-              href="/"
               className="inline-block w-full bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-900 transition-colors"
+              href="/"
             >
               Go to Homepage
             </Link>
 
             <div className="flex gap-3">
               <Link
-                href="/dashboard"
                 className="flex-1 bg-gray-100 text-gray-900 px-4 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors text-sm"
+                href="/dashboard"
               >
                 Dashboard
               </Link>
               <Link
-                href="/apply"
                 className="flex-1 bg-gray-100 text-gray-900 px-4 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors text-sm"
+                href="/apply"
               >
                 Create Store
               </Link>
@@ -88,17 +88,17 @@ export default function NotFound() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 text-sm">
               <a
-                href="https://chat.whatsapp.com/ELdaZCgi8SvBRIMAM8KIdQ"
-                target="_blank"
-                rel="noopener noreferrer"
                 className="text-gray-600 hover:text-black transition-colors"
+                href="https://chat.whatsapp.com/ELdaZCgi8SvBRIMAM8KIdQ"
+                rel="noopener noreferrer"
+                target="_blank"
               >
                 Contact Support
               </a>
               <span className="hidden sm:inline text-gray-300">•</span>
               <Link
-                href="/login"
                 className="text-gray-600 hover:text-black transition-colors"
+                href="/login"
               >
                 Sign In
               </Link>

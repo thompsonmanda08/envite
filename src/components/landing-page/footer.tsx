@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+
 import { Container } from "./section";
 
 const COLS = [
@@ -39,7 +40,7 @@ export default function Footer() {
       <Container className="py-20">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
-            <Link href="/" className="inline-flex items-center gap-2">
+            <Link className="inline-flex items-center gap-2" href="/">
               <span
                 aria-hidden
                 className="grid h-8 w-8 place-items-center rounded-full bg-foreground text-background"
@@ -57,17 +58,17 @@ export default function Footer() {
               with care, sent with intention.
             </p>
             <form
-              onSubmit={(e) => e.preventDefault()}
               className="mt-8 flex max-w-sm items-center gap-2 rounded-full border border-hairline bg-surface p-1.5 transition-colors focus-within:border-foreground/40"
+              onSubmit={(e) => e.preventDefault()}
             >
               <input
-                type="email"
-                placeholder="your@email.com"
                 className="flex-1 bg-transparent px-4 py-2 text-sm text-foreground placeholder:text-mute focus:outline-none"
+                placeholder="your@email.com"
+                type="email"
               />
               <button
-                type="submit"
                 className="rounded-full bg-foreground px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-background transition-opacity hover:opacity-90"
+                type="submit"
               >
                 Subscribe
               </button>
@@ -84,8 +85,8 @@ export default function Footer() {
                   {c.links.map((l) => (
                     <li key={l.label}>
                       <Link
-                        href={l.href}
                         className="text-sm text-foreground/80 transition-colors hover:text-foreground"
+                        href={l.href}
                       >
                         {l.label}
                       </Link>
@@ -102,13 +103,13 @@ export default function Footer() {
             © {new Date().getFullYear()} e-nvite. Crafted with care.
           </p>
           <div className="flex items-center gap-6 text-xs text-mute">
-            <Link href="#" className="transition-colors hover:text-foreground">
+            <Link className="transition-colors hover:text-foreground" href="#">
               Terms
             </Link>
-            <Link href="#" className="transition-colors hover:text-foreground">
+            <Link className="transition-colors hover:text-foreground" href="#">
               Privacy
             </Link>
-            <Link href="#" className="transition-colors hover:text-foreground">
+            <Link className="transition-colors hover:text-foreground" href="#">
               Cookies
             </Link>
           </div>

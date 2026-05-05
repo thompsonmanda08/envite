@@ -1,6 +1,7 @@
 "use client";
 
 import { Quote } from "lucide-react";
+
 import { Container, Eyebrow, Reveal, Section } from "./section";
 
 const STORIES = [
@@ -26,7 +27,7 @@ const STORIES = [
 
 export default function Testimonials() {
   return (
-    <Section id="stories" className="bg-surface/40">
+    <Section className="bg-surface/40" id="stories">
       <Container>
         <Reveal className="mx-auto mb-16 max-w-2xl text-center">
           <Eyebrow>In their words</Eyebrow>
@@ -40,8 +41,8 @@ export default function Testimonials() {
             <Reveal key={s.author} delay={i * 0.07}>
               <figure className="group relative flex h-full flex-col rounded-3xl border border-hairline bg-surface p-8 transition-all duration-500 hover:-translate-y-1 hover:border-foreground/25 hover:shadow-[0_24px_60px_-30px_color-mix(in_oklch,var(--foreground)_25%,transparent)]">
                 <Quote
-                  size={28}
                   className="text-foreground/15 transition-colors group-hover:text-foreground/30"
+                  size={28}
                 />
                 <blockquote className="mt-6 flex-1 font-display text-lg font-normal italic leading-snug text-foreground">
                   "{s.quote}"

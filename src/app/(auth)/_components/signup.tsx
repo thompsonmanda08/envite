@@ -1,11 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/ui/spinner";
 import { createNewAccount } from "@/app/_actions/auth";
-import { countries, formatCountryOption, formatCountrySelectDisplay, findCountryByDialCode } from "@/lib/countries";
+import {
+  countries,
+  formatCountryOption,
+  findCountryByDialCode,
+  type Country,
+} from "@/lib/countries";
 
 export default function Signup() {
   const router = useRouter();
@@ -21,7 +27,8 @@ export default function Signup() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [step, setStep] = useState(1); // 1: Store info, 2: Password creation
-  const [showWhatsAppConfirmation, setShowWhatsAppConfirmation] = useState(false);
+  const [showWhatsAppConfirmation, setShowWhatsAppConfirmation] =
+    useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,10 +37,14 @@ export default function Signup() {
     if (step === 1) {
       // First step: validate store info and show WhatsApp confirmation modal
       if (!email || !username || !shopName || !whatsapp) {
-        setMessage("Please fill in all required fields including WhatsApp number.");
+        setMessage(
+          "Please fill in all required fields including WhatsApp number.",
+        );
+
         return;
       }
       setShowWhatsAppConfirmation(true);
+
       return;
     }
 
@@ -41,16 +52,19 @@ export default function Signup() {
       // Second step: create account with password
       if (!password || !confirmPassword) {
         setMessage("Please enter and confirm your password.");
+
         return;
       }
 
       if (password !== confirmPassword) {
         setMessage("Passwords do not match. Please try again.");
+
         return;
       }
 
       if (password.length < 8) {
         setMessage("Password must be at least 8 characters long.");
+
         return;
       }
 
@@ -118,32 +132,32 @@ export default function Signup() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form className="space-y-6" onSubmit={handleSubmit}>
         {step === 1 ? (
           // Step 1: Store Information
           <>
             <div>
               <label
-                htmlFor="email"
                 className="block text-sm font-medium text-black mb-2"
+                htmlFor="email"
               >
                 Email Address
               </label>
               <input
-                type="email"
-                id="email"
+                required
                 className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-colors placeholder:text-gray-400 text-black"
+                id="email"
                 placeholder="your@email.com"
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
               />
             </div>
 
             <div>
               <label
-                htmlFor="username"
                 className="block text-sm font-medium text-black mb-2"
+                htmlFor="username"
               >
                 Username{" "}
                 <span className="text-xs text-gray-400">
@@ -151,17 +165,17 @@ export default function Signup() {
                 </span>
               </label>
               <input
-                type="text"
-                id="username"
+                required
                 className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-colors placeholder:text-gray-400 text-black"
+                id="username"
                 placeholder="your-handle"
+                type="text"
                 value={username}
                 onChange={(e) =>
                   setUsername(
-                    e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, "")
+                    e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ""),
                   )
                 }
-                required
               />
               <p className="text-xs text-gray-500 mt-1">
                 • Only letters, numbers, - and _ allowed
@@ -170,19 +184,19 @@ export default function Signup() {
 
             <div>
               <label
-                htmlFor="shopName"
                 className="block text-sm font-medium text-black mb-2"
+                htmlFor="shopName"
               >
                 Store Name
               </label>
               <input
-                type="text"
-                id="shopName"
+                required
                 className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-colors placeholder:text-gray-400 text-black"
+                id="shopName"
                 placeholder="Your Brand Name"
+                type="text"
                 value={shopName}
                 onChange={(e) => setShopName(e.target.value)}
-                required
               />
               <p className="text-xs text-gray-500 mt-1">
                 This is your brand name and can contain any characters
@@ -191,17 +205,17 @@ export default function Signup() {
 
             <div>
               <label
-                htmlFor="description"
                 className="block text-sm font-medium text-black mb-2"
+                htmlFor="description"
               >
                 Store Description{" "}
                 <span className="text-gray-400">(Optional)</span>
               </label>
               <textarea
-                id="description"
-                rows={3}
                 className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-colors resize-none placeholder:text-gray-400 text-black"
+                id="description"
                 placeholder="What do you sell? Tell your customers about your brand..."
+                rows={3}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
@@ -209,18 +223,18 @@ export default function Signup() {
 
             <div>
               <label
-                htmlFor="whatsapp"
                 className="block text-sm font-medium text-black mb-2"
+                htmlFor="whatsapp"
               >
                 WhatsApp Number <span className="text-red-500">*</span>
               </label>
               <div className="flex gap-2">
                 <select
+                  className="w-20 px-2 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-colors text-black bg-white text-sm"
                   value={countryCode}
                   onChange={(e) => setCountryCode(e.target.value)}
-                  className="w-20 px-2 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-colors text-black bg-white text-sm"
                 >
-                  {countries.map((country) => (
+                  {countries.map((country: Country) => (
                     <option key={country.code} value={country.dialCode}>
                       {formatCountryOption(country)}
                     </option>
@@ -229,13 +243,15 @@ export default function Signup() {
                 <div className="flex-1 flex items-center px-3 py-3 border border-gray-200 rounded-lg bg-gray-50">
                   <span className="text-gray-700 mr-2">{countryCode}</span>
                   <input
-                    type="tel"
-                    id="whatsapp"
-                    className="flex-1 bg-transparent outline-none placeholder:text-gray-400 text-black"
-                    placeholder="1234567890"
-                    value={whatsapp}
-                    onChange={(e) => setWhatsapp(e.target.value.replace(/[^0-9]/g, ""))}
                     required
+                    className="flex-1 bg-transparent outline-none placeholder:text-gray-400 text-black"
+                    id="whatsapp"
+                    placeholder="1234567890"
+                    type="tel"
+                    value={whatsapp}
+                    onChange={(e) =>
+                      setWhatsapp(e.target.value.replace(/[^0-9]/g, ""))
+                    }
                   />
                 </div>
               </div>
@@ -244,7 +260,7 @@ export default function Signup() {
               </p>
             </div>
 
-            <Button type="submit" disabled={isSubmitting} className="w-full">
+            <Button className="w-full" disabled={isSubmitting} type="submit">
               Continue to Password
             </Button>
           </>
@@ -268,19 +284,19 @@ export default function Signup() {
 
             <div>
               <label
-                htmlFor="password"
                 className="block text-sm font-medium text-black mb-2"
+                htmlFor="password"
               >
                 Password
               </label>
               <input
-                type="password"
-                id="password"
+                required
                 className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-colors placeholder:text-gray-400 text-black"
+                id="password"
                 placeholder="Enter a strong password"
+                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
               />
               <p className="text-xs text-gray-500 mt-1">
                 Must be at least 8 characters long
@@ -289,36 +305,36 @@ export default function Signup() {
 
             <div>
               <label
-                htmlFor="confirmPassword"
                 className="block text-sm font-medium text-black mb-2"
+                htmlFor="confirmPassword"
               >
                 Confirm Password
               </label>
               <input
-                type="password"
-                id="confirmPassword"
+                required
                 className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-colors placeholder:text-gray-400 text-black"
+                id="confirmPassword"
                 placeholder="Confirm your password"
+                type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                required
               />
             </div>
 
             <div className="flex gap-4">
               <Button
+                className="w-full bg-gray-100 text-black"
                 type="button"
                 variant="outline"
                 onClick={handleBack}
-                className="w-full bg-gray-100 text-black"
               >
                 Back
               </Button>
 
-              <Button type="submit" disabled={isSubmitting} className="w-full">
+              <Button className="w-full" disabled={isSubmitting} type="submit">
                 {isSubmitting ? (
                   <span className="flex items-center gap-1 ">
-                    <Spinner size={"sm"} color="white" /> Creating Store...
+                    <Spinner color="white" size={"sm"} /> Creating Store...
                   </span>
                 ) : (
                   "Create Store"
@@ -345,11 +361,11 @@ export default function Signup() {
       <div className="mt-12 p-6 bg-gray-50 rounded-lg">
         <div className="space-y-3 text-sm text-gray-600">
           <div className="flex items-center gap-3">
-            <div className="w-2 h-2 bg-black rounded-full flex-shrink-0"></div>
+            <div className="w-2 h-2 bg-black rounded-full flex-shrink-0" />
             <span>Your personalized store page instantly</span>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-2 h-2 bg-black rounded-full flex-shrink-0"></div>
+            <div className="w-2 h-2 bg-black rounded-full flex-shrink-0" />
             <span>One link to share across all platforms</span>
           </div>
         </div>
@@ -361,7 +377,9 @@ export default function Signup() {
           <div className="bg-white rounded-lg p-6 w-full max-w-md mx-auto shadow-2xl">
             <div className="text-center">
               <div className="text-4xl mb-4">📱</div>
-              <h3 className="font-semibold text-gray-900 mb-3">Confirm your WhatsApp number</h3>
+              <h3 className="font-semibold text-gray-900 mb-3">
+                Confirm your WhatsApp number
+              </h3>
               <div className="bg-green-50 p-4 rounded-lg border border-green-200 mb-4">
                 <p className="text-lg font-mono text-green-800">
                   {countryCode} {whatsapp}
@@ -380,17 +398,17 @@ export default function Signup() {
 
             <div className="flex gap-3">
               <Button
+                className="flex-1"
                 type="button"
                 variant="outline"
                 onClick={handleWhatsAppEdit}
-                className="flex-1"
               >
                 Edit Number
               </Button>
               <Button
+                className="flex-1"
                 type="button"
                 onClick={handleWhatsAppConfirm}
-                className="flex-1"
               >
                 Confirm & Continue
               </Button>

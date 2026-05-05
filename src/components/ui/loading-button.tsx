@@ -1,8 +1,10 @@
 "use client";
 
 import { type ButtonHTMLAttributes, forwardRef } from "react";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
 import Spinner from "./spinner";
 
 interface LoadingButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -41,19 +43,19 @@ const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(
 
     return (
       <Button
+        ref={ref}
         className={cn(className)}
         disabled={disabled || isLoading}
-        ref={ref}
-        variant={variant as any}
         size={size}
+        variant={variant as any}
         {...props}
       >
         {isLoading ? (
           <div className="flex items-center justify-center">
             <Spinner
-              variant={spinnerVariant}
-              size={spinnerSize}
               color={spinnerColor}
+              size={spinnerSize}
+              variant={spinnerVariant}
             />
             {loadingText && <span className="ml-2">{loadingText}</span>}
           </div>

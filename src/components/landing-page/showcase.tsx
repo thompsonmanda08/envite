@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+
 import { Container, Eyebrow, Reveal, Section } from "./section";
 
 type Design = {
@@ -73,7 +74,7 @@ const DESIGNS: Design[] = [
 
 export default function Showcase() {
   return (
-    <Section id="designs" className="bg-surface/40">
+    <Section className="bg-surface/40" id="designs">
       <Container>
         <Reveal className="mx-auto mb-16 max-w-2xl text-center">
           <Eyebrow>The collection</Eyebrow>
@@ -101,9 +102,9 @@ export default function Showcase() {
 function DesignCard({ d }: { d: Design }) {
   return (
     <motion.article
-      whileHover={{ y: -6 }}
-      transition={{ type: "spring", stiffness: 220, damping: 22 }}
       className="group relative overflow-hidden rounded-3xl border border-hairline bg-surface"
+      transition={{ type: "spring", stiffness: 220, damping: 22 }}
+      whileHover={{ y: -6 }}
     >
       <div className="relative aspect-[4/5] overflow-hidden">
         <div
@@ -147,8 +148,8 @@ function DesignCard({ d }: { d: Design }) {
           </div>
         </div>
         <ArrowUpRight
-          size={16}
           className="text-foreground/50 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground"
+          size={16}
         />
       </div>
     </motion.article>

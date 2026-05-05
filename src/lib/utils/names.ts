@@ -25,6 +25,7 @@ const titleWithDot = (title: string): string => {
   if (!title) return "";
   if (title.endsWith(".")) return title;
   if (title.length <= SHORT_TITLE_MAX_LEN) return `${title}.`;
+
   return title;
 };
 
@@ -58,6 +59,7 @@ export function formatUserName(
   // Legacy fallback: nothing structured, use the cached name verbatim.
   if (!first && !last) {
     if (variant === "initials") return fallbackInitials(fallback);
+
     return fallback;
   }
 
@@ -73,6 +75,7 @@ export function formatUserName(
 
   if (variant === "formal") {
     const initial = first ? `${first.charAt(0).toUpperCase()}.` : "";
+
     return [t, initial, last].filter(Boolean).join(" ");
   }
 
@@ -84,9 +87,8 @@ export function formatUserName(
  * Initials from a user object — preferred over the legacy `getInitials(name)`
  * because it uses the structured fields when present.
  */
-export const userInitials = (
-  user: NameInput | null | undefined,
-): string => formatUserName(user, "initials");
+export const userInitials = (user: NameInput | null | undefined): string =>
+  formatUserName(user, "initials");
 
 /** Last-resort initials parser for a single string (e.g. "Dr. E. Mwape").
  * Strips a leading honorific token before taking initials so we never get
@@ -95,9 +97,9 @@ function fallbackInitials(name: string): string {
   if (!name) return "";
   const HONORIFIC_RE = /^(mr|mrs|ms|miss|mx|dr|prof|rev)\.?$/i;
   const tokens = name.split(/\s+/).filter(Boolean);
-  const stripped = tokens[0] && HONORIFIC_RE.test(tokens[0])
-    ? tokens.slice(1)
-    : tokens;
+  const stripped =
+    tokens[0] && HONORIFIC_RE.test(tokens[0]) ? tokens.slice(1) : tokens;
+
   if (stripped.length === 0) return "";
   if (stripped.length === 1) {
     return stripped[0].charAt(0).toUpperCase();
@@ -105,5 +107,6 @@ function fallbackInitials(name: string): string {
   // First initial + last initial. Skip middle initials so "E. Mwape" → "EM".
   const first = stripped[0].replace(/[^a-zA-Z]/g, "");
   const last = stripped[stripped.length - 1].replace(/[^a-zA-Z]/g, "");
+
   return `${first.charAt(0)}${last.charAt(0)}`.toUpperCase();
 }

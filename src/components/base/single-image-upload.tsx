@@ -1,10 +1,12 @@
 import React, { useState, useRef } from "react";
-import { Upload, X, Camera, Loader2 } from "lucide-react";
-import Spinner from "../ui/spinner";
-import { cn } from "@/lib/utils";
-import { uploadImageAuth } from "@/app/_actions";
+import { Upload, X, Camera } from "lucide-react";
 import { upload } from "@imagekit/next";
 import { toast } from "sonner";
+
+import { cn } from "@/lib/utils";
+import { uploadImageAuth } from "@/app/_actions";
+
+import Spinner from "../ui/spinner";
 
 interface ImageUploadProps {
   value?: string;
@@ -50,20 +52,23 @@ const SingleImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   const handleFileSelect = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
+
     if (!file) return;
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
       alert("Please select an image file");
+
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert("Image size must be less than 5MB");
+
       return;
     }
 
@@ -105,6 +110,7 @@ const SingleImageUpload: React.FC<ImageUploadProps> = ({
       if (response?.url) {
         // Create preview URL
         const objectUrl = URL.createObjectURL(file);
+
         setPreviewUrl(objectUrl);
 
         // console.log("Uploading file:", file);
@@ -144,7 +150,7 @@ const SingleImageUpload: React.FC<ImageUploadProps> = ({
       className={cn(
         `relative flex flex-1 rounded-lg border-2 border-dashed border-gray-300 hover:border-gray-400`,
         className,
-        classNames?.wrapper
+        classNames?.wrapper,
       )}
     >
       <div
@@ -155,31 +161,31 @@ const SingleImageUpload: React.FC<ImageUploadProps> = ({
           {
             "pointer-events-none": isLoading,
           },
-          classNames?.container
+          classNames?.container,
         )}
         onClick={handleClick}
       >
         <input
           ref={fileInputRef}
-          type="file"
           accept="image/*"
-          onChange={handleFileSelect}
           className="hidden"
           disabled={isLoading}
+          type="file"
+          onChange={handleFileSelect}
         />
 
         {previewUrl ? (
           <>
             <img
-              src={previewUrl}
               alt="Preview"
               className={cn("w-full h-full object-cover", classNames?.preview)}
+              src={previewUrl}
             />
 
             {/* Overlay with loading or remove button */}
             <div
               className={cn(
-                `absolute inset-0 bg-slate-800/50 bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center`
+                `absolute inset-0 bg-slate-800/50 bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-200 flex items-center justify-center`,
               )}
             >
               {isLoading ? (
@@ -189,22 +195,22 @@ const SingleImageUpload: React.FC<ImageUploadProps> = ({
               ) : (
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-2">
                   <button
+                    className="bg-white rounded-full p-2 hover:bg-gray-100 transition-colors"
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleClick();
                     }}
-                    className="bg-white rounded-full p-2 hover:bg-gray-100 transition-colors"
                   >
                     <Camera className="w-4 h-4 text-gray-600" />
                   </button>
                   <button
+                    className="bg-white rounded-full p-2 hover:bg-gray-100 transition-colors"
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleRemove();
                     }}
-                    className="bg-white rounded-full p-2 hover:bg-gray-100 transition-colors"
                   >
                     <X className="w-4 h-4 text-red-600" />
                   </button>
@@ -236,7 +242,7 @@ const SingleImageUpload: React.FC<ImageUploadProps> = ({
       {isLoading && previewUrl && (
         <div className="absolute inset-0 bg-black/70 bg-opacity-75 flex items-center justify-center rounded-lg">
           <div className="flex flex-col gap-2 items-center">
-            <Spinner size="lg" color="white" />
+            <Spinner color="white" size="lg" />
             <span className="text-sm text-gray-100 font-semibold">
               Uploading...
             </span>

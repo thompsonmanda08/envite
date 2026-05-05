@@ -14,6 +14,8 @@ import {
   VisibilityState,
   RowSelectionState,
 } from "@tanstack/react-table";
+import { ArrowLeft, ClipboardXIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import {
   Table,
@@ -26,11 +28,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import EmptyState from "@/components/base/empty-state";
-import { ArrowLeft, ClipboardXIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
+
 import { CustomPagination } from "./custom-pagination";
 import { ActionButtons, type ActionButton } from "./action-buttons";
-import { cn } from "@/lib/utils";
 
 // Enhanced interfaces for better reusability
 export interface DataTableProps<TData, TValue> {
@@ -183,18 +184,18 @@ export function DataTable<TData, TValue>({
         id: "select",
         header: ({ table }) => (
           <input
-            type="checkbox"
             checked={table.getIsAllPageRowsSelected()}
-            onChange={(e) => table.toggleAllPageRowsSelected(e.target.checked)}
             className="rounded border border-input"
+            type="checkbox"
+            onChange={(e) => table.toggleAllPageRowsSelected(e.target.checked)}
           />
         ),
         cell: ({ row }) => (
           <input
-            type="checkbox"
             checked={row.getIsSelected()}
-            onChange={(e) => row.toggleSelected(e.target.checked)}
             className="rounded border border-input"
+            type="checkbox"
+            onChange={(e) => row.toggleSelected(e.target.checked)}
           />
         ),
         enableSorting: false,
@@ -271,6 +272,7 @@ export function DataTable<TData, TValue>({
       {searchKey && !hideSearchBar && (
         <div className="flex items-center justify-between">
           <Input
+            className="max-w-sm"
             placeholder={searchPlaceholder}
             value={
               (table.getColumn(searchKey)?.getFilterValue() as string) ?? ""
@@ -278,7 +280,6 @@ export function DataTable<TData, TValue>({
             onChange={(event) =>
               table.getColumn(searchKey)?.setFilterValue(event.target.value)
             }
-            className="max-w-sm"
           />
 
           {/* Selection info */}
@@ -314,17 +315,17 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {isLoading ? (
               <LoadingSkeleton
-                rows={loadingRows}
                 columns={finalColumns.length}
+                rows={loadingRows}
               />
             ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
                   className={
                     onRowClick ? "cursor-pointer hover:bg-muted/50" : undefined
                   }
+                  data-state={row.getIsSelected() && "selected"}
                   onClick={() => onRowClick?.(row.original)}
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -340,13 +341,13 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={finalColumns.length}
                   className="h-24 text-center"
+                  colSpan={finalColumns.length}
                 >
                   <EmptyState
+                    description={currentEmptyState.description}
                     icon={currentEmptyState.icon}
                     title={currentEmptyState.title}
-                    description={currentEmptyState.description}
                     variant="inline"
                   >
                     {currentEmptyState.action}
@@ -361,6 +362,7 @@ export function DataTable<TData, TValue>({
       {/* Pagination */}
       {!hidePagination && !isLoading && (
         <CustomPagination
+          allowSetPageSize={true}
           pagination={{
             page: currentPage,
             limit: pageSize,
@@ -380,13 +382,12 @@ export function DataTable<TData, TValue>({
               (totalPages ?? Math.ceil((totalCount ?? data.length) / pageSize)),
             has_prev: currentPage > 1,
           }}
+          showDetails={true}
           updatePagination={({ page, page_size }) => {
             if (onPaginationChange) {
               onPaginationChange(page, page_size || pageSize);
             }
           }}
-          allowSetPageSize={true}
-          showDetails={true}
         />
       )}
     </div>

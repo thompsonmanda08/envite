@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronLeft } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 
 type SplitPanelLayoutProps = {
@@ -94,9 +95,9 @@ export function SplitPanelLayout({
           {/* Back button — mobile only, shown when an item is selected */}
           {mobileSplit && hasSelection && onBack && (
             <button
+              className="flex lg:hidden items-center gap-1.5 text-sm font-medium text-primary mb-4 pb-3 border-b border-default-100 w-full"
               type="button"
               onClick={onBack}
-              className="flex lg:hidden items-center gap-1.5 text-sm font-medium text-primary mb-4 pb-3 border-b border-default-100 w-full"
             >
               <ChevronLeft className="h-4 w-4" />
               {backLabel}

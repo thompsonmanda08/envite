@@ -1,13 +1,16 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
 import type { APIResponse, Guest, RsvpStatus } from "@/types";
+
+import { revalidateTag } from "next/cache";
+
+import { CACHE_TAGS } from "@/lib/cache-tags";
+
 import authenticatedApiClient, {
   fromBackend,
   handleError,
   badRequestResponse,
 } from "./api-config";
-import { CACHE_TAGS } from "@/lib/cache-tags";
 
 export async function getGuests(
   eventId: string,
@@ -15,6 +18,7 @@ export async function getGuests(
 ): Promise<APIResponse<Guest[]>> {
   if (!eventId) return badRequestResponse("Event ID is required");
   const url = `/api/v1/events/${eventId}/guests`;
+
   try {
     const res = await authenticatedApiClient({
       url,
@@ -25,6 +29,7 @@ export async function getGuests(
         revalidate: 30,
       },
     });
+
     return fromBackend<Guest[]>(res);
   } catch (error: any) {
     return handleError(error, "GET", url);
@@ -38,10 +43,13 @@ export async function addGuest(
   if (!eventId) return badRequestResponse("Event ID is required");
   if (!data?.name) return badRequestResponse("Guest name is required");
   const url = `/api/v1/events/${eventId}/guests`;
+
   try {
     const res = await authenticatedApiClient({ url, method: "POST", data });
-    revalidateTag(CACHE_TAGS.GUESTS_BY_EVENT(eventId));
-    revalidateTag(CACHE_TAGS.GUESTS);
+
+    revalidateTag(CACHE_TAGS.GUESTS_BY_EVENT(eventId), "max");
+    revalidateTag(CACHE_TAGS.GUESTS, "max");
+
     return fromBackend<Guest>(res);
   } catch (error: any) {
     return handleError(error, "POST", url);
@@ -55,14 +63,17 @@ export async function bulkAddGuests(
   if (!eventId) return badRequestResponse("Event ID is required");
   if (!guests?.length) return badRequestResponse("Guests list is required");
   const url = `/api/v1/events/${eventId}/guests/bulk`;
+
   try {
     const res = await authenticatedApiClient({
       url,
       method: "POST",
       data: { guests },
     });
-    revalidateTag(CACHE_TAGS.GUESTS_BY_EVENT(eventId));
-    revalidateTag(CACHE_TAGS.GUESTS);
+
+    revalidateTag(CACHE_TAGS.GUESTS_BY_EVENT(eventId), "max");
+    revalidateTag(CACHE_TAGS.GUESTS, "max");
+
     return fromBackend<Guest[]>(res);
   } catch (error: any) {
     return handleError(error, "POST", url);
@@ -74,12 +85,16 @@ export async function updateGuest(
   id: string,
   data: Partial<Guest>,
 ): Promise<APIResponse<Guest>> {
-  if (!eventId || !id) return badRequestResponse("Event and guest IDs required");
+  if (!eventId || !id)
+    return badRequestResponse("Event and guest IDs required");
   const url = `/api/v1/events/${eventId}/guests/${id}`;
+
   try {
     const res = await authenticatedApiClient({ url, method: "PUT", data });
-    revalidateTag(CACHE_TAGS.GUESTS_BY_EVENT(eventId));
-    revalidateTag(CACHE_TAGS.GUESTS);
+
+    revalidateTag(CACHE_TAGS.GUESTS_BY_EVENT(eventId), "max");
+    revalidateTag(CACHE_TAGS.GUESTS, "max");
+
     return fromBackend<Guest>(res);
   } catch (error: any) {
     return handleError(error, "PUT", url);
@@ -90,12 +105,16 @@ export async function deleteGuest(
   eventId: string,
   id: string,
 ): Promise<APIResponse> {
-  if (!eventId || !id) return badRequestResponse("Event and guest IDs required");
+  if (!eventId || !id)
+    return badRequestResponse("Event and guest IDs required");
   const url = `/api/v1/events/${eventId}/guests/${id}`;
+
   try {
     const res = await authenticatedApiClient({ url, method: "DELETE" });
-    revalidateTag(CACHE_TAGS.GUESTS_BY_EVENT(eventId));
-    revalidateTag(CACHE_TAGS.GUESTS);
+
+    revalidateTag(CACHE_TAGS.GUESTS_BY_EVENT(eventId), "max");
+    revalidateTag(CACHE_TAGS.GUESTS, "max");
+
     return fromBackend(res);
   } catch (error: any) {
     return handleError(error, "DELETE", url);
@@ -107,16 +126,20 @@ export async function setRsvp(
   id: string,
   rsvp: RsvpStatus,
 ): Promise<APIResponse<Guest>> {
-  if (!eventId || !id) return badRequestResponse("Event and guest IDs required");
+  if (!eventId || !id)
+    return badRequestResponse("Event and guest IDs required");
   const url = `/api/v1/events/${eventId}/guests/${id}/rsvp`;
+
   try {
     const res = await authenticatedApiClient({
       url,
       method: "POST",
       data: { rsvp },
     });
-    revalidateTag(CACHE_TAGS.GUESTS_BY_EVENT(eventId));
-    revalidateTag(CACHE_TAGS.GUESTS);
+
+    revalidateTag(CACHE_TAGS.GUESTS_BY_EVENT(eventId), "max");
+    revalidateTag(CACHE_TAGS.GUESTS, "max");
+
     return fromBackend<Guest>(res);
   } catch (error: any) {
     return handleError(error, "POST", url);

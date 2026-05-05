@@ -40,7 +40,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function ChartLineDots({ chartConfig, chartData }) {
+export function ChartLineDots({
+  chartConfig,
+  chartData,
+}: {
+  chartConfig: ChartConfig;
+  chartData: any[];
+}) {
   return (
     <Card>
       <CardHeader>
@@ -59,27 +65,27 @@ export function ChartLineDots({ chartConfig, chartData }) {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
-              tickLine={false}
               axisLine={false}
-              tickMargin={8}
+              dataKey="month"
               tickFormatter={(value) => value.slice(0, 3)}
+              tickLine={false}
+              tickMargin={8}
             />
             <ChartTooltip
-              cursor={false}
               content={<ChartTooltipContent hideLabel />}
+              cursor={false}
             />
             <Line
-              dataKey="desktop"
-              type="natural"
-              stroke="var(--color-desktop)"
-              strokeWidth={2}
-              dot={{
-                fill: "var(--color-desktop)",
-              }}
               activeDot={{
                 r: 6,
               }}
+              dataKey="desktop"
+              dot={{
+                fill: "var(--color-desktop)",
+              }}
+              stroke="var(--color-desktop)"
+              strokeWidth={2}
+              type="natural"
             />
           </LineChart>
         </ChartContainer>

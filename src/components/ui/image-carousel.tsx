@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "./button";
 
 interface ImageCarouselProps {
   images: string[];
@@ -29,10 +28,10 @@ export function ImageCarousel({
             viewBox="0 0 24 24"
           >
             <path
+              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
             />
           </svg>
           <p className="text-sm">No images uploaded</p>
@@ -73,17 +72,17 @@ export function ImageCarousel({
       {/* Main Image */}
       <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden group">
         <img
-          src={images[currentIndex]}
           alt={`${productName} - Image ${currentIndex + 1}`}
           className="w-full h-full object-cover"
+          src={images[currentIndex]}
         />
 
         {/* Navigation Arrows */}
         {images.length > 1 && (
           <>
             <button
-              onClick={prevImage}
               className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={prevImage}
             >
               <svg
                 className="w-4 h-4"
@@ -92,16 +91,16 @@ export function ImageCarousel({
                 viewBox="0 0 24 24"
               >
                 <path
+                  d="M15 19l-7-7 7-7"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
                 />
               </svg>
             </button>
             <button
-              onClick={nextImage}
               className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+              onClick={nextImage}
             >
               <svg
                 className="w-4 h-4"
@@ -110,10 +109,10 @@ export function ImageCarousel({
                 viewBox="0 0 24 24"
               >
                 <path
+                  d="M9 5l7 7-7 7"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M9 5l7 7-7 7"
                 />
               </svg>
             </button>
@@ -123,8 +122,8 @@ export function ImageCarousel({
         {/* Delete Button */}
         {canEdit && (
           <button
-            onClick={() => handleDeleteImage(currentIndex)}
             className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={() => handleDeleteImage(currentIndex)}
           >
             <svg
               className="w-4 h-4"
@@ -133,10 +132,10 @@ export function ImageCarousel({
               viewBox="0 0 24 24"
             >
               <path
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
               />
             </svg>
           </button>
@@ -156,20 +155,20 @@ export function ImageCarousel({
           {images.map((image, index) => (
             <button
               key={index}
-              onClick={() => goToImage(index)}
               className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
                 index === currentIndex
                   ? "border-blue-500 ring-2 ring-blue-200"
                   : "border-gray-200 hover:border-gray-300"
               }`}
+              onClick={() => goToImage(index)}
             >
               <img
-                src={image}
                 alt={`${productName} - Thumbnail ${index + 1}`}
                 className="w-full h-full object-cover"
+                src={image}
               />
               {index === currentIndex && (
-                <div className="absolute inset-0 bg-blue-500/20"></div>
+                <div className="absolute inset-0 bg-blue-500/20" />
               )}
             </button>
           ))}

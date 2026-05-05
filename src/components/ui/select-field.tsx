@@ -1,6 +1,7 @@
-import { cn } from "@/lib/utils";
 import * as React from "react";
 import { motion } from "framer-motion";
+
+import { cn } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -8,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
 import { Spinner } from "./spinner";
 
 type SelectInputProps = Omit<
@@ -103,16 +105,10 @@ const SelectField = React.forwardRef<HTMLSelectElement, SelectInputProps>(
           {...(value !== undefined
             ? { value }
             : { defaultValue: String(defaultValue) })}
-          onValueChange={onValueChange}
           disabled={isDisabled || props?.disabled}
+          onValueChange={onValueChange}
         >
           <SelectTrigger
-            size={
-              typeof props?.size === "string" &&
-              (props.size === "default" || props.size === "sm")
-                ? props.size
-                : "default"
-            }
             className={cn(
               // Base styles matching input.tsx
               "w-full px-4 py-2 text-base bg-foreground/5 border border-border rounded-lg transition-all duration-200 outline-none",
@@ -135,6 +131,12 @@ const SelectField = React.forwardRef<HTMLSelectElement, SelectInputProps>(
               className,
               classNames?.input,
             )}
+            size={
+              typeof props?.size === "string" &&
+              (props.size === "default" || props.size === "sm")
+                ? props.size
+                : "default"
+            }
           >
             {isLoading ? (
               <div className="flex items-center gap-2 text-slate-400 dark:text-slate-500">
@@ -151,8 +153,7 @@ const SelectField = React.forwardRef<HTMLSelectElement, SelectInputProps>(
             {children
               ? children
               : options?.map((item: any, index) => {
-                  const itemValue =
-                    item?.value || item.id || index.toString();
+                  const itemValue = item?.value || item.id || index.toString();
                   const itemLabel =
                     item?.[String(listItemName)] ||
                     item.name ||

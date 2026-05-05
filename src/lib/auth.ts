@@ -1,10 +1,11 @@
 "use server";
 import "server-only";
 
+import type { AuthSession, AuthUser, UserType } from "@/types";
+
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-import type { AuthSession, AuthUser, UserType } from "@/types";
 import { SESSION_CONFIG } from "@/lib/session-config";
 import {
   AUTH_SESSION,
@@ -19,9 +20,11 @@ const getSecretKey = () => {
     process.env.AUTH_SECRET ||
     process.env.JWT_SECRET ||
     "dev-only-secret-change-me-please-32+chars";
+
   if (!secret || secret.length < 32) {
     throw new Error("AUTH_SECRET must be at least 32 characters");
   }
+
   return secret;
 };
 const getKey = () => new TextEncoder().encode(getSecretKey());
@@ -30,6 +33,7 @@ export async function encrypt(payload: any, expirationTime: string = "7d") {
   if (!payload || typeof payload !== "object") {
     throw new Error("Payload must be a non-empty object");
   }
+
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -49,6 +53,7 @@ export async function decrypt(token: any) {
       algorithms: ["HS256"],
       clockTolerance: 15,
     });
+
     return payload;
   } catch (error: any) {
     return {
@@ -65,6 +70,7 @@ export async function decrypt(token: any) {
 // ─── Session lifecycle ──────────────────────────────────────────────────────
 function normalizeSessionUser(user?: Partial<AuthUser> & Record<string, any>) {
   if (!user) return undefined;
+
   return {
     ...user,
     first_name: user.first_name ?? user.firstName,
@@ -114,6 +120,7 @@ export async function createAuthSession({
   if (!token) throw new Error("Failed to create session token.");
 
   const store = await cookies();
+
   store.set(AUTH_SESSION, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -128,6 +135,7 @@ export async function updateAuthSession(
   fields: Partial<AuthSession>,
 ): Promise<AuthSession | undefined> {
   const { isAuthenticated, session: oldSession } = await verifySession();
+
   if (!isAuthenticated || !oldSession) return;
 
   const cleaned = Object.fromEntries(
@@ -135,6 +143,7 @@ export async function updateAuthSession(
   ) as AuthSession;
 
   const newSession: AuthSession = { ...cleaned, ...fields };
+
   newSession.expiresAt = fields?.expiresAt
     ? new Date(fields.expiresAt as any)
     : oldSession?.expiresAt
@@ -145,9 +154,11 @@ export async function updateAuthSession(
   const cookieExpiry = new Date(Date.now() + cookieLifetimeMs);
   const jwtTtl = `${Math.ceil(cookieLifetimeMs / 1000)}s`;
   const token = await encrypt(newSession, jwtTtl);
+
   if (!token) throw new Error("Failed to update session token.");
 
   const store = await cookies();
+
   store.set(AUTH_SESSION, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -155,6 +166,7 @@ export async function updateAuthSession(
     sameSite: "strict",
     path: "/",
   });
+
   return newSession;
 }
 
@@ -167,21 +179,26 @@ export async function verifySession(): Promise<{
   try {
     const store = await cookies();
     const cookie = store.get(AUTH_SESSION)?.value;
+
     if (!cookie) return { isAuthenticated: false, session: null };
 
     const decrypted = await decrypt(cookie);
+
     if (!decrypted || (decrypted as any).success === false) {
       await deleteSession();
+
       return { isAuthenticated: false, session: null };
     }
 
     const session = decrypted as unknown as AuthSession;
+
     if (!session?.access_token) {
       return { isAuthenticated: false, session: null };
     }
 
     if (session.expiresAt) {
       const expiresAt = new Date(session.expiresAt as any);
+
       if (expiresAt < new Date()) {
         return { isAuthenticated: false, session, accessExpired: true };
       }
@@ -195,21 +212,25 @@ export async function verifySession(): Promise<{
 
 export async function getSession(): Promise<AuthSession | null> {
   const { session } = await verifySession();
+
   return session;
 }
 
 export async function getCurrentUser(): Promise<AuthUser | null> {
   const { session } = await verifySession();
+
   return (session?.user as AuthUser) || null;
 }
 
 export async function deleteSession() {
   try {
     const store = await cookies();
+
     store.delete(AUTH_SESSION);
     store.delete(USER_SESSION);
     store.delete(PERMISSIONS_SESSION);
     store.delete(SCREEN_LOCK_SESSION);
+
     return { success: true, message: "Logout success" };
   } catch (error: any) {
     return {

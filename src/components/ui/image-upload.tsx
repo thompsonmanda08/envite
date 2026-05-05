@@ -3,7 +3,6 @@
 import { useState, useRef } from "react";
 import { upload } from "@imagekit/next";
 import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
 
 interface ImageUploadProps {
   images: string[];
@@ -24,9 +23,11 @@ export function ImageUpload({
   const authenticator = async () => {
     try {
       const response = await fetch("/api/upload-auth");
+
       if (!response.ok) {
         throw new Error("Failed to get upload authentication");
       }
+
       return await response.json();
     } catch (error) {
       console.error("Error getting upload auth:", error);
@@ -70,6 +71,7 @@ export function ImageUpload({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+
     if (file) {
       handleFileUpload(file);
     }
@@ -106,6 +108,7 @@ export function ImageUpload({
     }
     const newImages = [...images];
     const [selectedImage] = newImages.splice(index, 1);
+
     newImages.unshift(selectedImage);
     onImagesChange(newImages);
     toast.success(`Image moved to main position`);
@@ -119,28 +122,28 @@ export function ImageUpload({
           dragActive
             ? "border-blue-500 bg-blue-50"
             : uploading
-            ? "border-gray-300 bg-gray-50"
-            : "border-gray-300 hover:border-gray-400 hover:bg-gray-50"
+              ? "border-gray-300 bg-gray-50"
+              : "border-gray-300 hover:border-gray-400 hover:bg-gray-50"
         } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+        onClick={() => !disabled && !uploading && fileInputRef.current?.click()}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
-        onClick={() => !disabled && !uploading && fileInputRef.current?.click()}
       >
         <input
           ref={fileInputRef}
-          type="file"
           accept="image/*"
-          onChange={handleInputChange}
-          disabled={uploading || disabled}
           className="hidden"
+          disabled={uploading || disabled}
+          type="file"
+          onChange={handleInputChange}
         />
 
         {uploading ? (
           <div className="space-y-3">
             <div className="w-12 h-12 mx-auto">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
             </div>
             <div className="space-y-2">
               <p className="text-sm text-gray-600">Uploading image...</p>
@@ -157,16 +160,16 @@ export function ImageUpload({
           <div className="space-y-3">
             <div className="w-12 h-12 mx-auto text-gray-400">
               <svg
+                className="w-full h-full"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 48 48"
-                className="w-full h-full"
               >
                 <path
+                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
                 />
               </svg>
             </div>
@@ -200,19 +203,19 @@ export function ImageUpload({
             >
               <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
                 <img
-                  src={url}
                   alt={`Product image ${index + 1}`}
                   className="w-full h-full object-cover pointer-events-none"
+                  src={url}
                 />
               </div>
               <button
+                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50 z-10"
+                disabled={disabled}
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
                   removeImage(index);
                 }}
-                disabled={disabled}
-                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50 z-10"
               >
                 ×
               </button>
