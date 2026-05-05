@@ -1,5 +1,10 @@
 "use server";
 
+// NOTE: Backend public RSVP endpoint not yet implemented. URL below is an
+// optimistic guess — calls will 404 until backend lands. UI surface
+// (i/[id] RSVP form) operates on this contract; rewire here once the
+// real public endpoint is confirmed.
+
 import type { APIResponse, RsvpStatus } from "@/types";
 
 import {

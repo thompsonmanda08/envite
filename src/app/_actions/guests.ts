@@ -1,15 +1,20 @@
 "use server";
 
-import type { APIResponse, Guest, RsvpStatus } from "@/types";
+// NOTE: Backend guest endpoints not yet documented in postman collection
+// (only `step 4 - upload guests` stub with empty URL exists). URLs below
+// are optimistic guesses — calls will 404 until backend lands. UI surfaces
+// (events/[id]/guests) operate on this contract; rewire here once real
+// routes are confirmed.
 
 import { revalidateTag } from "next/cache";
 
 import { CACHE_TAGS } from "@/lib/cache-tags";
+import type { APIResponse, Guest, RsvpStatus } from "@/types";
 
 import authenticatedApiClient, {
+  badRequestResponse,
   fromBackend,
   handleError,
-  badRequestResponse,
 } from "./api-config";
 
 export async function getGuests(

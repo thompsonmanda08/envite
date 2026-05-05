@@ -1,131 +1,79 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
+import { ArrowLeft, Mail } from "lucide-react";
 
-import { resetPassword } from "@/app/_actions/auth";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import Spinner from "@/components/ui/spinner";
-import Spinner2 from "@/components/ui/spinner";
+const ease = [0.22, 1, 0.36, 1] as const;
 
-function LoadingPage() {
-  return (
-    <div className="flex h-screen items-center justify-center">
-      <Spinner2 size="lg" />
-    </div>
-  );
-}
-import { toast } from "sonner";
-
-export default function ResetForgotPasswordPage() {
-  const router = useRouter();
-  const params = useSearchParams();
-  const token = params.get("token") || "";
-
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  if (!token) {
-    router.push("/forgot-password");
-    toast.error("No reset token provided.");
-
-    return <LoadingPage />;
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setMessage("");
-
-    if (!newPassword || !confirmPassword) {
-      setMessage("Please enter both newPassword and password.");
-
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      setMessage("Passwords do not match.");
-
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    const response = await resetPassword({ password: newPassword, token });
-
-    if (response.success) {
-      const token = response.data.token;
-
-      // Redirect to reset password page with token
-      toast.success(response.message || "Password reset successfully!");
-      setMessage("🎉 Password reset successfully! Redirecting...");
-      router.push(`/login?password_reset=${true}`);
-    } else {
-      setMessage(`Error: ${response?.data?.message || response?.message}`);
-    }
-
-    setIsSubmitting(false);
-  };
+export default function ResetPasswordPage() {
+  const reduce = useReducedMotion();
 
   return (
-    <div className="w-full max-w-md">
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-light text-black mb-2">
-          Reset <span className="font-bold">Password</span>
+    <motion.div
+      initial={reduce ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease }}
+      className="w-full max-w-md"
+    >
+      <Link
+        href="/login"
+        className="inline-flex items-center gap-2 font-brand text-[10px] uppercase tracking-[0.32em] text-mute transition-colors hover:text-foreground"
+      >
+        <ArrowLeft size={12} />
+        Back to sign in
+      </Link>
+
+      <header className="mt-8 space-y-3">
+        <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+          Briefly unavailable
+        </p>
+        <h1 className="font-display text-balance text-4xl font-medium tracking-tight md:text-5xl">
+          Reset is on <span className="italic">its way.</span>
         </h1>
-        <p className="text-gray-600">Change your Password?</p>
+      </header>
+
+      <div className="mt-10 rounded-3xl border border-hairline bg-surface/60 p-8 backdrop-blur">
+        <span className="grid h-10 w-10 place-items-center rounded-full border border-hairline bg-background text-foreground">
+          <Mail size={16} />
+        </span>
+        <p className="mt-5 text-sm leading-relaxed text-foreground/85">
+          Token-based password reset isn&rsquo;t yet supported by our backend.
+          In the meantime:
+        </p>
+        <ul className="mt-4 flex flex-col gap-3 text-sm text-foreground/80">
+          <li className="flex items-start gap-3">
+            <span className="mt-1 h-1 w-1 flex-none rounded-full bg-foreground/40" />
+            <span>
+              If you can still sign in, change your password from{" "}
+              <Link
+                href="/dashboard/settings"
+                className="text-foreground underline-offset-4 hover:underline"
+              >
+                Settings → Passphrase
+              </Link>
+              .
+            </span>
+          </li>
+          <li className="flex items-start gap-3">
+            <span className="mt-1 h-1 w-1 flex-none rounded-full bg-foreground/40" />
+            <span>
+              Locked out entirely? Email{" "}
+              <a
+                href="mailto:hello@e-nvite.com"
+                className="text-foreground underline-offset-4 hover:underline"
+              >
+                hello@e-nvite.com
+              </a>{" "}
+              and we&rsquo;ll sort it manually.
+            </span>
+          </li>
+        </ul>
       </div>
 
-      <form className="space-y-4" onSubmit={handleSubmit}>
-        <Input
-          disabled={isSubmitting}
-          errorText="Password must be at least 6 characters."
-          id="newPassword"
-          isInvalid={newPassword.length < 6 && newPassword.length > 0}
-          label="New Password"
-          placeholder="Enter your new password"
-          type="password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-        <Input
-          disabled={isSubmitting}
-          errorText="Passwords do not match."
-          id="confirmPassword"
-          isInvalid={
-            confirmPassword !== newPassword && confirmPassword.length > 6
-          }
-          label="Confirm Password"
-          placeholder="Enter your password again"
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-
-        <Button className="w-full" disabled={isSubmitting} type="submit">
-          {isSubmitting ? (
-            <span className="flex items-center gap-1 ">
-              <Spinner color="white" size={"sm"} /> Submitting...
-            </span>
-          ) : (
-            "Change Password"
-          )}
-        </Button>
-
-        {message && (
-          <div
-            className={`mt-4 p-4 rounded-lg text-center ${
-              message.includes("🎉") || message.includes("successfully")
-                ? "bg-green-50 text-green-800 border border-green-200"
-                : "bg-red-50 text-red-800 border border-red-200"
-            }`}
-          >
-            {message}
-          </div>
-        )}
-      </form>
-    </div>
+      <p className="mt-8 text-center font-display text-sm italic text-mute">
+        &ldquo;Patience is a host&rsquo;s first virtue.&rdquo;
+      </p>
+    </motion.div>
   );
 }

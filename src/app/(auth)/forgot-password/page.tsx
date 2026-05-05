@@ -1,151 +1,102 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
-import { sendResetEmail } from "@/app/_actions/auth";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import Spinner from "@/components/ui/spinner";
-import RadioGroup from "@/components/base/radio_group";
+import { useRequestPasswordResetMutation } from "@/hooks/use-auth-mutations";
+
+const ease = [0.22, 1, 0.36, 1] as const;
+
+const inputCls =
+  "w-full rounded-xl border border-hairline bg-background px-4 py-3 text-sm transition-colors focus:border-foreground/40 focus:outline-none";
 
 export default function ForgotPasswordPage() {
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [selectedOption, setSelectedOption] = useState({
-    name: "email",
-    index: 0,
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
+  const [sent, setSent] = useState(false);
+  const reset = useRequestPasswordResetMutation();
+  const reduce = useReducedMotion();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setMessage("");
-
-    if (!username && !email) {
-      setMessage("Please provide your username or email.");
-
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    const response = await sendResetEmail(email || username);
-
-    if (response.success) {
-      const token = response.data.token;
-
-      // Redirect to reset password page with token
-      router.push(`/?password_reset_link_sent=${true}`);
-      toast.success("Password reset link sent successfully!");
-    } else {
-      toast.error(`${response?.data?.message || response?.message}`);
-      setMessage(`Error: ${response?.data?.message || response?.message}`);
-      setIsSubmitting(false);
-    }
-
-    setTimeout(() => {
-      setIsSubmitting(false);
-    }, 1000 * 60); // Simulate a delay of 1 minute
-  };
+    const res = await reset.mutateAsync(email);
+    if (!res.success) return toast.error(res.message);
+    setSent(true);
+    toast.success("If the email exists, a reset link is on its way");
+  }
 
   return (
-    <div className="w-full max-w-md">
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-light text-black mb-2">
-          Welcome <span className="font-bold">Back</span>
-        </h1>
-        <p className="text-gray-600">Forgot your Password?</p>
-      </div>
+    <motion.div
+      initial={reduce ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease }}
+      className="w-full max-w-md"
+    >
+      <Link
+        href="/login"
+        className="inline-flex items-center gap-2 font-brand text-[10px] uppercase tracking-[0.32em] text-mute transition-colors hover:text-foreground"
+      >
+        <ArrowLeft size={12} />
+        Back to sign in
+      </Link>
 
-      <form className="space-y-4 w-full " onSubmit={handleSubmit}>
-        <RadioGroup
-          required
-          labelText="Email/Username"
-          options={["email ", "username"]?.map((item, index) => (
-            <div
-              key={index}
-              className="flex flex-1 gap-2 capitalize text-black"
-            >
-              <span>{item}</span>
-            </div>
-          ))}
-          value={selectedOption.index}
-          onChange={(index) => {
-            setSelectedOption({
-              name: ["email ", "username"][index],
-              index,
-            });
-          }}
-        />
-        <Input
-          required
-          descriptionText={
-            selectedOption.name === "username"
-              ? "Enter username without @ symbol"
-              : "Enter your email address to receive a reset link."
-          }
-          disabled={isSubmitting}
-          id={selectedOption.name}
-          label={
-            selectedOption.name === "username" ? "Username" : "Email Address"
-          }
-          placeholder={`Enter your ${selectedOption.name}`}
-          type={selectedOption.name === "username" ? "text" : "email"}
-          value={selectedOption.name === "username" ? username : email}
-          onChange={(e) =>
-            selectedOption.name === "username"
-              ? setUsername(e.target.value)
-              : setEmail(e.target.value)
-          }
-        />
-        <Button className="w-full" disabled={isSubmitting} type="submit">
-          {isSubmitting ? (
-            <span className="flex items-center gap-1">
-              <Spinner color="white" size={"sm"} /> Submitting...
-            </span>
-          ) : (
-            "Submit"
-          )}
-        </Button>
-
-        {message && (
-          <div
-            className={`mt-4 p-4 rounded-lg text-center ${
-              message.includes("🎉") || message.includes("successfully")
-                ? "bg-green-50 text-green-800 border border-green-200"
-                : "bg-red-50 text-red-800 border border-red-200"
-            }`}
-          >
-            {message}
-          </div>
-        )}
-      </form>
-
-      <div className="mt-8 text-center">
-        <p className="text-gray-600">
-          Don't have an account?{" "}
-          <Link
-            className="text-black font-medium hover:underline"
-            href="/apply"
-          >
-            Apply to join
-          </Link>
+      <header className="mt-8 space-y-3">
+        <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+          A small mercy
         </p>
-      </div>
+        <h1 className="font-display text-balance text-4xl font-medium tracking-tight md:text-5xl">
+          Reset your <span className="italic">password.</span>
+        </h1>
+        <p className="text-sm italic text-mute">
+          We&rsquo;ll send a one-time link to set a new one.
+        </p>
+      </header>
 
-      <div className="mt-6 text-center">
-        <Link
-          className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
-          href="/login"
-        >
-          Oh! I remember my password
-        </Link>
-      </div>
-    </div>
+      {sent ? (
+        <div className="mt-10 rounded-3xl border border-hairline bg-surface/60 p-8 text-center backdrop-blur">
+          <p className="font-display text-xl">Check your inbox.</p>
+          <p className="mt-2 text-sm text-mute">
+            We sent a reset link to{" "}
+            <span className="text-foreground">{email}</span>. The link expires
+            in an hour.
+          </p>
+          <p className="mt-6 font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+            Didn&rsquo;t arrive?
+          </p>
+          <button
+            onClick={() => setSent(false)}
+            className="mt-2 text-sm text-foreground underline-offset-4 hover:underline"
+          >
+            Try a different email
+          </button>
+        </div>
+      ) : (
+        <form onSubmit={onSubmit} className="mt-10 flex flex-col gap-4">
+          <label className="flex flex-col gap-1.5">
+            <span className="font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+              Email
+            </span>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+              placeholder="you@example.com"
+              className={inputCls}
+            />
+          </label>
+          <button
+            type="submit"
+            disabled={reset.isPending}
+            className="mt-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background shadow-[0_8px_24px_-12px_color-mix(in_oklch,var(--foreground)_50%,transparent)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-12px_color-mix(in_oklch,var(--foreground)_60%,transparent)] disabled:translate-y-0 disabled:opacity-50 disabled:shadow-none"
+          >
+            {reset.isPending ? "Sending…" : "Send reset link"}
+          </button>
+        </form>
+      )}
+    </motion.div>
   );
 }
