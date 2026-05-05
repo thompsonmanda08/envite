@@ -6,6 +6,8 @@ import { Calendar, MapPin, Sparkles } from "lucide-react";
 
 import type { EventRecord, EventSession } from "@/types";
 
+import { RsvpForm } from "./rsvp-form";
+
 const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function PublicEvent({
@@ -16,6 +18,12 @@ export default function PublicEvent({
   sessions: EventSession[];
 }) {
   const reduce = useReducedMotion();
+
+  const acceptingRsvp =
+    event.requires_rsvp !== false &&
+    event.status !== "cancelled" &&
+    (!event.rsvp_deadline ||
+      new Date(event.rsvp_deadline).getTime() > Date.now());
 
   return (
     <main className="relative isolate overflow-hidden">
@@ -196,19 +204,29 @@ export default function PublicEvent({
         ) : null}
 
         <motion.section
-          initial={reduce ? false : { opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={reduce ? false : { opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease }}
-          className="mt-24 text-center"
+          className="mt-24"
         >
-          <span className="mx-auto block h-px w-12 bg-hairline" />
-          <p className="mt-8 font-display text-base italic text-foreground/70">
-            With grateful hearts, we await your reply.
-          </p>
-          <p className="mt-3 text-[11px] uppercase tracking-[0.32em] text-mute">
-            RSVP opens once guest endpoints land
-          </p>
+          {acceptingRsvp ? (
+            <RsvpForm eventId={event.id} sessions={sessions} />
+          ) : (
+            <div className="rounded-3xl border border-hairline bg-surface/60 p-12 text-center">
+              <p className="font-display text-2xl italic text-foreground/70">
+                {event.status === "cancelled"
+                  ? "This event has been cancelled."
+                  : "RSVP is closed."}
+              </p>
+              {event.rsvp_deadline && event.status !== "cancelled" && (
+                <p className="font-brand mt-3 text-[11px] uppercase tracking-[0.32em] text-mute">
+                  Deadline passed{" "}
+                  {format(new Date(event.rsvp_deadline), "MMMM d, yyyy")}
+                </p>
+              )}
+            </div>
+          )}
         </motion.section>
 
         <Ornament className="mt-20" />
