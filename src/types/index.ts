@@ -41,14 +41,12 @@ export type AuthUser = {
   email: string;
   first_name?: string;
   last_name?: string;
-  firstName?: string;
-  lastName?: string;
   phone?: string;
-  avatar?: string;
-  role: UserRole;
+  avatar_url?: string;
+  role?: UserRole;
   account_type?: string;
   organization_id?: string;
-  isVerified?: boolean;
+  is_verified?: boolean;
   created_at?: string;
   updated_at?: string;
   last_login?: string;
@@ -70,26 +68,36 @@ export type AuthSession = {
 };
 
 // ─── Domain ─────────────────────────────────────────────────────────────────
-export type EventStatus = "draft" | "scheduled" | "live" | "ended" | "archived";
+export type EventStatus = "draft" | "published" | "cancelled";
 
 export type EventRecord = {
   id: string;
+  event_type_id: string;
+  user_id?: string;
   title: string;
-  slug: string;
   description?: string;
-  coverImage?: string;
-  templateId?: string;
-  startsAt: string;
-  endsAt?: string;
-  timezone?: string;
-  venueName?: string;
-  venueAddress?: string;
+  theme?: string;
+  dress_code?: string;
+  venue?: string;
+  venue_address?: string;
+  venue_map_pin?: string;
+  start_date: string;
+  end_date?: string;
+  rsvp_deadline?: string;
+  max_attendees?: number;
+  special_instructions?: string;
+  dietary_restrictions_note?: string;
+  parking_info?: string;
+  contact_person?: string;
+  contact_phone?: string;
+  contact_email?: string;
+  requires_rsvp?: boolean;
+  is_multi_day?: boolean;
+  duration_days?: number;
+  banner_url?: string;
   status: EventStatus;
-  hostId: string;
-  guestCount?: number;
-  rsvpCount?: number;
-  createdAt: string;
-  updatedAt: string;
+  created_at?: string;
+  updated_at?: string;
   [x: string]: any;
 };
 
@@ -97,16 +105,17 @@ export type RsvpStatus = "pending" | "going" | "maybe" | "declined";
 
 export type Guest = {
   id: string;
-  eventId: string;
+  event_id: string;
+  invitation_id?: string;
   name: string;
   email?: string;
   phone?: string;
   rsvp: RsvpStatus;
-  plusOnes?: number;
+  plus_ones?: number;
   group?: string;
   notes?: string;
-  invitedAt?: string;
-  respondedAt?: string;
+  invited_at?: string;
+  responded_at?: string;
   [x: string]: any;
 };
 
@@ -142,13 +151,14 @@ export type EventSession = {
 
 export type Invitation = {
   id: string;
-  eventId: string;
-  guestId: string;
-  channel: "email" | "sms" | "link";
-  status: "queued" | "sent" | "delivered" | "opened" | "failed";
-  sentAt?: string;
-  openedAt?: string;
-  shareUrl?: string;
+  event_id: string;
+  invitation_type: string;
+  custom_image_url?: string;
+  sessions: string[]; // session ids
+  share_url?: string;
+  status?: "draft" | "published" | "archived";
+  created_at?: string;
+  updated_at?: string;
   [x: string]: any;
 };
 
