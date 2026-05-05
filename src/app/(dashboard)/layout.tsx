@@ -1,4 +1,11 @@
-import { CalendarIcon, HomeIcon, MailIcon, UsersIcon } from "lucide-react";
+import {
+  BarChart3Icon,
+  CalendarIcon,
+  HomeIcon,
+  MailIcon,
+  SettingsIcon,
+  SparklesIcon,
+} from "lucide-react";
 import React, { PropsWithChildren } from "react";
 
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -12,14 +19,32 @@ import {
 
 const navGroups: SidebarNavGroup[] = [
   {
+    label: "Workspace",
     items: [
-      { label: "Dashboard", href: "/dashboard", icon: HomeIcon },
-      { label: "Events", href: "/events", icon: CalendarIcon },
-      { label: "Guests", href: "/guests", icon: UsersIcon },
-      { label: "Invitations", href: "/invitations", icon: MailIcon },
+      { label: "Atelier", href: "/dashboard", icon: HomeIcon },
+      { label: "Events", href: "/dashboard/events", icon: CalendarIcon },
+      { label: "Invitations", href: "/dashboard/invitations", icon: MailIcon },
+    ],
+  },
+  {
+    label: "Library",
+    items: [
+      {
+        label: "Event Types",
+        href: "/dashboard/event-types",
+        icon: SparklesIcon,
+      },
+      { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3Icon },
+      {
+        label: "Settings",
+        href: "/dashboard/settings",
+        icon: SettingsIcon,
+      },
     ],
   },
 ];
+
+export const dynamic = "force-dynamic";
 
 export default function DashboardLayoutPage({ children }: PropsWithChildren) {
   return (

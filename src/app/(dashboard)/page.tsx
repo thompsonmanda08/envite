@@ -1,190 +1,82 @@
+import Link from "next/link";
+
 import { getCurrentUser } from "@/lib/auth";
+import { getMyEvents } from "@/app/_actions/events";
+import { Button } from "@/components/ui/button";
+import { DashboardHero } from "./_components/dashboard-hero";
+import { EventsTimeline } from "./_components/events-timeline";
+import { StatsRow } from "./_components/stats-row";
 
 export default async function DashboardPage() {
-  const user = await getCurrentUser();
+  const [user, eventsRes] = await Promise.all([
+    getCurrentUser(),
+    getMyEvents().catch(() => ({ success: false, data: [] as any[] })),
+  ]);
+  const events = (eventsRes.success ? eventsRes.data : []) ?? [];
+
+  const upcoming = events
+    .filter(
+      (e: any) =>
+        e?.start_date && new Date(e.start_date).getTime() >= Date.now(),
+    )
+    .sort(
+      (a: any, b: any) =>
+        new Date(a.start_date).getTime() - new Date(b.start_date).getTime(),
+    );
+
+  const draftCount = events.filter((e: any) => e?.status === "draft").length;
+  const publishedCount = events.filter(
+    (e: any) => e?.status === "published",
+  ).length;
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600">
-          Here's what's happening with your events today.
-        </p>
-      </div>
+    <div className="relative isolate">
+      <div
+        aria-hidden
+        className="halo pointer-events-none absolute -top-24 right-0 h-[420px] w-[520px] opacity-70"
+      />
+      <div
+        aria-hidden
+        className="halo-cool pointer-events-none absolute top-40 -left-20 h-[360px] w-[420px] opacity-60"
+      />
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white overflow-hidden shadow-sm rounded-2xl">
-          <div className="p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-blue-100 rounded-xl flex items-center justify-center">
-                  📅
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Total Events
-                  </dt>
-                  <dd className="text-2xl font-bold text-gray-900">12</dd>
-                </dl>
-              </div>
-            </div>
+      <DashboardHero
+        userName={
+          [user?.first_name, user?.last_name].filter(Boolean).join(" ") ||
+          user?.email ||
+          "there"
+        }
+        nextEvent={upcoming[0]}
+      />
+
+      <div className="hairline my-12" />
+
+      <StatsRow
+        total={events.length}
+        upcoming={upcoming.length}
+        drafts={draftCount}
+        published={publishedCount}
+      />
+
+      <div className="hairline my-12" />
+
+      <section className="space-y-8">
+        <header className="flex items-end justify-between gap-6">
+          <div>
+            <p className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
+              The Programme
+            </p>
+            <h2 className="font-display mt-2 text-4xl font-medium tracking-tight md:text-5xl">
+              Forthcoming events
+            </h2>
           </div>
-        </div>
+          <Button asChild variant="outline" className="rounded-full">
+            <Link href="/dashboard/events">View all</Link>
+          </Button>
+        </header>
 
-        <div className="bg-white overflow-hidden shadow-sm rounded-2xl">
-          <div className="p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-green-100 rounded-xl flex items-center justify-center">
-                  ✉️
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Pending Invites
-                  </dt>
-                  <dd className="text-2xl font-bold text-gray-900">145</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white overflow-hidden shadow-sm rounded-2xl">
-          <div className="p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center">
-                  💳
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Completed
-                  </dt>
-                  <dd className="text-2xl font-bold text-gray-900">8</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white overflow-hidden shadow-sm rounded-2xl">
-          <div className="p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-orange-100 rounded-xl flex items-center justify-center">
-                  📊
-                </div>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    Response Rate
-                  </dt>
-                  <dd className="text-2xl font-bold text-gray-900">78.5%</dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          <div className="bg-white shadow-sm rounded-2xl">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900">
-                Recent Activity
-              </h3>
-            </div>
-            <div className="p-6">
-              <div className="space-y-4">
-                <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                      ✅
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900">
-                      New RSVP Response
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Sarah Johnson responded to Summer Wedding
-                    </p>
-                    <p className="text-xs text-gray-400 mt-1">2 hours ago</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                      📧
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900">
-                      Invites Sent
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      25 invites sent for Birthday Party
-                    </p>
-                    <p className="text-xs text-gray-400 mt-1">5 hours ago</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                      🎉
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900">
-                      Event Created
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      Corporate Annual Gala created
-                    </p>
-                    <p className="text-xs text-gray-400 mt-1">1 day ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div className="bg-white shadow-sm rounded-2xl">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h3 className="text-lg font-medium text-gray-900">
-                Quick Actions
-              </h3>
-            </div>
-            <div className="p-6 space-y-3">
-              <button className="w-full bg-blue-600 text-white py-3 px-4 rounded-xl font-medium hover:bg-blue-700 transition-colors">
-                🎉 Create New Event
-              </button>
-              <button className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-medium hover:bg-gray-200 transition-colors">
-                📧 Send Invites
-              </button>
-              <button className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-medium hover:bg-gray-200 transition-colors">
-                📊 View Analytics
-              </button>
-              <button className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-medium hover:bg-gray-200 transition-colors">
-                ⚙️ Settings
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+        <EventsTimeline events={upcoming.slice(0, 6)} />
+      </section>
     </div>
   );
 }

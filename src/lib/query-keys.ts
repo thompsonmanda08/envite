@@ -31,3 +31,10 @@ export const EVENT_TYPES_KEYS = {
   list: () => ["event-types", "list"] as const,
   detail: (id: string) => ["event-types", id] as const,
 };
+
+export const SESSIONS_KEYS = {
+  all: ["sessions"] as const,
+  list: (eventId: string, params?: Record<string, any>) =>
+    ["sessions", "list", eventId, params ?? {}] as const,
+  detail: (id: string) => ["sessions", id] as const,
+};
