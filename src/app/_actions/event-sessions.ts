@@ -65,9 +65,28 @@ export async function getEventSession(
   }
 }
 
+export type CreateEventSessionInput = Pick<
+  EventSession,
+  "session_name" | "session_date" | "start_time"
+> &
+  Partial<
+    Pick<
+      EventSession,
+      | "description"
+      | "end_time"
+      | "venue"
+      | "venue_address"
+      | "dress_code"
+      | "max_attendees"
+      | "special_notes"
+      | "session_order"
+      | "is_active"
+    >
+  >;
+
 export async function createEventSession(
   eventId: string,
-  data: Partial<EventSession>,
+  data: CreateEventSessionInput,
 ): Promise<APIResponse<EventSession>> {
   if (!eventId) return badRequestResponse("Event ID required");
   if (!data?.session_name || !data?.session_date || !data?.start_time) {
@@ -85,18 +104,22 @@ export async function createEventSession(
   }
 }
 
+export type UpdateEventSessionInput = Partial<
+  Omit<EventSession, "id" | "event_id" | "created_at" | "updated_at">
+>;
+
 export async function updateEventSession(
   id: string,
-  data: Partial<EventSession>,
+  eventId: string,
+  data: UpdateEventSessionInput,
 ): Promise<APIResponse<EventSession>> {
   if (!id) return badRequestResponse("Session ID required");
+  if (!eventId) return badRequestResponse("Event ID required");
   const url = `/api/v1/event-sessions/${id}`;
   try {
     const res = await authenticatedApiClient({ url, method: "PUT", data });
     revalidateTag(CACHE_TAGS.SESSION(id), "max");
-    if (data.event_id) {
-      revalidateTag(CACHE_TAGS.SESSIONS_BY_EVENT(data.event_id), "max");
-    }
+    revalidateTag(CACHE_TAGS.SESSIONS_BY_EVENT(eventId), "max");
     return fromBackend<EventSession>(res);
   } catch (error: any) {
     return handleError(error, "PUT", url);
@@ -105,10 +128,11 @@ export async function updateEventSession(
 
 export async function deleteEventSession(
   id: string,
-  hard = true,
-  eventId?: string,
+  eventId: string,
+  hard = false,
 ): Promise<APIResponse> {
   if (!id) return badRequestResponse("Session ID required");
+  if (!eventId) return badRequestResponse("Event ID required");
   const url = `/api/v1/event-sessions/${id}`;
   try {
     const res = await authenticatedApiClient({
@@ -117,9 +141,7 @@ export async function deleteEventSession(
       params: { hard_delete: String(hard) },
     });
     revalidateTag(CACHE_TAGS.SESSION(id), "max");
-    if (eventId) {
-      revalidateTag(CACHE_TAGS.SESSIONS_BY_EVENT(eventId), "max");
-    }
+    revalidateTag(CACHE_TAGS.SESSIONS_BY_EVENT(eventId), "max");
     return fromBackend(res);
   } catch (error: any) {
     return handleError(error, "DELETE", url);
