@@ -1,29 +1,29 @@
 "use client";
 
-import type { AuthUser } from "@/types";
-
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
-  getMe,
+  getProfile,
   loginUser,
   logoutUser,
   registerUser,
   requestPasswordReset,
-  resetPassword,
+  updatePassword,
+  updateProfile,
   type LoginData,
   type SignUpData,
+  type UpdatePasswordData,
+  type UpdateProfileData,
 } from "@/app/_actions/auth";
 import { AUTH_KEYS } from "@/lib/query-keys";
+import type { AuthUser } from "@/types";
 
-export function useMeQuery(initialData?: AuthUser) {
+export function useProfileQuery(initialData?: AuthUser) {
   return useQuery({
     queryKey: AUTH_KEYS.me,
     queryFn: async () => {
-      const res = await getMe();
-
+      const res = await getProfile();
       if (!res.success) throw new Error(res.message);
-
       return res.data as AuthUser;
     },
     initialData,
@@ -32,9 +32,11 @@ export function useMeQuery(initialData?: AuthUser) {
   });
 }
 
+// Backward-compat alias — older callers used `useMeQuery`.
+export const useMeQuery = useProfileQuery;
+
 export function useLoginMutation() {
   const qc = useQueryClient();
-
   return useMutation({
     mutationFn: (data: LoginData) => loginUser(data),
     onSuccess: (res) => {
@@ -44,19 +46,15 @@ export function useLoginMutation() {
 }
 
 export function useRegisterMutation() {
-  const qc = useQueryClient();
-
+  // Registration does NOT auto-login — UI redirects to /login on success.
+  // Therefore no profile invalidation here.
   return useMutation({
     mutationFn: (data: SignUpData) => registerUser(data),
-    onSuccess: (res) => {
-      if (res.success) qc.invalidateQueries({ queryKey: AUTH_KEYS.me });
-    },
   });
 }
 
 export function useLogoutMutation() {
   const qc = useQueryClient();
-
   return useMutation({
     mutationFn: () => logoutUser(),
     onSuccess: () => {
@@ -72,9 +70,18 @@ export function useRequestPasswordResetMutation() {
   });
 }
 
-export function useResetPasswordMutation() {
+export function useUpdateProfileMutation() {
+  const qc = useQueryClient();
   return useMutation({
-    mutationFn: (data: { token: string; password: string }) =>
-      resetPassword(data),
+    mutationFn: (data: UpdateProfileData) => updateProfile(data),
+    onSuccess: (res) => {
+      if (res.success) qc.invalidateQueries({ queryKey: AUTH_KEYS.me });
+    },
+  });
+}
+
+export function useUpdatePasswordMutation() {
+  return useMutation({
+    mutationFn: (data: UpdatePasswordData) => updatePassword(data),
   });
 }
