@@ -40,7 +40,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "next.config.mts",
-    "src/test",
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
