@@ -1,48 +1,37 @@
-type WelcomeProps = { sellerName: string; shopName: string };
-export function WelcomeEmail({ sellerName, shopName }: WelcomeProps) {
+type WelcomeProps = { name: string };
+export function WelcomeEmail({ name }: WelcomeProps) {
   return (
     <div>
-      <h1>Welcome, {sellerName}</h1>
-      <p>Your shop {shopName} is ready.</p>
+      <h1>Welcome to e-nvite, {name}</h1>
+      <p>Start planning beautiful events and tracking RSVPs in one place.</p>
     </div>
   );
 }
 
-type OrderItem = { name: string; quantity: number; image?: string };
-type OrderProps = {
-  customerName: string;
-  orderId: string;
-  items: OrderItem[];
-  totalAmount: number;
-  currency: string;
-  orderDate: string;
-  shippingAddress: string;
+type InvitationProps = {
+  guestName: string;
+  eventName: string;
+  hostName: string;
+  eventDate: string;
+  inviteUrl: string;
 };
-export function OrderConfirmationEmail({
-  customerName,
-  orderId,
-  items,
-  totalAmount,
-  currency,
-  orderDate,
-  shippingAddress,
-}: OrderProps) {
+export function InvitationEmail({
+  guestName,
+  eventName,
+  hostName,
+  eventDate,
+  inviteUrl,
+}: InvitationProps) {
   return (
     <div>
-      <h1>Order #{orderId}</h1>
-      <p>Hi {customerName},</p>
-      <p>Order placed {orderDate}</p>
-      <ul>
-        {items.map((it) => (
-          <li key={it.name}>
-            {it.name} x {it.quantity}
-          </li>
-        ))}
-      </ul>
+      <h1>You're invited, {guestName}!</h1>
       <p>
-        Total: {currency} {totalAmount}
+        {hostName} has invited you to <strong>{eventName}</strong> on{" "}
+        {eventDate}.
       </p>
-      <p>Ship to: {shippingAddress}</p>
+      <p>
+        <a href={inviteUrl}>View invitation &amp; RSVP</a>
+      </p>
     </div>
   );
 }

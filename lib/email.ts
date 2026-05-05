@@ -17,9 +17,11 @@ interface SendEmailOptions {
 }
 
 const DEFAULT_FROM = {
-  email: process.env.SENDGRID_FROM_EMAIL || "natasha@xclsv.shop",
-  name: process.env.SENDGRID_FROM_NAME || "Natasha from Xclsv",
+  email: process.env.SENDGRID_FROM_EMAIL || "hello@e-nvite.com",
+  name: process.env.SENDGRID_FROM_NAME || "e-nvite",
 };
+
+const APP_NAME = "e-nvite";
 
 export async function sendEmail({
   to,
@@ -35,12 +37,7 @@ export async function sendEmail({
   }
 
   const payload = {
-    personalizations: [
-      {
-        to,
-        subject,
-      },
-    ],
+    personalizations: [{ to, subject }],
     content,
     from,
     reply_to: replyTo,
@@ -67,69 +64,48 @@ export async function sendEmail({
   }
 }
 
-// Helper function for common email templates
 export async function sendWelcomeEmail(
-  sellerEmail: string,
-  sellerName: string,
-  shopName: string
+  email: string,
+  name: string,
 ): Promise<{ success: boolean; error?: string }> {
   const { renderToString } = await import("react-dom/server");
   const { WelcomeEmail } = await import("../src/components/email-templates");
 
-  const emailHtml = renderToString(WelcomeEmail({ sellerName, shopName }));
+  const emailHtml = renderToString(WelcomeEmail({ name }));
 
   return sendEmail({
-    to: [{ email: sellerEmail, name: sellerName }],
-    subject: "Natasha from Xclsv: Your new Online Store await",
-    content: [
-      {
-        type: "text/html",
-        value: emailHtml,
-      },
-    ],
+    to: [{ email, name }],
+    subject: `Welcome to ${APP_NAME}`,
+    content: [{ type: "text/html", value: emailHtml }],
   });
 }
 
-export async function sendOrderConfirmation(
-  customerEmail: string,
-  customerName: string,
-  orderId: string,
-  items: Array<{
-    name: string;
-    price: number;
-    quantity: number;
-    image?: string;
-  }>,
-  totalAmount: number,
-  currency: string = "USD",
-  shippingAddress: string
-): Promise<{ success: boolean; error?: string }> {
+export async function sendInvitationEmail({
+  guestEmail,
+  guestName,
+  eventName,
+  hostName,
+  eventDate,
+  inviteUrl,
+}: {
+  guestEmail: string;
+  guestName: string;
+  eventName: string;
+  hostName: string;
+  eventDate: string;
+  inviteUrl: string;
+}): Promise<{ success: boolean; error?: string }> {
   const { renderToString } = await import("react-dom/server");
-  const { OrderConfirmationEmail } = await import(
-    "../src/components/email-templates"
-  );
+  const { InvitationEmail } = await import("../src/components/email-templates");
 
   const emailHtml = renderToString(
-    OrderConfirmationEmail({
-      customerName,
-      orderId,
-      items,
-      totalAmount,
-      currency,
-      orderDate: new Date().toLocaleDateString(),
-      shippingAddress,
-    })
+    InvitationEmail({ guestName, eventName, hostName, eventDate, inviteUrl }),
   );
 
   return sendEmail({
-    to: [{ email: customerEmail, name: customerName }],
-    subject: `Natasha from Xclsv: Order Confirmation #${orderId}`,
-    content: [
-      {
-        type: "text/html",
-        value: emailHtml,
-      },
-    ],
+    to: [{ email: guestEmail, name: guestName }],
+    subject: `${hostName} invited you to ${eventName}`,
+    content: [{ type: "text/html", value: emailHtml }],
   });
 }
 
@@ -144,9 +120,7 @@ export async function sendPasswordReset({
   resetToken: string;
   expiresIn?: string;
 }): Promise<{ success: boolean; error?: string }> {
-  
   if (!process.env.PASSWORD_RESET_URL) {
-    console.error("PASSWORD_RESET_URL environment variable is not set");
     throw new Error("PASSWORD_RESET_URL environment variable is not set");
   }
 
@@ -158,21 +132,12 @@ export async function sendPasswordReset({
   );
 
   const emailHtml = renderToString(
-    PasswordResetEmail({
-      name,
-      resetUrl,
-      expiresIn,
-    })
+    PasswordResetEmail({ name, resetUrl, expiresIn }),
   );
 
   return sendEmail({
     to: [{ email, name }],
-    subject: "Natasha from Xclsv: Password Reset Request",
-    content: [
-      {
-        type: "text/html",
-        value: emailHtml,
-      },
-    ],
+    subject: `${APP_NAME}: Password reset request`,
+    content: [{ type: "text/html", value: emailHtml }],
   });
 }

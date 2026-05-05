@@ -52,8 +52,8 @@ export async function getEvent(id: string): Promise<APIResponse<EventRecord>> {
 export async function createEvent(
   data: Partial<EventRecord>,
 ): Promise<APIResponse<EventRecord>> {
-  if (!data?.title || !data?.startsAt) {
-    return badRequestResponse("Title and startsAt are required");
+  if (!data?.title || !data?.start_date) {
+    return badRequestResponse("Title and start_date are required");
   }
   const url = "/api/v1/events";
 
