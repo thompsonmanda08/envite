@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { Lock, UserRound } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -10,13 +12,23 @@ import {
 } from "@/hooks/use-auth-mutations";
 import type { AuthUser } from "@/types";
 
+const ease = [0.22, 1, 0.36, 1] as const;
+
 const inputCls =
-  "rounded-lg border border-hairline bg-surface px-4 py-3 text-sm focus:border-foreground/40 focus:outline-none";
+  "w-full rounded-xl border border-hairline bg-background px-4 py-3 text-sm transition-colors focus:border-foreground/40 focus:outline-none";
+
+const FIELDS = [
+  { key: "first_name", label: "First name", autoComplete: "given-name", type: "text" },
+  { key: "last_name", label: "Last name", autoComplete: "family-name", type: "text" },
+  { key: "email", label: "Email", autoComplete: "email", type: "email" },
+  { key: "phone", label: "Phone", autoComplete: "tel", type: "tel" },
+] as const;
 
 export default function ProfileForm({ initial }: { initial: AuthUser }) {
   const { data = initial } = useProfileQuery(initial);
   const updateProfile = useUpdateProfileMutation();
   const updatePassword = useUpdatePasswordMutation();
+  const reduce = useReducedMotion();
 
   const [profile, setProfile] = useState({
     email: data.email ?? "",
@@ -54,74 +66,169 @@ export default function ProfileForm({ initial }: { initial: AuthUser }) {
     setPassword("");
   }
 
+  const initials = `${profile.first_name?.[0] ?? ""}${profile.last_name?.[0] ?? ""}`.toUpperCase() || "•";
+
   return (
-    <div className="mx-auto max-w-2xl space-y-12">
-      <header className="space-y-2">
-        <p className="font-brand text-[11px] uppercase tracking-[0.32em] text-mute">
-          Settings
-        </p>
-        <h1 className="font-display text-balance text-4xl font-medium tracking-tight md:text-5xl">
-          Your account, <span className="italic">refined.</span>
-        </h1>
-      </header>
+    <div className="relative isolate">
+      <div
+        aria-hidden
+        className="halo pointer-events-none absolute -top-24 right-0 h-[420px] w-[520px] opacity-60"
+      />
 
-      <form onSubmit={saveProfile} className="flex flex-col gap-4">
-        <h2 className="font-display text-xl font-medium">Profile</h2>
-        {(["email", "first_name", "last_name", "phone"] as const).map((k) => (
-          <label key={k} className="flex flex-col gap-1.5">
-            <span className="font-brand text-[10px] uppercase tracking-[0.28em] text-mute">
-              {k.replace("_", " ")}
-            </span>
-            <input
-              type={k === "email" ? "email" : k === "phone" ? "tel" : "text"}
-              value={profile[k]}
-              onChange={(e) =>
-                setProfile((p) => ({ ...p, [k]: e.target.value }))
-              }
-              autoComplete={
-                k === "email"
-                  ? "email"
-                  : k === "first_name"
-                    ? "given-name"
-                    : k === "last_name"
-                      ? "family-name"
-                      : k === "phone"
-                        ? "tel"
-                        : undefined
-              }
-              className={inputCls}
+      <div className="mx-auto max-w-3xl space-y-14">
+        <motion.header
+          initial={reduce ? false : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease }}
+          className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end"
+        >
+          <div className="space-y-3">
+            <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+              The dressing room
+            </p>
+            <h1 className="font-display text-balance text-4xl font-medium tracking-tight md:text-6xl">
+              Your account, <span className="italic">refined.</span>
+            </h1>
+            <p className="max-w-md text-base italic text-mute md:text-lg">
+              Particulars worth preserving — name, contact, the keys to the door.
+            </p>
+          </div>
+          <div className="relative">
+            <div
+              aria-hidden
+              className="absolute inset-0 -z-10 translate-x-1.5 translate-y-1.5 rounded-full border border-hairline"
             />
-          </label>
-        ))}
-        <button
-          type="submit"
-          disabled={updateProfile.isPending}
-          className="self-end rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
-        >
-          {updateProfile.isPending ? "Saving…" : "Save profile"}
-        </button>
-      </form>
+            <div className="grid h-20 w-20 place-items-center rounded-full border border-hairline bg-surface-2 font-display text-2xl font-medium text-foreground">
+              {initials}
+            </div>
+          </div>
+        </motion.header>
 
-      <div className="h-px bg-hairline" />
-
-      <form onSubmit={savePassword} className="flex flex-col gap-4">
-        <h2 className="font-display text-xl font-medium">Change password</h2>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="New password (min 8 characters)"
-          autoComplete="new-password"
-          className={inputCls}
-        />
-        <button
-          type="submit"
-          disabled={updatePassword.isPending}
-          className="self-end rounded-full border border-hairline px-5 py-2.5 text-sm transition-colors hover:border-foreground/30 disabled:opacity-50"
+        <motion.form
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease }}
+          onSubmit={saveProfile}
+          className="rounded-3xl border border-hairline bg-surface/60 p-8 backdrop-blur md:p-10"
         >
-          {updatePassword.isPending ? "Saving…" : "Update password"}
-        </button>
-      </form>
+          <div className="flex items-center gap-3 border-b border-hairline pb-6">
+            <span className="grid h-10 w-10 place-items-center rounded-full border border-hairline bg-background text-foreground">
+              <UserRound size={16} />
+            </span>
+            <div>
+              <h2 className="font-display text-xl font-medium tracking-tight">
+                Profile
+              </h2>
+              <p className="text-xs text-mute">
+                Visible on invitations you send.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+            {FIELDS.map((f) => (
+              <label key={f.key} className="flex flex-col gap-1.5">
+                <span className="font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+                  {f.label}
+                </span>
+                <input
+                  type={f.type}
+                  value={profile[f.key]}
+                  onChange={(e) =>
+                    setProfile((p) => ({ ...p, [f.key]: e.target.value }))
+                  }
+                  autoComplete={f.autoComplete}
+                  className={inputCls}
+                />
+              </label>
+            ))}
+          </div>
+
+          <div className="mt-8 flex items-center justify-end gap-3">
+            <p className="text-xs text-mute">
+              {updateProfile.isSuccess
+                ? "Last saved just now"
+                : "Changes save manually"}
+            </p>
+            <button
+              type="submit"
+              disabled={updateProfile.isPending}
+              className="group inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-2.5 text-sm font-medium text-background shadow-[0_8px_24px_-12px_color-mix(in_oklch,var(--foreground)_50%,transparent)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-12px_color-mix(in_oklch,var(--foreground)_60%,transparent)] disabled:translate-y-0 disabled:opacity-50 disabled:shadow-none"
+            >
+              {updateProfile.isPending ? "Saving…" : "Save profile"}
+            </button>
+          </div>
+        </motion.form>
+
+        <motion.form
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease, delay: 0.05 }}
+          onSubmit={savePassword}
+          className="rounded-3xl border border-hairline bg-surface/60 p-8 backdrop-blur md:p-10"
+        >
+          <div className="flex items-center gap-3 border-b border-hairline pb-6">
+            <span className="grid h-10 w-10 place-items-center rounded-full border border-hairline bg-background text-foreground">
+              <Lock size={16} />
+            </span>
+            <div>
+              <h2 className="font-display text-xl font-medium tracking-tight">
+                Passphrase
+              </h2>
+              <p className="text-xs text-mute">
+                Eight characters, kept entirely to yourself.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <label className="flex flex-col gap-1.5">
+              <span className="font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+                New password
+              </span>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="At least eight characters"
+                autoComplete="new-password"
+                className={inputCls}
+              />
+              <span className="mt-1 font-brand text-[10px] uppercase tracking-[0.28em] text-foreground/50">
+                {password.length === 0
+                  ? "—"
+                  : password.length < 8
+                    ? `${8 - password.length} more to go`
+                    : "Strong enough"}
+              </span>
+            </label>
+          </div>
+
+          <div className="mt-8 flex justify-end">
+            <button
+              type="submit"
+              disabled={updatePassword.isPending || password.length < 8}
+              className="rounded-full border border-hairline px-6 py-2.5 text-sm font-medium text-foreground transition-all duration-300 hover:border-foreground/30 hover:bg-surface disabled:opacity-50"
+            >
+              {updatePassword.isPending ? "Saving…" : "Update password"}
+            </button>
+          </div>
+        </motion.form>
+
+        <motion.footer
+          initial={reduce ? false : { opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.7, ease }}
+          className="border-t border-hairline pt-8 text-center"
+        >
+          <p className="font-display text-sm italic text-mute">
+            "Quietly tended to" — the e-nvite house style.
+          </p>
+        </motion.footer>
+      </div>
     </div>
   );
 }
