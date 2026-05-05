@@ -3,6 +3,7 @@ import "server-only";
 
 import type { AuthSession, AuthUser, UserType } from "@/types";
 
+
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
@@ -68,51 +69,26 @@ export async function decrypt(token: any) {
 }
 
 // ─── Session lifecycle ──────────────────────────────────────────────────────
-function normalizeSessionUser(user?: Partial<AuthUser> & Record<string, any>) {
-  if (!user) return undefined;
-
-  return {
-    ...user,
-    first_name: user.first_name ?? user.firstName,
-    last_name: user.last_name ?? user.lastName,
-    created_at: user.created_at ?? user.createdAt,
-    updated_at: user.updated_at ?? user.updatedAt,
-    last_login: user.last_login ?? user.lastLogin,
-  } as AuthUser;
+function normalizeSessionUser(user?: AuthUser): AuthUser | undefined {
+  return user;
 }
 
-export async function createAuthSession({
-  access_token,
-  refresh_token,
-  role,
-  user_id,
-  organization_id,
-  expiresIn,
-  user,
-}: {
+export async function createAuthSession(input: {
   access_token: string;
-  refresh_token?: string;
-  role?: UserType;
-  user_id?: string;
-  organization_id?: string;
-  expiresIn?: number;
+  expires_at?: number; // epoch seconds (from backend JWT payload)
   user?: AuthUser;
 }): Promise<void> {
-  const accessMs = expiresIn ? expiresIn * 1000 : SESSION_CONFIG.SESSION_TTL;
-  const expiresAt = new Date(Date.now() + accessMs);
+  const expiresAt = input.expires_at
+    ? new Date(input.expires_at * 1000)
+    : new Date(Date.now() + SESSION_CONFIG.SESSION_TTL);
 
   const session: AuthSession = {
-    access_token: access_token || "",
-    refresh_token,
-    role,
-    user_id,
-    organization_id,
+    access_token: input.access_token,
     expiresAt,
-    expiresIn,
-    user: normalizeSessionUser(user) as any,
+    user: normalizeSessionUser(input.user) as any,
   };
 
-  const cookieLifetimeMs = SESSION_CONFIG.REFRESH_TOKEN_TTL;
+  const cookieLifetimeMs = SESSION_CONFIG.SESSION_TTL;
   const cookieExpiry = new Date(Date.now() + cookieLifetimeMs);
   const jwtTtl = `${Math.ceil(cookieLifetimeMs / 1000)}s`;
   const token = await encrypt(session, jwtTtl);
@@ -150,7 +126,7 @@ export async function updateAuthSession(
       ? new Date(oldSession.expiresAt as any)
       : new Date(Date.now() + SESSION_CONFIG.SESSION_TTL);
 
-  const cookieLifetimeMs = SESSION_CONFIG.REFRESH_TOKEN_TTL;
+  const cookieLifetimeMs = SESSION_CONFIG.SESSION_TTL;
   const cookieExpiry = new Date(Date.now() + cookieLifetimeMs);
   const jwtTtl = `${Math.ceil(cookieLifetimeMs / 1000)}s`;
   const token = await encrypt(newSession, jwtTtl);
