@@ -1,15 +1,27 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { Edit, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { Plus } from "lucide-react";
+
+import type { EventType } from "@/types";
 import {
   useCreateEventTypeMutation,
+  useDeleteEventTypeMutation,
   useEventTypesQuery,
+  useUpdateEventTypeMutation,
 } from "@/hooks/use-event-types-queries";
-import type { EventType } from "@/types";
 
-const EMPTY = {
+type Draft = {
+  id?: string;
+  name: string;
+  description: string;
+  icon_url: string;
+  price_per_invitation: number;
+  max_free_invitations: number;
+};
+
+const EMPTY: Draft = {
   name: "",
   description: "",
   icon_url: "",
@@ -27,10 +39,15 @@ export default function EventTypesList({
 }) {
   const { data = initialData } = useEventTypesQuery(initialData);
   const create = useCreateEventTypeMutation();
+  const update = useUpdateEventTypeMutation();
+  const remove = useDeleteEventTypeMutation();
   const [open, setOpen] = useState(false);
-  const [draft, setDraft] = useState(EMPTY);
+  const [draft, setDraft] = useState<Draft>(EMPTY);
   const titleId = useId();
   const firstFieldRef = useRef<HTMLInputElement>(null);
+
+  const submitting = create.isPending || update.isPending;
+  const isEdit = !!draft.id;
 
   useEffect(() => {
     if (!open) return;
@@ -50,16 +67,43 @@ export default function EventTypesList({
     setDraft((d) => ({ ...d, [k]: Number.isFinite(n) ? n : 0 }));
   }
 
+  function startCreate() {
+    setDraft(EMPTY);
+    setOpen(true);
+  }
+
+  function startEdit(t: EventType) {
+    setDraft({
+      id: t.id,
+      name: t.name ?? "",
+      description: t.description ?? "",
+      icon_url: t.icon_url ?? "",
+      price_per_invitation: t.price_per_invitation ?? 0,
+      max_free_invitations: t.max_free_invitations ?? 0,
+    });
+    setOpen(true);
+  }
+
   async function save(e: React.FormEvent) {
     e.preventDefault();
-    const res = await create.mutateAsync(draft);
+    const { id: draftId, ...payload } = draft;
+    const res = draftId
+      ? await update.mutateAsync({ id: draftId, data: payload })
+      : await create.mutateAsync(payload);
     if (!res.success) {
       toast.error(res.message);
       return;
     }
-    toast.success("Template created");
+    toast.success(draftId ? "Template updated" : "Template created");
     setOpen(false);
     setDraft(EMPTY);
+  }
+
+  async function onDelete(t: EventType) {
+    if (!confirm(`Delete "${t.name}"? This cannot be undone.`)) return;
+    const res = await remove.mutateAsync(t.id);
+    if (!res.success) toast.error(res.message);
+    else toast.success("Template removed");
   }
 
   return (
@@ -75,7 +119,7 @@ export default function EventTypesList({
         </div>
         <button
           type="button"
-          onClick={() => setOpen(true)}
+          onClick={startCreate}
           className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
         >
           <Plus size={14} /> New template
@@ -95,9 +139,29 @@ export default function EventTypesList({
           {data.map((t) => (
             <li
               key={t.id}
-              className="rounded-2xl border border-hairline bg-surface p-6"
+              className="group relative rounded-2xl border border-hairline bg-surface p-6"
             >
-              <div className="font-display text-xl font-medium">{t.name}</div>
+              <div className="flex items-start justify-between gap-3">
+                <div className="font-display text-xl font-medium">{t.name}</div>
+                <div className="flex shrink-0 gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                  <button
+                    type="button"
+                    onClick={() => startEdit(t)}
+                    aria-label="Edit"
+                    className="grid h-8 w-8 place-items-center rounded-full border border-hairline text-mute hover:border-foreground hover:text-foreground"
+                  >
+                    <Edit size={12} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onDelete(t)}
+                    aria-label="Delete"
+                    className="grid h-8 w-8 place-items-center rounded-full border border-hairline text-mute hover:border-destructive hover:text-destructive"
+                  >
+                    <Trash2 size={12} />
+                  </button>
+                </div>
+              </div>
               {t.description ? (
                 <p className="mt-2 line-clamp-3 text-sm text-mute">
                   {t.description}
@@ -127,7 +191,7 @@ export default function EventTypesList({
             className="w-full max-w-lg rounded-3xl border border-hairline bg-background p-8"
           >
             <h2 id={titleId} className="font-display text-2xl font-medium">
-              New template
+              {isEdit ? "Edit template" : "New template"}
             </h2>
             <div className="mt-6 flex flex-col gap-4">
               <input
@@ -192,10 +256,16 @@ export default function EventTypesList({
               </button>
               <button
                 type="submit"
-                disabled={create.isPending}
+                disabled={submitting}
                 className="rounded-full bg-foreground px-5 py-2 text-sm font-medium text-background disabled:opacity-50"
               >
-                {create.isPending ? "Creating…" : "Create"}
+                {submitting
+                  ? isEdit
+                    ? "Saving…"
+                    : "Creating…"
+                  : isEdit
+                    ? "Save"
+                    : "Create"}
               </button>
             </div>
           </form>

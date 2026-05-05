@@ -47,15 +47,17 @@ export async function getEventType(
   }
 }
 
+export type EventTypeInput = Pick<
+  EventType,
+  | "name"
+  | "description"
+  | "icon_url"
+  | "price_per_invitation"
+  | "max_free_invitations"
+>;
+
 export async function createEventType(
-  data: Pick<
-    EventType,
-    | "name"
-    | "description"
-    | "icon_url"
-    | "price_per_invitation"
-    | "max_free_invitations"
-  >,
+  data: EventTypeInput,
 ): Promise<APIResponse<EventType>> {
   if (!data?.name) return badRequestResponse("Name required");
   const url = "/api/v1/event-type/new";
@@ -68,5 +70,39 @@ export async function createEventType(
     return fromBackend<EventType>(res);
   } catch (error: any) {
     return handleError(error, "POST", url);
+  }
+}
+
+// NOTE: update + delete endpoints not yet documented in postman. URLs are
+// optimistic guesses; calls will 404 until backend lands. See
+// docs/BACKEND_PENDING.md.
+export async function updateEventType(
+  id: string,
+  data: Partial<EventTypeInput>,
+): Promise<APIResponse<EventType>> {
+  if (!id) return badRequestResponse("Event type ID required");
+  const url = `/api/v1/event-type/${id}`;
+
+  try {
+    const res = await authenticatedApiClient({ url, method: "PUT", data });
+    revalidateTag(CACHE_TAGS.EVENT_TYPES, "max");
+    revalidateTag(CACHE_TAGS.EVENT_TYPE(id), "max");
+    return fromBackend<EventType>(res);
+  } catch (error: any) {
+    return handleError(error, "PUT", url);
+  }
+}
+
+export async function deleteEventType(id: string): Promise<APIResponse> {
+  if (!id) return badRequestResponse("Event type ID required");
+  const url = `/api/v1/event-type/${id}`;
+
+  try {
+    const res = await authenticatedApiClient({ url, method: "DELETE" });
+    revalidateTag(CACHE_TAGS.EVENT_TYPES, "max");
+    revalidateTag(CACHE_TAGS.EVENT_TYPE(id), "max");
+    return fromBackend(res);
+  } catch (error: any) {
+    return handleError(error, "DELETE", url);
   }
 }
