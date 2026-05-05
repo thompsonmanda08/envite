@@ -9,4 +9,6 @@ export const CACHE_TAGS = {
   GUESTS_BY_EVENT: (eventId: string) => `guests:event:${eventId}`,
   USER: "user",
   AUTH: "auth",
+  EVENT_TYPES: "event-types",
+  EVENT_TYPE: (id: string) => `event-type:${id}`,
 } as const;

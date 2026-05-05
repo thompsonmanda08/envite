@@ -26,3 +26,9 @@ export const AUTH_KEYS = {
   session: ["auth", "session"] as const,
   me: ["auth", "me"] as const,
 };
+
+export const EVENT_TYPES_KEYS = {
+  all: ["event-types"] as const,
+  list: () => ["event-types", "list"] as const,
+  detail: (id: string) => ["event-types", id] as const,
+};

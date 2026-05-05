@@ -110,6 +110,17 @@ export type Guest = {
   [x: string]: any;
 };
 
+export type EventType = {
+  id: string;
+  name: string;
+  description?: string;
+  icon_url?: string;
+  price_per_invitation?: number;
+  max_free_invitations?: number;
+  created_at?: string;
+  updated_at?: string;
+};
+
 export type Invitation = {
   id: string;
   eventId: string;
