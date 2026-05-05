@@ -165,15 +165,28 @@ const authenticatedApiClient = async (
     };
   }
 
-  const headers: Record<string, string> = {
-    "Content-Type": reqConfig.contentType || "application/json",
+  // Let `request()` set Content-Type for FormData (it owns the multipart
+  // boundary). Only inject a Content-Type header when the caller didn't pass
+  // one explicitly AND the body isn't FormData.
+  const isFormData = reqConfig.data instanceof FormData;
+  const authHeaders: Record<string, string> = {
     Authorization: `Bearer ${session.access_token}`,
   };
+  if (reqConfig.contentType) {
+    authHeaders["Content-Type"] = reqConfig.contentType;
+  } else if (!isFormData) {
+    authHeaders["Content-Type"] = "application/json";
+  }
 
   return await request({
-    method: "GET",
     ...reqConfig,
-    headers: { ...headers, ...reqConfig.headers },
+    // caller-supplied headers win over our defaults EXCEPT Authorization,
+    // which the auth client owns.
+    headers: {
+      ...authHeaders,
+      ...reqConfig.headers,
+      Authorization: authHeaders.Authorization,
+    },
   });
 };
 
