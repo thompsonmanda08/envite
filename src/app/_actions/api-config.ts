@@ -1,15 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import "server-only";
 
-import type { AuthSession } from "@/types";
-
-import { verifySession, updateAuthSession } from "@/lib/auth";
-import { AUTH_SESSION } from "@/lib/constants";
+import { verifySession } from "@/lib/auth";
 
 const BASE_URL =
   process.env.BASE_URL ||
   process.env.NEXT_PUBLIC_SERVER_URL ||
-  "http://localhost:8080";
+  "http://localhost:4000";
 
 // ─── Axios-compatible response shape ────────────────────────────────────────
 type FetchResponse<T = any> = {
@@ -154,115 +151,30 @@ axiosCompat.delete = (
 
 export const axios = axiosCompat;
 
-// ─── Silent token refresh ───────────────────────────────────────────────────
-async function silentRefresh(
-  session: AuthSession,
-): Promise<AuthSession | null> {
-  if (!session.refresh_token) return null;
-  try {
-    const res = await axios.post("/api/v1/auth/refresh", {
-      refreshToken: session.refresh_token,
-    });
-    const data = res.data?.data || res.data;
-    const newAccess = data?.accessToken || data?.access_token;
-
-    if (!newAccess) return null;
-
-    const expiresIn: number | undefined = data?.expiresIn;
-    const newExpiresAt = expiresIn
-      ? new Date(Date.now() + expiresIn * 1000)
-      : undefined;
-
-    const updated = await updateAuthSession({
-      access_token: newAccess,
-      refresh_token:
-        data?.refreshToken || data?.refresh_token || session.refresh_token,
-      expiresAt: newExpiresAt,
-      expiresIn,
-    });
-
-    return updated ?? null;
-  } catch {
-    return null;
-  }
-}
-
 // ─── Authenticated client ───────────────────────────────────────────────────
 const authenticatedApiClient = async (
   reqConfig: RequestType,
-  retryCount = 0,
 ): Promise<FetchResponse> => {
-  const maxRetries = 1;
-  const retryDelay = 200;
+  const { isAuthenticated, session } = await verifySession();
 
-  try {
-    let { isAuthenticated, session } = await verifySession();
-
-    if (!isAuthenticated && session?.refresh_token) {
-      const refreshed = await silentRefresh(session);
-
-      if (refreshed) {
-        session = refreshed;
-        isAuthenticated = true;
-      }
-    }
-
-    if (!isAuthenticated || !session?.access_token) {
-      if (retryCount < maxRetries) {
-        await new Promise((r) => setTimeout(r, retryDelay));
-
-        return authenticatedApiClient(reqConfig, retryCount + 1);
-      }
-      throw new Error("No valid session found");
-    }
-
-    const headers: Record<string, string> = {
-      "Content-Type": reqConfig.contentType || "application/json",
-      Authorization: `Bearer ${session.access_token}`,
-      Cookie: `${AUTH_SESSION}=${session.access_token}`,
+  if (!isAuthenticated || !session?.access_token) {
+    throw {
+      response: { status: 401, data: { message: "No valid session" } },
+      status: 401,
+      message: "No valid session",
     };
-
-    if (session.organization_id) {
-      headers["X-Organization-ID"] = session.organization_id;
-    }
-
-    const config: RequestConfig = {
-      method: "GET",
-      ...reqConfig,
-      headers: { ...headers, ...reqConfig.headers },
-    };
-
-    return await request(config);
-  } catch (error: any) {
-    if (error?.response?.status === 401 && retryCount === 0) {
-      const { session } = await verifySession();
-
-      if (session?.refresh_token) {
-        const refreshed = await silentRefresh(session);
-
-        if (refreshed) {
-          return authenticatedApiClient(reqConfig, retryCount + 1);
-        }
-      }
-      try {
-        const { deleteSession } = await import("@/lib/auth");
-
-        await deleteSession();
-      } catch {
-        // best-effort cleanup
-      }
-    }
-
-    if (
-      error?.message === "No valid session found" &&
-      retryCount < maxRetries
-    ) {
-      await new Promise((r) => setTimeout(r, retryDelay * (retryCount + 1)));
-
-      return authenticatedApiClient(reqConfig, retryCount + 1);
-    }
-    throw error;
   }
+
+  const headers: Record<string, string> = {
+    "Content-Type": reqConfig.contentType || "application/json",
+    Authorization: `Bearer ${session.access_token}`,
+  };
+
+  return await request({
+    method: "GET",
+    ...reqConfig,
+    headers: { ...headers, ...reqConfig.headers },
+  });
 };
 
 export default authenticatedApiClient;
