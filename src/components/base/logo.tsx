@@ -1,10 +1,26 @@
 "use client";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { useTheme } from "next-themes";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 
 import { cn } from "@/lib/utils";
+
+type LogoProps = {
+  href?: string;
+  src?: string;
+  alt?: string;
+  className?: string;
+  isIcon?: boolean;
+  isWhite?: boolean;
+  isDark?: boolean;
+  isFull?: boolean;
+  classNames?: {
+    link?: string;
+    container?: string;
+    image?: string;
+  };
+};
 
 function Logo({
   href = "/",
@@ -12,56 +28,77 @@ function Logo({
   alt,
   isWhite = false,
   isDark = false,
+  isFull = false,
   className = "",
+  classNames,
   isIcon = false,
-}: {
-  href?: string;
-  src?: string;
-  alt?: string;
-  isWhite?: boolean;
-  isDark?: boolean;
-  className?: string;
-  isIcon?: boolean;
-}) {
-  const { theme } = useTheme();
-  const [logoUrl, setLogoUrl] = useState(`/logo/logo-wordmark.png`);
+}: LogoProps) {
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
-  useEffect(() => {
-    let logoType = "";
+  // SSR has no theme. Default light until mount so server HTML matches first
+  // client render, then swap to resolved theme.
+  const logoUrl = useMemo(() => {
+    const isDarkTheme = mounted && resolvedTheme === "dark";
 
     if (isIcon) {
-      logoType =
-        theme === "light"
-          ? `/logo/logo-wordmark.png`
-          : "/logo/logo-wordmark-alt.png";
-    } else if (isWhite) {
-      logoType = "/logo/logo-wordmark-alt.png";
-    } else if (isDark) {
-      logoType = `/logo/logo-wordmark.png`;
-    } else {
-      logoType =
-        theme === "light"
-          ? `/logo/logo-wordmark.png`
-          : "/logo/logo-wordmark-alt.png";
+      if (isWhite) return "/logo/logo-alt.png";
+      if (isDark) return "/logo/logo.png";
+      return isDarkTheme ? "/logo/logo-alt.png" : "/logo/logo.png";
     }
 
-    setLogoUrl(logoType);
-  }, [isIcon, isWhite, isDark]);
+    if (isWhite) return "/logo/logo-wordmark-alt.png";
+    if (isDark) return "/logo/logo-wordmark.png";
+    return isDarkTheme
+      ? "/logo/logo-wordmark-alt.png"
+      : "/logo/logo-wordmark.png";
+  }, [resolvedTheme, mounted, isIcon, isWhite, isDark, isFull]);
 
-  console.log(theme);
+  if (isIcon) {
+    return (
+      <Link href={href} className={classNames?.link}>
+        <div
+          className={cn(
+            "aspect-square flex justify-center w-full max-h-12 items-center min-w-fit",
+            "max-w-12 mx-auto min-h-12",
+            className,
+            classNames?.container,
+          )}
+        >
+          <Image
+            alt={alt || "logo"}
+            className={cn("object-contain", classNames?.image)}
+            height={50}
+            src={src || logoUrl}
+            width={50}
+            priority
+          />
+        </div>
+      </Link>
+    );
+  }
 
   return (
     <Link
-      className={cn(`w-full min-w-fit max-w-max flex items-center`, className)}
       href={href}
+      className={cn(
+        "inline-flex items-center h-8 max-w-40",
+        className,
+        classNames?.link,
+        classNames?.container,
+      )}
     >
       <Image
-        unoptimized
-        alt="e-nvite logo"
-        className="object-contain transition-all duration-300 ease-in-out sm:h-14 "
-        height={60}
+        alt={alt || "logo"}
+        className={cn(
+          "object-contain h-full w-auto transition-all duration-300 ease-in-out",
+          classNames?.image,
+        )}
+        height={80}
         src={src || logoUrl}
-        width={120}
+        width={200}
+        priority
       />
     </Link>
   );

@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 
 import { PillButton } from "./primitives";
 import ThemeToggle from "./theme-toggle";
+import Logo from "../base/logo";
 
 const NAV = [
   { name: "How it works", href: "#how-it-works" },
@@ -43,7 +44,7 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
-        <Link className="group inline-flex items-center gap-2" href="/">
+        {/* <Link className="group inline-flex items-center gap-2" href="/">
           <span
             aria-hidden
             className="relative grid h-8 w-8 place-items-center rounded-full bg-foreground text-background"
@@ -56,7 +57,8 @@ export default function Navbar() {
           <span className="font-display text-xl font-medium tracking-tight text-foreground">
             e-nvite
           </span>
-        </Link>
+        </Link> */}
+        <Logo href="/" isIcon />
 
         <nav className="hidden items-center gap-1 md:flex">
           {NAV.map((item) => (
