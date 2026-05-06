@@ -110,25 +110,25 @@ export function GuestsManager({
     <div className="space-y-8">
       <section className="grid grid-cols-2 gap-px overflow-hidden rounded-3xl border border-hairline bg-hairline lg:grid-cols-5">
         <article className="bg-background p-6">
-          <p className="font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+          <p className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
             Total
           </p>
           <p className="font-display mt-3 text-4xl font-semibold tabular-nums leading-none">
             {guests.length}
           </p>
-          <p className="font-brand mt-2 flex items-center gap-1 text-[10px] uppercase tracking-[0.32em] text-mute">
+          <p className="font-brand mt-2 flex items-center gap-1 text-xs uppercase tracking-[0.32em] text-mute">
             <Users className="size-3" /> on the list
           </p>
         </article>
         {(Object.keys(counts) as RsvpStatus[]).map((s) => (
           <article key={s} className="bg-background p-6">
-            <p className="font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+            <p className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
               {RSVP_LABEL[s]}
             </p>
             <p className="font-display mt-3 text-4xl font-semibold tabular-nums leading-none">
               {counts[s]}
             </p>
-            <p className="mt-2 text-[11px] italic text-mute">
+            <p className="mt-2 text-xs italic text-mute">
               {guests.length === 0
                 ? "—"
                 : `${Math.round((counts[s] / guests.length) * 100)}%`}
@@ -138,7 +138,7 @@ export function GuestsManager({
       </section>
 
       <div className="flex items-center justify-between">
-        <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+        <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
           The Guest Book
         </p>
         <Dialog open={open} onOpenChange={setOpen}>
@@ -248,7 +248,7 @@ export function GuestsManager({
                       key={s}
                       onClick={() => onSetRsvp(g.id, s)}
                       className={cn(
-                        "font-brand rounded-full border px-3 py-1 text-[10px] uppercase tracking-[0.24em] transition-all",
+                        "font-brand rounded-full border px-3 py-1 text-xs uppercase tracking-[0.24em] transition-all",
                         g.rsvp === s
                           ? RSVP_TONE[s]
                           : "border-hairline text-mute hover:border-foreground hover:text-foreground",

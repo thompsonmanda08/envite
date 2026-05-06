@@ -17,7 +17,7 @@ export default function TrustBar() {
   return (
     <section className="border-y border-hairline bg-surface/40 py-10">
       <Container>
-        <p className="mb-6 text-center text-[11px] uppercase tracking-[0.3em] text-mute">
+        <p className="mb-6 text-center text-xs uppercase tracking-[0.3em] text-mute">
           Trusted by 12,000+ hosts and planners
         </p>
         <div

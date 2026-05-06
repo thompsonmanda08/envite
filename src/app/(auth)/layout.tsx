@@ -33,7 +33,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
             e-nvite
           </span>
         </Link>
-        <p className="hidden font-brand text-[11px] uppercase tracking-[0.32em] text-mute md:block">
+        <p className="hidden font-brand text-xs uppercase tracking-[0.32em] text-mute md:block">
           <Sparkles size={11} className="mr-2 inline-block text-secondary" />
           Welcome back
         </p>
@@ -66,20 +66,20 @@ function DecorativePanel() {
         />
         <div aria-hidden className="absolute inset-0 grain" />
         <div className="relative flex h-full flex-col items-center justify-center px-12 text-center">
-          <span className="font-brand text-[10px] uppercase tracking-[0.4em] text-foreground/60">
+          <span className="font-brand text-xs uppercase tracking-[0.4em] text-foreground/60">
             Together with their families
           </span>
           <span className="mt-8 font-display text-3xl font-medium leading-tight text-foreground">
             Sarah <span className="italic text-foreground/70">&</span> Michael
           </span>
           <span className="mt-3 h-px w-12 bg-foreground/30" />
-          <span className="mt-4 font-brand text-[10px] uppercase tracking-[0.32em] text-foreground/55">
+          <span className="mt-4 font-brand text-xs uppercase tracking-[0.32em] text-foreground/55">
             request the pleasure
           </span>
           <span className="mt-12 font-display text-base italic text-foreground/70">
             The Garden Pavilion
           </span>
-          <span className="mt-1 font-brand text-[10px] uppercase tracking-[0.28em] text-foreground/50">
+          <span className="mt-1 font-brand text-xs uppercase tracking-[0.28em] text-foreground/50">
             Downtown · 06.15.26
           </span>
         </div>

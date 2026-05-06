@@ -83,7 +83,7 @@ export default function ProfileForm({ initial }: { initial: AuthUser }) {
           className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end"
         >
           <div className="space-y-3">
-            <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+            <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
               The dressing room
             </p>
             <h1 className="font-display text-balance text-4xl font-medium tracking-tight md:text-6xl">
@@ -129,7 +129,7 @@ export default function ProfileForm({ initial }: { initial: AuthUser }) {
           <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
             {FIELDS.map((f) => (
               <label key={f.key} className="flex flex-col gap-1.5">
-                <span className="font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+                <span className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
                   {f.label}
                 </span>
                 <input
@@ -185,7 +185,7 @@ export default function ProfileForm({ initial }: { initial: AuthUser }) {
 
           <div className="mt-6">
             <label className="flex flex-col gap-1.5">
-              <span className="font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+              <span className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
                 New password
               </span>
               <input
@@ -196,7 +196,7 @@ export default function ProfileForm({ initial }: { initial: AuthUser }) {
                 autoComplete="new-password"
                 className={inputCls}
               />
-              <span className="mt-1 font-brand text-[10px] uppercase tracking-[0.28em] text-foreground/50">
+              <span className="mt-1 font-brand text-xs uppercase tracking-[0.28em] text-foreground/50">
                 {password.length === 0
                   ? "—"
                   : password.length < 8

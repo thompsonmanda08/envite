@@ -30,7 +30,7 @@ function ErrorDisplay({
       />
 
       <section className="relative z-10 mx-auto w-full max-w-2xl text-center">
-        <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+        <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
           A misstep
         </p>
 
@@ -84,7 +84,7 @@ function ErrorDisplay({
         <div className="mt-14 flex items-center justify-center gap-3 text-foreground/30">
           <span className="h-px w-10 bg-current" />
           <span className="font-display text-sm italic">e</span>
-          <span className="text-[10px]">✦</span>
+          <span className="text-xs">✦</span>
           <span className="font-display text-sm italic">n</span>
           <span className="h-px w-10 bg-current" />
         </div>

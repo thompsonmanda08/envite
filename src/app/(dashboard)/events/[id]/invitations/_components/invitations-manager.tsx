@@ -121,7 +121,7 @@ export function InvitationsManager({
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+        <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
           {invitations.length} invitation{invitations.length === 1 ? "" : "s"}
         </p>
         <Dialog open={open} onOpenChange={setOpen}>
@@ -140,7 +140,7 @@ export function InvitationsManager({
 
             <div className="space-y-6">
               <div>
-                <p className="font-brand mb-3 text-[11px] uppercase tracking-[0.32em] text-mute">
+                <p className="font-brand mb-3 text-xs uppercase tracking-[0.32em] text-mute">
                   Type
                 </p>
                 <Input
@@ -154,7 +154,7 @@ export function InvitationsManager({
               </div>
 
               <div>
-                <p className="font-brand mb-3 text-[11px] uppercase tracking-[0.32em] text-mute">
+                <p className="font-brand mb-3 text-xs uppercase tracking-[0.32em] text-mute">
                   Custom image URL (optional)
                 </p>
                 <Input
@@ -168,7 +168,7 @@ export function InvitationsManager({
               </div>
 
               <div>
-                <p className="font-brand mb-3 text-[11px] uppercase tracking-[0.32em] text-mute">
+                <p className="font-brand mb-3 text-xs uppercase tracking-[0.32em] text-mute">
                   Sessions ({draft.sessions.length}/{sessions.length})
                 </p>
                 {sessions.length === 0 ? (
@@ -241,7 +241,7 @@ export function InvitationsManager({
                     <Mail className="size-5 text-mute" />
                     {inv.invitation_type}
                   </p>
-                  <p className="font-brand mt-2 text-[10px] uppercase tracking-[0.32em] text-mute">
+                  <p className="font-brand mt-2 text-xs uppercase tracking-[0.32em] text-mute">
                     {inv.sessions?.length ?? 0} session
                     {inv.sessions?.length === 1 ? "" : "s"}
                   </p>
@@ -272,7 +272,7 @@ export function InvitationsManager({
                       <li
                         key={sid}
                         className={cn(
-                          "font-brand rounded-full border px-3 py-1 text-[10px] uppercase tracking-[0.24em]",
+                          "font-brand rounded-full border px-3 py-1 text-xs uppercase tracking-[0.24em]",
                           s
                             ? "border-hairline text-foreground/70"
                             : "border-destructive/30 text-destructive",

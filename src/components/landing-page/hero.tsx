@@ -147,13 +147,13 @@ function InvitationFrame() {
                 Michael
               </span>
               <span className="mt-3 h-px w-12 bg-foreground/30" />
-              <span className="mt-4 text-[11px] uppercase tracking-[0.3em] text-foreground/55">
+              <span className="mt-4 text-xs uppercase tracking-[0.3em] text-foreground/55">
                 request the pleasure
               </span>
               <span className="mt-10 font-display text-base italic text-foreground/70">
                 The Garden Pavilion
               </span>
-              <span className="mt-1 text-[11px] uppercase tracking-[0.25em] text-foreground/50">
+              <span className="mt-1 text-xs uppercase tracking-[0.25em] text-foreground/50">
                 Downtown · 06.15.26
               </span>
             </div>
@@ -201,7 +201,7 @@ function FloatingTag({
       <div className="rounded-2xl border border-hairline bg-surface/85 px-4 py-3 backdrop-blur shadow-sm">
         <div className="flex items-center gap-2 text-mute">
           {icon}
-          <span className="text-[10px] uppercase tracking-[0.18em]">
+          <span className="text-xs uppercase tracking-[0.18em]">
             {side === "left" ? "Save the date" : "RSVP"}
           </span>
         </div>

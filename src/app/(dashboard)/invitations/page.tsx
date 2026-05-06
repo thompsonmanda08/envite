@@ -57,7 +57,7 @@ export default async function InvitationsIndexPage() {
                     href={`/dashboard/events/${p.event.id}/invitations`}
                     className="block"
                   >
-                    <p className="font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+                    <p className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
                       {p.event.title}
                     </p>
                     <p className="font-display mt-3 flex items-center gap-2 text-2xl font-medium tracking-tight">

@@ -32,7 +32,7 @@ export function StatsRow({
           key={s.label}
           className="group bg-background p-7 transition-colors duration-500 hover:bg-surface"
         >
-          <p className="font-brand text-[11px] uppercase tracking-[0.32em] text-mute">
+          <p className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
             {s.label}
           </p>
           <p className="font-display mt-5 text-5xl font-semibold tabular-nums leading-none tracking-tight">

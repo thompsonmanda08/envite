@@ -49,19 +49,19 @@ export function EventsTimeline({ events }: { events: EventRecord[] }) {
               <span className="font-display text-5xl font-semibold leading-none tabular-nums tracking-tight">
                 {day}
               </span>
-              <span className="font-brand mt-1 text-[10px] uppercase tracking-[0.32em] text-mute">
+              <span className="font-brand mt-1 text-xs uppercase tracking-[0.32em] text-mute">
                 {month}
               </span>
             </div>
 
             <div className="min-w-0 space-y-1.5">
               <div className="flex items-center gap-3">
-                <span className="font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+                <span className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
                   {weekday}
                 </span>
                 <span
                   className={cn(
-                    "font-brand text-[10px] uppercase tracking-[0.32em]",
+                    "font-brand text-xs uppercase tracking-[0.32em]",
                     STATUS_TONE[e.status] ?? "text-mute",
                   )}
                 >

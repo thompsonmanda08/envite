@@ -18,14 +18,14 @@ export default function ResetPasswordPage() {
     >
       <Link
         href="/login"
-        className="inline-flex items-center gap-2 font-brand text-[10px] uppercase tracking-[0.32em] text-mute transition-colors hover:text-foreground"
+        className="inline-flex items-center gap-2 font-brand text-xs uppercase tracking-[0.32em] text-mute transition-colors hover:text-foreground"
       >
         <ArrowLeft size={12} />
         Back to sign in
       </Link>
 
       <header className="mt-8 space-y-3">
-        <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+        <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
           Briefly unavailable
         </p>
         <h1 className="font-display text-balance text-4xl font-medium tracking-tight md:text-5xl">

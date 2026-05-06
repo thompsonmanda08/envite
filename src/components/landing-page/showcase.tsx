@@ -121,7 +121,7 @@ function DesignCard({ d }: { d: Design }) {
           style={{ color: d.ink }}
         >
           <span
-            className="text-[10px] uppercase tracking-[0.35em] opacity-70"
+            className="text-xs uppercase tracking-[0.35em] opacity-70"
             style={{ color: d.ink }}
           >
             {d.accent}
@@ -133,7 +133,7 @@ function DesignCard({ d }: { d: Design }) {
             className="mt-3 h-px w-10 opacity-50"
             style={{ background: d.ink }}
           />
-          <span className="mt-3 text-[10px] uppercase tracking-[0.3em] opacity-65">
+          <span className="mt-3 text-xs uppercase tracking-[0.3em] opacity-65">
             {d.occasion}
           </span>
         </div>

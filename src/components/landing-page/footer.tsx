@@ -78,7 +78,7 @@ export default function Footer() {
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:col-span-7">
             {COLS.map((c) => (
               <div key={c.title}>
-                <h4 className="text-[11px] font-medium uppercase tracking-[0.22em] text-mute">
+                <h4 className="text-xs font-medium uppercase tracking-[0.22em] text-mute">
                   {c.title}
                 </h4>
                 <ul className="mt-5 space-y-3">

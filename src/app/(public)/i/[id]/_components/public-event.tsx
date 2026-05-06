@@ -45,7 +45,7 @@ export default function PublicEvent({
           transition={{ duration: 0.7, ease }}
           className="text-center"
         >
-          <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+          <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
             <Sparkles size={11} className="mr-2 inline-block text-secondary" />
             You are invited
           </p>
@@ -81,7 +81,7 @@ export default function PublicEvent({
             />
             <div aria-hidden className="absolute inset-0 grain" />
             <div className="relative flex flex-col items-center px-10 py-14 text-center">
-              <span className="font-brand text-[10px] uppercase tracking-[0.4em] text-foreground/55">
+              <span className="font-brand text-xs uppercase tracking-[0.4em] text-foreground/55">
                 Save the date
               </span>
               <span className="mt-6 font-display text-3xl font-medium leading-tight text-foreground">
@@ -92,7 +92,7 @@ export default function PublicEvent({
                 {format(new Date(event.start_date), "EEEE")}
               </span>
               {event.venue ? (
-                <span className="mt-6 text-[11px] uppercase tracking-[0.3em] text-foreground/55">
+                <span className="mt-6 text-xs uppercase tracking-[0.3em] text-foreground/55">
                   {event.venue}
                 </span>
               ) : null}
@@ -135,7 +135,7 @@ export default function PublicEvent({
           />
           {event.dress_code ? (
             <Row
-              icon={<span aria-hidden className="text-[10px]">✦</span>}
+              icon={<span aria-hidden className="text-xs">✦</span>}
               label="Dress code"
               value={event.dress_code}
               delay={0.15}
@@ -152,7 +152,7 @@ export default function PublicEvent({
               transition={{ duration: 0.7, ease }}
               className="text-center"
             >
-              <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+              <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
                 The order of things
               </p>
               <h2 className="mt-3 font-display text-3xl font-medium tracking-tight md:text-4xl">
@@ -172,7 +172,7 @@ export default function PublicEvent({
                   className="group relative overflow-hidden rounded-3xl border border-hairline bg-surface p-6 transition-all duration-500 hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-[0_24px_60px_-30px_color-mix(in_oklch,var(--foreground)_25%,transparent)]"
                 >
                   <div className="flex items-baseline justify-between">
-                    <span className="font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+                    <span className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
                       #{String(s.session_order).padStart(2, "0")}
                     </span>
                     <span className="font-display text-xs italic text-foreground/55">
@@ -188,7 +188,7 @@ export default function PublicEvent({
                     {s.venue ? ` · ${s.venue}` : ""}
                   </div>
                   {s.dress_code ? (
-                    <div className="mt-3 inline-flex rounded-full border border-hairline px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-foreground/70">
+                    <div className="mt-3 inline-flex rounded-full border border-hairline px-3 py-1 text-xs uppercase tracking-[0.2em] text-foreground/70">
                       {s.dress_code}
                     </div>
                   ) : null}
@@ -220,7 +220,7 @@ export default function PublicEvent({
                   : "RSVP is closed."}
               </p>
               {event.rsvp_deadline && event.status !== "cancelled" && (
-                <p className="font-brand mt-3 text-[11px] uppercase tracking-[0.32em] text-mute">
+                <p className="font-brand mt-3 text-xs uppercase tracking-[0.32em] text-mute">
                   Deadline passed{" "}
                   {format(new Date(event.rsvp_deadline), "MMMM d, yyyy")}
                 </p>
@@ -243,7 +243,7 @@ function Ornament({ className = "" }: { className?: string }) {
     >
       <span className="h-px w-10 bg-current" />
       <span className="font-display text-base italic">e</span>
-      <span className="text-[10px]">✦</span>
+      <span className="text-xs">✦</span>
       <span className="font-display text-base italic">n</span>
       <span className="h-px w-10 bg-current" />
     </div>
@@ -296,7 +296,7 @@ function Row({
     >
       <div className="flex items-center gap-3 text-mute">
         {icon}
-        <span className="font-brand text-[10px] uppercase tracking-[0.28em]">
+        <span className="font-brand text-xs uppercase tracking-[0.28em]">
           {label}
         </span>
       </div>

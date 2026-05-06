@@ -86,7 +86,7 @@ export default function LoginPage() {
       className="w-full max-w-md"
     >
       <header className="space-y-3">
-        <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+        <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
           {mode === "signin" ? "The salon awaits" : "Compose an invitation"}
         </p>
         <h1 className="font-display text-balance text-4xl font-medium tracking-tight md:text-5xl">
@@ -185,7 +185,7 @@ export default function LoginPage() {
             mode === "signin" ? (
               <Link
                 href="/forgot-password"
-                className="font-brand text-[10px] uppercase tracking-[0.28em] text-mute transition-colors hover:text-foreground"
+                className="font-brand text-xs uppercase tracking-[0.28em] text-mute transition-colors hover:text-foreground"
               >
                 Forgot?
               </Link>
@@ -254,7 +254,7 @@ function Field({
   return (
     <label className="flex flex-col gap-1.5">
       <span className="flex items-baseline justify-between">
-        <span className="font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+        <span className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
           {label}
           {required ? " ·" : null}
         </span>
@@ -273,7 +273,7 @@ function Ornament({ className = "" }: { className?: string }) {
     >
       <span className="h-px w-10 bg-current" />
       <span className="font-display text-base italic">e</span>
-      <span className="text-[10px]">✦</span>
+      <span className="text-xs">✦</span>
       <span className="font-display text-base italic">n</span>
       <span className="h-px w-10 bg-current" />
     </div>

@@ -59,7 +59,7 @@ export default async function EventDetailPage({
     <div className="space-y-12">
       <Link
         href="/dashboard/events"
-        className="font-brand inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.42em] text-mute hover:text-foreground"
+        className="font-brand inline-flex items-center gap-2 text-xs uppercase tracking-[0.42em] text-mute hover:text-foreground"
       >
         <ArrowLeft className="size-3" />
         Back to the salon
@@ -69,14 +69,14 @@ export default async function EventDetailPage({
         <div className="space-y-5">
           <div className="flex items-center gap-3">
             <span
-              className={`font-brand rounded-full border px-3 py-1 text-[10px] uppercase tracking-[0.32em] ${
+              className={`font-brand rounded-full border px-3 py-1 text-xs uppercase tracking-[0.32em] ${
                 STATUS_TONE[event.status] ?? "border-hairline text-mute"
               }`}
             >
               {event.status}
             </span>
             {event.theme && (
-              <span className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+              <span className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
                 {event.theme}
               </span>
             )}
@@ -95,7 +95,7 @@ export default async function EventDetailPage({
 
       <div className="grid gap-px overflow-hidden rounded-3xl border border-hairline bg-hairline lg:grid-cols-3">
         <article className="bg-background p-7">
-          <p className="font-brand text-[11px] uppercase tracking-[0.32em] text-mute">
+          <p className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
             When
           </p>
           <p className="font-display mt-4 text-2xl font-medium leading-tight tracking-tight">
@@ -116,7 +116,7 @@ export default async function EventDetailPage({
         </article>
 
         <article className="bg-background p-7">
-          <p className="font-brand text-[11px] uppercase tracking-[0.32em] text-mute">
+          <p className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
             Where
           </p>
           {event.venue ? (
@@ -137,7 +137,7 @@ export default async function EventDetailPage({
         </article>
 
         <article className="bg-background p-7">
-          <p className="font-brand text-[11px] uppercase tracking-[0.32em] text-mute">
+          <p className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
             Reach
           </p>
           {(event.contact_email || event.contact_phone) ? (
@@ -164,7 +164,7 @@ export default async function EventDetailPage({
             <p className="mt-4 italic text-mute">No contact set.</p>
           )}
           {event.max_attendees && (
-            <p className="font-brand mt-4 flex items-center gap-2 text-[11px] uppercase tracking-[0.32em] text-mute">
+            <p className="font-brand mt-4 flex items-center gap-2 text-xs uppercase tracking-[0.32em] text-mute">
               <Users className="size-3.5" />
               Capacity {event.max_attendees}
             </p>
@@ -174,7 +174,7 @@ export default async function EventDetailPage({
 
       {(event.dress_code || event.special_instructions) && (
         <section className="rounded-3xl border border-hairline bg-surface/40 p-8">
-          <h2 className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+          <h2 className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
             Notes for guests
           </h2>
           {event.dress_code && (

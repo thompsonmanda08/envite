@@ -35,7 +35,7 @@ function FieldShell({
     <div className="space-y-2">
       <label
         htmlFor={htmlFor}
-        className="font-brand flex items-center justify-between text-[11px] uppercase tracking-[0.32em] text-mute"
+        className="font-brand flex items-center justify-between text-xs uppercase tracking-[0.32em] text-mute"
       >
         <span>
           {label}
@@ -114,7 +114,7 @@ export function EventForm({
   return (
     <form onSubmit={onSubmit} className="space-y-12">
       <section className="space-y-8">
-        <h2 className="font-brand border-b border-hairline pb-3 text-[11px] uppercase tracking-[0.42em] text-mute">
+        <h2 className="font-brand border-b border-hairline pb-3 text-xs uppercase tracking-[0.42em] text-mute">
           I &middot; The Particulars
         </h2>
         <FieldShell label="Type of occasion" required htmlFor="event_type_id">
@@ -176,7 +176,7 @@ export function EventForm({
       </section>
 
       <section className="space-y-8">
-        <h2 className="font-brand border-b border-hairline pb-3 text-[11px] uppercase tracking-[0.42em] text-mute">
+        <h2 className="font-brand border-b border-hairline pb-3 text-xs uppercase tracking-[0.42em] text-mute">
           II &middot; The Hour
         </h2>
         <div className="grid gap-8 md:grid-cols-3">
@@ -211,7 +211,7 @@ export function EventForm({
       </section>
 
       <section className="space-y-8">
-        <h2 className="font-brand border-b border-hairline pb-3 text-[11px] uppercase tracking-[0.42em] text-mute">
+        <h2 className="font-brand border-b border-hairline pb-3 text-xs uppercase tracking-[0.42em] text-mute">
           III &middot; The Setting
         </h2>
         <div className="grid gap-8 md:grid-cols-2">
@@ -237,7 +237,7 @@ export function EventForm({
       </section>
 
       <section className="space-y-8">
-        <h2 className="font-brand border-b border-hairline pb-3 text-[11px] uppercase tracking-[0.42em] text-mute">
+        <h2 className="font-brand border-b border-hairline pb-3 text-xs uppercase tracking-[0.42em] text-mute">
           IV &middot; The Guests
         </h2>
         <div className="flex items-center justify-between rounded-2xl border border-hairline bg-surface/40 p-5">
@@ -298,7 +298,7 @@ export function EventForm({
       </section>
 
       <div className="flex flex-col-reverse items-stretch gap-3 border-t border-hairline pt-8 md:flex-row md:items-center md:justify-between">
-        <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+        <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
           Saved as <span className="text-foreground">{form.status}</span>
         </p>
         <div className="flex gap-3">

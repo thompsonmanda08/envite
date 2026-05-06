@@ -15,7 +15,7 @@ export function PageHeading({
     <header className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
       <div className="space-y-3">
         {eyebrow && (
-          <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+          <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
             {eyebrow}
           </p>
         )}

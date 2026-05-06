@@ -35,7 +35,7 @@ export default function NotFound() {
       </header>
 
       <section className="relative z-10 mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center px-6 text-center">
-        <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+        <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
           A page astray
         </p>
 
@@ -72,13 +72,13 @@ export default function NotFound() {
         <div className="mt-14 flex items-center gap-3 text-foreground/30">
           <span className="h-px w-10 bg-current" />
           <span className="font-display text-sm italic">e</span>
-          <span className="text-[10px]">✦</span>
+          <span className="text-xs">✦</span>
           <span className="font-display text-sm italic">n</span>
           <span className="h-px w-10 bg-current" />
         </div>
       </section>
 
-      <footer className="relative z-10 px-6 py-6 text-center font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+      <footer className="relative z-10 px-6 py-6 text-center font-brand text-xs uppercase tracking-[0.32em] text-mute">
         © {new Date().getFullYear()} e-nvite — All rights reserved
       </footer>
     </main>

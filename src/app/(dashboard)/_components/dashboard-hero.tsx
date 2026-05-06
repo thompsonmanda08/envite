@@ -43,7 +43,7 @@ export function DashboardHero({
     <section className="relative grid grid-cols-1 gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
       <div className="space-y-7">
         <div className="flex items-center gap-3">
-          <span className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+          <span className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
             The Atelier &middot; {today}
           </span>
         </div>
@@ -87,7 +87,7 @@ export function DashboardHero({
               aria-hidden
               className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-secondary/30 blur-3xl"
             />
-            <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+            <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
               Next on the calendar
             </p>
             <h3 className="font-display mt-4 text-3xl font-medium leading-tight tracking-tight">
@@ -125,7 +125,7 @@ export function DashboardHero({
           </div>
         ) : (
           <div className="rounded-3xl border border-hairline bg-surface/60 p-8">
-            <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+            <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
               Calendar empty
             </p>
             <h3 className="font-display mt-4 text-3xl font-medium leading-tight">

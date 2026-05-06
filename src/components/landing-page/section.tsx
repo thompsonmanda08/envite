@@ -100,7 +100,7 @@ export function Eyebrow({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-mute",
+        "inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-mute",
         className,
       )}
     >

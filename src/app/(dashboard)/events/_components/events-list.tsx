@@ -59,7 +59,7 @@ export function EventsList({ events }: { events: EventRecord[] }) {
               aria-selected={status === s}
               onClick={() => setStatus(s)}
               className={cn(
-                "font-brand rounded-full px-4 py-1.5 text-[11px] uppercase tracking-[0.32em] transition-all",
+                "font-brand rounded-full px-4 py-1.5 text-xs uppercase tracking-[0.32em] transition-all",
                 status === s
                   ? "bg-foreground text-background"
                   : "text-mute hover:text-foreground",
@@ -105,7 +105,7 @@ export function EventsList({ events }: { events: EventRecord[] }) {
                         <span className="font-display block text-4xl font-semibold leading-none tabular-nums tracking-tight">
                           {d.day}
                         </span>
-                        <span className="font-brand mt-1 block text-[10px] uppercase tracking-[0.32em] text-mute">
+                        <span className="font-brand mt-1 block text-xs uppercase tracking-[0.32em] text-mute">
                           {d.month} {d.year}
                         </span>
                       </div>
@@ -113,7 +113,7 @@ export function EventsList({ events }: { events: EventRecord[] }) {
                   </div>
                   <span
                     className={cn(
-                      "font-brand rounded-full border px-3 py-1 text-[10px] uppercase tracking-[0.32em]",
+                      "font-brand rounded-full border px-3 py-1 text-xs uppercase tracking-[0.32em]",
                       STATUS_BADGE[e.status] ?? "border-hairline text-mute",
                     )}
                   >
@@ -133,7 +133,7 @@ export function EventsList({ events }: { events: EventRecord[] }) {
                   </p>
                 )}
                 <div className="mt-6 flex items-center justify-between border-t border-hairline pt-5">
-                  <span className="font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+                  <span className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
                     {e.requires_rsvp ? "RSVP required" : "No RSVP"}
                   </span>
                   <span className="relative z-10 grid h-9 w-9 place-items-center rounded-full border border-hairline text-foreground/70 transition-all duration-500 group-hover:rotate-[-6deg] group-hover:border-foreground group-hover:bg-foreground group-hover:text-background">

@@ -94,7 +94,7 @@ export default function Pricing() {
                   onMouseEnter={() => setActive(p.id)}
                 >
                   {p.popular && (
-                    <span className="absolute right-6 top-6 rounded-full bg-foreground px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-background">
+                    <span className="absolute right-6 top-6 rounded-full bg-foreground px-3 py-1 text-xs uppercase tracking-[0.18em] text-background">
                       Most loved
                     </span>
                   )}

@@ -82,7 +82,7 @@ export function RsvpForm({
         </p>
         <button
           onClick={() => setDone(null)}
-          className="font-brand mt-6 text-[11px] uppercase tracking-[0.32em] text-mute hover:text-foreground"
+          className="font-brand mt-6 text-xs uppercase tracking-[0.32em] text-mute hover:text-foreground"
         >
           Amend response
         </button>
@@ -96,7 +96,7 @@ export function RsvpForm({
       className="grid gap-8 rounded-3xl border border-hairline bg-surface/60 p-8 md:p-10"
     >
       <header className="text-center">
-        <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+        <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
           Kindly respond
         </p>
         <h2 className="font-display mt-3 text-3xl font-medium tracking-tight md:text-4xl">
@@ -122,7 +122,7 @@ export function RsvpForm({
             </span>
             <span
               className={cn(
-                "font-brand text-[10px] uppercase tracking-[0.32em]",
+                "font-brand text-xs uppercase tracking-[0.32em]",
                 rsvp === opt.value ? "text-background/70" : "text-mute",
               )}
             >
@@ -232,7 +232,7 @@ export function RsvpForm({
       </Field>
 
       <div className="flex flex-col items-stretch gap-3 border-t border-hairline pt-6 md:flex-row md:items-center md:justify-between">
-        <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+        <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
           Your response is private to the host
         </p>
         <Button
@@ -260,7 +260,7 @@ function Field({
 }) {
   return (
     <div className="space-y-2">
-      <label className="font-brand block text-[11px] uppercase tracking-[0.32em] text-mute">
+      <label className="font-brand block text-xs uppercase tracking-[0.32em] text-mute">
         {label}
         {required && <span className="ml-1 text-foreground">*</span>}
       </label>
