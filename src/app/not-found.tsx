@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
-import { Metadata } from "next";
+import type { Metadata } from "next";
+import { ArrowLeft, Home } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Page Not Found",
@@ -9,110 +9,78 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      {/* Header */}
-      <nav className="px-6 py-4 border-b border-gray-100">
-        <Link className="inline-block" href="/">
-          <Image
-            alt="xclsv"
-            className="h-12 w-auto"
-            height={40}
-            src="/logo/black-on-white-transparent.png"
-            width={120}
-          />
+    <main className="relative isolate flex min-h-screen flex-col overflow-hidden bg-background">
+      <div
+        aria-hidden
+        className="halo pointer-events-none absolute -top-40 left-1/2 h-[520px] w-[820px] -translate-x-1/2"
+      />
+      <div
+        aria-hidden
+        className="halo-cool pointer-events-none absolute -bottom-32 right-[-120px] h-[420px] w-[520px]"
+      />
+
+      <header className="relative z-10 px-6 py-6 sm:px-10">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 font-display text-xl font-medium tracking-tight text-foreground"
+        >
+          <span
+            aria-hidden
+            className="grid h-8 w-8 place-items-center rounded-full bg-foreground text-background"
+          >
+            <span className="text-base font-medium leading-none">e</span>
+          </span>
+          e-nvite
         </Link>
-      </nav>
+      </header>
 
-      {/* Main Content */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12">
-        <div className="text-center max-w-md">
-          {/* 404 Illustration */}
-          <div className="mb-8">
-            <div className="text-8xl font-light text-gray-200 mb-4">404</div>
-            <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center">
-              <svg
-                className="w-8 h-8 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                />
-              </svg>
-            </div>
-          </div>
+      <section className="relative z-10 mx-auto flex w-full max-w-2xl flex-1 flex-col items-center justify-center px-6 text-center">
+        <p className="font-brand text-[11px] uppercase tracking-[0.42em] text-mute">
+          A page astray
+        </p>
 
-          {/* Content */}
-          <h1 className="text-2xl lg:text-3xl font-light text-gray-900 mb-4">
-            Page <span className="font-bold">Not Found</span>
-          </h1>
+        <h1 className="font-display mt-6 text-[clamp(5rem,18vw,11rem)] font-medium leading-none tracking-[-0.04em] text-foreground/15">
+          404
+        </h1>
 
-          <p className="text-gray-600 mb-8 leading-relaxed">
-            The page you are looking for doesn&apos;t exist or has been moved.
-            Let&apos;s get you back on track.
-          </p>
+        <h2 className="font-display mt-4 text-balance text-3xl font-medium tracking-tight md:text-5xl">
+          That page is no longer <span className="italic">at home.</span>
+        </h2>
 
-          {/* Actions */}
-          <div className="space-y-4">
-            <Link
-              className="inline-block w-full bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-900 transition-colors"
-              href="/"
-            >
-              Go to Homepage
-            </Link>
+        <p className="mt-5 max-w-md text-base italic text-mute">
+          Either the address is mistaken, the moment has passed, or this page
+          was never composed.
+        </p>
 
-            <div className="flex gap-3">
-              <Link
-                className="flex-1 bg-gray-100 text-gray-900 px-4 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors text-sm"
-                href="/dashboard"
-              >
-                Dashboard
-              </Link>
-              <Link
-                className="flex-1 bg-gray-100 text-gray-900 px-4 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors text-sm"
-                href="/apply"
-              >
-                Create Store
-              </Link>
-            </div>
-          </div>
-
-          {/* Help Text */}
-          <div className="mt-12 pt-8 border-t border-gray-100">
-            <p className="text-sm text-gray-500 mb-4">
-              Need help finding something?
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 text-sm">
-              <a
-                className="text-gray-600 hover:text-black transition-colors"
-                href="https://chat.whatsapp.com/ELdaZCgi8SvBRIMAM8KIdQ"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Contact Support
-              </a>
-              <span className="hidden sm:inline text-gray-300">•</span>
-              <Link
-                className="text-gray-600 hover:text-black transition-colors"
-                href="/login"
-              >
-                Sign In
-              </Link>
-            </div>
-          </div>
+        <div className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+          <Link
+            href="/"
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-12px_color-mix(in_oklch,var(--foreground)_60%,transparent)]"
+          >
+            <Home size={14} />
+            Return home
+          </Link>
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center justify-center gap-2 rounded-full border border-hairline px-6 py-3 text-sm text-foreground/85 transition-colors hover:border-foreground/40 hover:text-foreground"
+          >
+            <ArrowLeft size={14} />
+            Open the atelier
+          </Link>
         </div>
-      </div>
 
-      {/* Footer */}
-      <footer className="px-6 py-4 border-t border-gray-100">
-        <div className="text-center text-sm text-gray-500">
-          © 2024 xclsv. All rights reserved.
+        <div className="mt-14 flex items-center gap-3 text-foreground/30">
+          <span className="h-px w-10 bg-current" />
+          <span className="font-display text-sm italic">e</span>
+          <span className="text-[10px]">✦</span>
+          <span className="font-display text-sm italic">n</span>
+          <span className="h-px w-10 bg-current" />
         </div>
+      </section>
+
+      <footer className="relative z-10 px-6 py-6 text-center font-brand text-[10px] uppercase tracking-[0.32em] text-mute">
+        © {new Date().getFullYear()} e-nvite — All rights reserved
       </footer>
-    </div>
+    </main>
   );
 }
