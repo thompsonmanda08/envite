@@ -51,7 +51,7 @@ export default function RootLayout({
       <head>
         <meta content="e-nvite" name="apple-mobile-web-app-title" />
       </head>
-      <body className="min-h-screen antialiased">
+      <body className="min-h-screen overflow-x-clip antialiased">
         <Providers>{children}</Providers>
       </body>
     </html>
