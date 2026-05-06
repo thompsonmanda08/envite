@@ -60,15 +60,15 @@ function Logo({
       <Link href={href} className={classNames?.link}>
         <div
           className={cn(
-            "aspect-square flex justify-center w-full max-h-12 items-center min-w-fit",
-            "max-w-12 mx-auto min-h-12",
+            "aspect-square flex justify-center w-full max-h-10 items-center min-w-fit",
+            "max-w-10 mx-auto rounded-full overflow-clip min-h-10",
             className,
             classNames?.container,
           )}
         >
           <Image
             alt={alt || "logo"}
-            className={cn("object-contain", classNames?.image)}
+            className={cn("object-cover object-center", classNames?.image)}
             height={50}
             src={src || logoUrl}
             width={50}

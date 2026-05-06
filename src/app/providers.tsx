@@ -1,37 +1,35 @@
 "use client";
 
-import * as React from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
   ThemeProvider as NextThemesProvider,
   type ThemeProviderProps,
 } from "next-themes";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { type PropsWithChildren, useState } from "react";
 import { Toaster } from "sonner";
-import { PropsWithChildren, useEffect, useState } from "react";
 
-const queryClient = new QueryClient();
-
-function Providers({
-  session,
-  children,
-}: PropsWithChildren & {
-  session?: any;
-}) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
+function Providers({ children }: PropsWithChildren) {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000,
+            refetchOnWindowFocus: false,
+          },
+        },
+      }),
+  );
 
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         {children}
         <Toaster richColors position="top-right" />
-        <ReactQueryDevtools initialIsOpen={false} />
+        {process.env.NODE_ENV === "development" && (
+          <ReactQueryDevtools initialIsOpen={false} />
+        )}
       </ThemeProvider>
     </QueryClientProvider>
   );
@@ -40,10 +38,10 @@ function Providers({
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemesProvider
-      disableTransitionOnChange
-      enableSystem
       attribute="class"
       defaultTheme="system"
+      disableTransitionOnChange
+      enableSystem
       {...props}
     >
       {children}

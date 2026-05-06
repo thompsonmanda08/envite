@@ -2,6 +2,9 @@ import type { ReactNode } from "react";
 
 import { Sparkles } from "lucide-react";
 import Link from "next/link";
+import Logo from "@/components/base/logo";
+
+export const dynamic = "force-dynamic";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
@@ -16,7 +19,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       />
 
       <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-6 sm:px-10">
-        <Link
+        {/* <Link
           href="/"
           className="inline-flex items-center gap-2 text-foreground"
         >
@@ -32,7 +35,13 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
           <span className="font-display text-xl font-medium tracking-tight">
             e-nvite
           </span>
-        </Link>
+        </Link> */}
+        <div className="group inline-flex items-center gap-2">
+          <Logo href="/" isIcon />
+          <span className="font-display text-xl font-medium tracking-tight text-foreground">
+            e-nvite
+          </span>
+        </div>
         <p className="hidden font-brand text-xs uppercase tracking-[0.32em] text-mute md:block">
           <Sparkles size={11} className="mr-2 inline-block text-secondary" />
           Welcome back

@@ -44,8 +44,8 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
-        {/* <Link className="group inline-flex items-center gap-2" href="/">
-          <span
+        <div className="group inline-flex items-center gap-2">
+          {/* <span
             aria-hidden
             className="relative grid h-8 w-8 place-items-center rounded-full bg-foreground text-background"
           >
@@ -53,12 +53,13 @@ export default function Navbar() {
               e
             </span>
             <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-secondary" />
-          </span>
+          </span> */}
+
+          <Logo href="/" isIcon />
           <span className="font-display text-xl font-medium tracking-tight text-foreground">
             e-nvite
           </span>
-        </Link> */}
-        <Logo href="/" isIcon />
+        </div>
 
         <nav className="hidden items-center gap-1 md:flex">
           {NAV.map((item) => (
