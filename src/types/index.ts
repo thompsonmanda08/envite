@@ -102,23 +102,24 @@ export type EventRecord = {
   updated_at?: string;
 };
 
-export type RsvpStatus = "pending" | "going" | "maybe" | "declined";
+export type RsvpStatus = "pending" | "confirmed" | "declined";
 
-// Guest endpoints are stubbed in the Postman collection. `invitation_id`
-// has been dropped here until the backend documents the guest <-> invitation
-// relationship explicitly.
+export type InvitationMethod = "email" | "sms" | "whatsapp";
+
+// Aligned to swagger Guest schema (docs/swagger.yaml#components.schemas.Guest)
 export type Guest = {
   id: string;
   event_id: string;
+  invitation_id?: string;
   name: string;
   email?: string;
   phone?: string;
-  rsvp: RsvpStatus;
-  plus_ones?: number;
-  group?: string;
-  notes?: string;
-  invited_at?: string;
-  responded_at?: string;
+  invitation_method?: InvitationMethod;
+  invitation_sent?: boolean;
+  invitation_sent_at?: string;
+  rsvp_status: RsvpStatus;
+  qr_code_url?: string;
+  created_at?: string;
 };
 
 export type EventType = {

@@ -174,3 +174,57 @@ export async function cancelEvent(
     return handleError(error, "PATCH", url);
   }
 }
+
+// Swagger marks /events/{id}/publish as GET — odd for a state change but
+// the spec is authoritative; mirror it.
+export async function publishEvent(id: string): Promise<APIResponse> {
+  if (!id) return badRequestResponse("Event ID required");
+  const url = `/api/v1/events/${id}/publish`;
+  try {
+    const res = await authenticatedApiClient({ url, method: "GET" });
+    revalidateTag(CACHE_TAGS.EVENTS, "max");
+    revalidateTag(CACHE_TAGS.EVENT(id), "max");
+    return fromBackend(res);
+  } catch (error: any) {
+    return handleError(error, "GET", url);
+  }
+}
+
+export async function completeEvent(id: string): Promise<APIResponse> {
+  if (!id) return badRequestResponse("Event ID required");
+  const url = `/api/v1/events/${id}/complete`;
+  try {
+    const res = await authenticatedApiClient({ url, method: "PATCH" });
+    revalidateTag(CACHE_TAGS.EVENTS, "max");
+    revalidateTag(CACHE_TAGS.EVENT(id), "max");
+    return fromBackend(res);
+  } catch (error: any) {
+    return handleError(error, "PATCH", url);
+  }
+}
+
+export type EventStats = {
+  total_guests?: number;
+  confirmed?: number;
+  declined?: number;
+  pending?: number;
+  checked_in?: number;
+  [k: string]: unknown;
+};
+
+export async function getEventStats(
+  id: string,
+): Promise<APIResponse<EventStats>> {
+  if (!id) return badRequestResponse("Event ID required");
+  const url = `/api/v1/events/${id}/stats`;
+  try {
+    const res = await authenticatedApiClient({
+      url,
+      method: "GET",
+      next: { tags: [CACHE_TAGS.EVENT(id)], revalidate: 30 },
+    });
+    return fromBackend<EventStats>(res);
+  } catch (error: any) {
+    return handleError(error, "GET", url);
+  }
+}

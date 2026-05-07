@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { getEvent } from "@/app/_actions/events";
 import { getGuests } from "@/app/_actions/guests";
+import { getInvitations } from "@/app/_actions/invitations";
 import { GuestsManager } from "./_components/guests-manager";
 
 export default async function EventGuestsPage({
@@ -12,13 +13,15 @@ export default async function EventGuestsPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [eventRes, guestsRes] = await Promise.all([
+  const [eventRes, guestsRes, invRes] = await Promise.all([
     getEvent(id),
     getGuests(id).catch(() => ({ success: false, data: [] as any[] })),
+    getInvitations(id).catch(() => ({ success: false, data: [] as any[] })),
   ]);
   if (!eventRes.success || !eventRes.data) notFound();
   const event = eventRes.data;
   const guests = (guestsRes.success ? guestsRes.data : []) ?? [];
+  const invitations = (invRes.success ? invRes.data : []) ?? [];
 
   return (
     <div className="space-y-10">
@@ -39,7 +42,11 @@ export default async function EventGuestsPage({
         </h1>
       </header>
 
-      <GuestsManager eventId={id} initial={guests} />
+      <GuestsManager
+        eventId={id}
+        initial={guests}
+        invitations={invitations}
+      />
     </div>
   );
 }

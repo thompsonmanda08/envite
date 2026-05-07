@@ -1,0 +1,1905 @@
+openapi: "3.0.3"
+info:
+  title: Envite API
+  version: "1.0.0"
+  description: Envite event management backend API
+
+servers:
+  - url: http://localhost:4000
+    description: Local development
+  - url: https://humble-emotion-production-653d.up.railway.app
+    description: Production
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
+
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+    # ── Users ────────────────────────────────────────────────────────────────
+
+    RegisterRequest:
+      type: object
+      required: [email, password, first_name, last_name, phone]
+      properties:
+        email:
+          type: string
+          format: email
+          example: jane@example.com
+        password:
+          type: string
+          minLength: 8
+          maxLength: 255
+          example: "S3cure!Pass"
+        first_name:
+          type: string
+          maxLength: 100
+          example: Jane
+        last_name:
+          type: string
+          maxLength: 100
+          example: Doe
+        phone:
+          type: string
+          minLength: 10
+          maxLength: 20
+          example: "+260971234567"
+
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 6
+
+    LoginResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        token:
+          type: string
+        expires_in:
+          type: integer
+          description: Seconds until token expiry
+        token_type:
+          type: string
+          example: Bearer
+        user:
+          $ref: "#/components/schemas/UserInfo"
+
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+        must_change_password:
+          type: boolean
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+        phone:
+          type: string
+        must_change_password:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    ForgotPasswordRequest:
+      type: object
+      required: [email]
+      properties:
+        email:
+          type: string
+          format: email
+
+    UpdateProfileRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+          maxLength: 100
+        last_name:
+          type: string
+          maxLength: 100
+        phone:
+          type: string
+          maxLength: 20
+
+    ChangePasswordRequest:
+      type: object
+      required: [new_password]
+      properties:
+        new_password:
+          type: string
+          minLength: 8
+          maxLength: 255
+
+    # ── Event Types ──────────────────────────────────────────────────────────
+
+    EventType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        features:
+          type: array
+          items:
+            type: string
+          example: ["Birthdays", "Weddings", "Family celebrations"]
+        price_per_invitation:
+          type: number
+          format: double
+        max_free_invitations:
+          type: integer
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+
+    CreateEventTypeRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          example: Conference
+        description:
+          type: string
+        icon_url:
+          type: string
+          format: uri
+          maxLength: 500
+        features:
+          type: array
+          items:
+            type: string
+          example: ["Keynote talks", "Workshops", "Networking"]
+        price_per_invitation:
+          type: number
+          format: double
+          minimum: 0
+        max_free_invitations:
+          type: integer
+          minimum: 0
+
+    UpdateEventTypeRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+        icon_url:
+          type: string
+          format: uri
+          maxLength: 500
+        is_active:
+          type: boolean
+        features:
+          type: array
+          items:
+            type: string
+        price_per_invitation:
+          type: number
+          format: double
+          minimum: 0
+        max_free_invitations:
+          type: integer
+          minimum: 0
+
+    # ── Events ───────────────────────────────────────────────────────────────
+
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        event_type_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        theme:
+          type: string
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        rsvp_deadline:
+          type: string
+          format: date-time
+        banner_url:
+          type: string
+          format: uri
+        slug:
+          type: string
+          example: annual-tech-summit-2026
+        status:
+          type: string
+          enum: [draft, published, cancelled, completed]
+        requires_rsvp:
+          type: boolean
+        is_multi_day:
+          type: boolean
+        duration_days:
+          type: integer
+        contact_person:
+          type: string
+        contact_phone:
+          type: string
+        contact_email:
+          type: string
+          format: email
+        created_at:
+          type: string
+          format: date-time
+        event_type:
+          $ref: "#/components/schemas/EventTypeSummary"
+
+    EventTypeSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        icon_url:
+          type: string
+          format: uri
+        features:
+          type: array
+          items:
+            type: string
+
+    EventSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [draft, published, cancelled, completed]
+        banner_url:
+          type: string
+          format: uri
+
+    InvitationSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        invitation_type:
+          type: string
+        custom_image_url:
+          type: string
+          format: uri
+
+    EventStats:
+      type: object
+      properties:
+        total_guests:
+          type: integer
+        confirmed:
+          type: integer
+        pending:
+          type: integer
+        declined:
+          type: integer
+        invitations_sent:
+          type: integer
+        total_sessions:
+          type: integer
+        checked_in:
+          type: integer
+
+    CreateEventRequest:
+      type: object
+      required: [title, start_date, end_date]
+      properties:
+        event_type_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          maxLength: 255
+          example: Annual Tech Summit
+        description:
+          type: string
+        theme:
+          type: string
+          maxLength: 100
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        rsvp_deadline:
+          type: string
+          format: date-time
+        max_attendees:
+          type: integer
+          minimum: 1
+        special_instructions:
+          type: string
+        dietary_restrictions_note:
+          type: string
+        parking_info:
+          type: string
+        contact_person:
+          type: string
+          maxLength: 255
+        contact_phone:
+          type: string
+          maxLength: 20
+        contact_email:
+          type: string
+          format: email
+          maxLength: 255
+        requires_rsvp:
+          type: boolean
+        is_multi_day:
+          type: boolean
+        duration_days:
+          type: integer
+          minimum: 1
+        banner_url:
+          type: string
+          format: uri
+        slug:
+          type: string
+          description: Auto-generated from title if not provided
+
+    UpdateEventRequest:
+      type: object
+      properties:
+        event_type_id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        theme:
+          type: string
+          maxLength: 100
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        rsvp_deadline:
+          type: string
+          format: date-time
+        max_attendees:
+          type: integer
+          minimum: 1
+        special_instructions:
+          type: string
+        dietary_restrictions_note:
+          type: string
+        parking_info:
+          type: string
+        contact_person:
+          type: string
+          maxLength: 255
+        contact_phone:
+          type: string
+          maxLength: 20
+        contact_email:
+          type: string
+          format: email
+          maxLength: 255
+        requires_rsvp:
+          type: boolean
+        is_multi_day:
+          type: boolean
+        duration_days:
+          type: integer
+          minimum: 1
+        banner_url:
+          type: string
+          format: uri
+        slug:
+          type: string
+
+    # ── Event Sessions ────────────────────────────────────────────────────────
+
+    EventSession:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        event_id:
+          type: string
+          format: uuid
+        session_name:
+          type: string
+        description:
+          type: string
+        session_date:
+          type: string
+          format: date
+        start_time:
+          type: string
+          example: "09:00:00"
+        end_time:
+          type: string
+          example: "10:30:00"
+        venue:
+          type: string
+        venue_address:
+          type: string
+        dress_code:
+          type: string
+        max_attendees:
+          type: integer
+        special_notes:
+          type: string
+        session_order:
+          type: integer
+        speaker_name:
+          type: string
+        speaker_bio:
+          type: string
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+
+    CreateEventSessionRequest:
+      type: object
+      required: [session_name, session_date, start_time, end_time]
+      properties:
+        session_name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        session_date:
+          type: string
+          format: date
+        start_time:
+          type: string
+          example: "09:00:00"
+        end_time:
+          type: string
+          example: "10:30:00"
+        venue:
+          type: string
+          maxLength: 255
+        venue_address:
+          type: string
+        venue_map_pin:
+          type: string
+          maxLength: 255
+        dress_code:
+          type: string
+          maxLength: 1000
+        max_attendees:
+          type: integer
+          minimum: 1
+        special_notes:
+          type: string
+        session_order:
+          type: integer
+          minimum: 1
+        speaker_name:
+          type: string
+          maxLength: 255
+        speaker_bio:
+          type: string
+
+    UpdateEventSessionRequest:
+      type: object
+      properties:
+        session_name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        session_date:
+          type: string
+          format: date
+        start_time:
+          type: string
+        end_time:
+          type: string
+        venue:
+          type: string
+          maxLength: 255
+        venue_address:
+          type: string
+        venue_map_pin:
+          type: string
+          maxLength: 255
+        dress_code:
+          type: string
+          maxLength: 1000
+        max_attendees:
+          type: integer
+          minimum: 1
+        special_notes:
+          type: string
+        session_order:
+          type: integer
+          minimum: 1
+        speaker_name:
+          type: string
+          maxLength: 255
+        speaker_bio:
+          type: string
+
+    # ── Invitations ──────────────────────────────────────────────────────────
+
+    Invitation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        event_id:
+          type: string
+          format: uuid
+        invitation_type:
+          type: string
+          description: Label for the invitation style (e.g. "Formal", "Casual")
+        custom_image_url:
+          type: string
+          format: uri
+          description: URL to the invitation card image
+        sessions:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Session IDs this invitation covers
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        event:
+          $ref: "#/components/schemas/EventSummary"
+        session_details:
+          type: array
+          items:
+            $ref: "#/components/schemas/EventSession"
+
+    CreateInvitationRequest:
+      type: object
+      required: [invitation_type, custom_image_url, sessions]
+      properties:
+        invitation_type:
+          type: string
+          maxLength: 255
+          example: Formal
+        custom_image_url:
+          type: string
+          format: uri
+          maxLength: 500
+          example: "https://example.com/card.jpg"
+        sessions:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            format: uuid
+          description: Session IDs to include in this invitation
+
+    UpdateInvitationRequest:
+      type: object
+      properties:
+        invitation_type:
+          type: string
+          maxLength: 255
+        custom_image_url:
+          type: string
+          format: uri
+          maxLength: 500
+        sessions:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    # ── Guests ───────────────────────────────────────────────────────────────
+
+    Guest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        event_id:
+          type: string
+          format: uuid
+        invitation_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        invitation_method:
+          type: string
+          enum: [email, sms, whatsapp]
+        invitation_sent:
+          type: boolean
+        invitation_sent_at:
+          type: string
+          format: date-time
+        rsvp_status:
+          type: string
+          enum: [pending, confirmed, declined]
+        qr_code_url:
+          type: string
+          format: uri
+        created_at:
+          type: string
+          format: date-time
+        invitation:
+          $ref: "#/components/schemas/InvitationSummary"
+
+    CheckInRequest:
+      type: object
+      required: [session_id]
+      properties:
+        session_id:
+          type: string
+          format: uuid
+        notes:
+          type: string
+
+    UploadGuestsRequest:
+      type: object
+      required: [url]
+      properties:
+        url:
+          type: string
+          format: uri
+          example: "https://example.com/guests.xlsx"
+
+    GuestData:
+      type: object
+      required: [name, invitation_method]
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        mobile_number:
+          type: string
+        invitation_method:
+          type: string
+          enum: [email, sms, whatsapp]
+
+    ManualGuestsRequest:
+      type: object
+      required: [guests]
+      properties:
+        guests:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/GuestData"
+
+    UpdateGuestRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        phone:
+          type: string
+          maxLength: 20
+        invitation_method:
+          type: string
+          enum: [email, sms, whatsapp]
+        invitation_sent:
+          type: boolean
+        invitation_sent_at:
+          type: string
+          format: date-time
+        rsvp_status:
+          type: string
+          enum: [pending, confirmed, declined]
+        qr_code_url:
+          type: string
+          format: uri
+
+    DeleteMultipleRequest:
+      type: object
+      required: [ids]
+      properties:
+        ids:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            format: uuid
+
+    InvitationSendResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "5 invitation(s) queued, 0 skipped"
+        queued:
+          type: integer
+        skipped:
+          type: integer
+
+    # ── Files ────────────────────────────────────────────────────────────────
+
+    FileRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        collection_id:
+          type: string
+          format: uuid
+        record_id:
+          type: string
+          format: uuid
+        filename:
+          type: string
+        mime_type:
+          type: string
+        size_bytes:
+          type: integer
+          format: int64
+        created_at:
+          type: string
+          format: date-time
+        url:
+          type: string
+          format: uri
+
+security:
+  - bearerAuth: []
+
+paths:
+  # ── Users ─────────────────────────────────────────────────────────────────
+
+  /api/v1/user/registration:
+    post:
+      tags: [Users]
+      summary: Register a new user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: User registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/v1/user/authentication:
+    post:
+      tags: [Users]
+      summary: Log in
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/v1/user/password/reset:
+    post:
+      tags: [Users]
+      summary: Request password reset
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ForgotPasswordRequest"
+      responses:
+        "200":
+          description: Reset email sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /api/v1/user/profile:
+    get:
+      tags: [Users]
+      summary: Get current user profile
+      responses:
+        "200":
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+    patch:
+      tags: [Users]
+      summary: Update current user profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileRequest"
+      responses:
+        "200":
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /api/v1/user/password:
+    patch:
+      tags: [Users]
+      summary: Change password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordRequest"
+      responses:
+        "200":
+          description: Password changed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "401":
+          description: Unauthorized
+
+  # ── Event Types ────────────────────────────────────────────────────────────
+
+  /api/v1/event-type/new:
+    post:
+      tags: [Event Types]
+      summary: Create an event type
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEventTypeRequest"
+      responses:
+        "201":
+          description: Event type created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /api/v1/event-type/{id}:
+    put:
+      tags: [Event Types]
+      summary: Update an event type
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEventTypeRequest"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+    delete:
+      tags: [Event Types]
+      summary: Delete an event type
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+    get:
+      tags: [Event Types]
+      summary: Get event type by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Event type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventType"
+
+  /api/v1/event-type/list:
+    get:
+      tags: [Event Types]
+      summary: List all event types
+      responses:
+        "200":
+          description: List of event types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EventType"
+
+  # ── Events ─────────────────────────────────────────────────────────────────
+
+  /api/v1/events/new:
+    post:
+      tags: [Events]
+      summary: Create an event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEventRequest"
+      responses:
+        "201":
+          description: Event created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+
+  /api/v1/events/whole-list:
+    get:
+      tags: [Events]
+      summary: Get all events (public, no auth required)
+      security: []
+      responses:
+        "200":
+          description: List of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+
+  /api/v1/events/list:
+    get:
+      tags: [Events]
+      summary: Get events for the current user
+      responses:
+        "200":
+          description: List of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Event"
+
+  /api/v1/events/{id}:
+    get:
+      tags: [Events]
+      summary: Get event details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Event details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Event"
+    put:
+      tags: [Events]
+      summary: Update an event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEventRequest"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+    delete:
+      tags: [Events]
+      summary: Delete an event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+    patch:
+      tags: [Events]
+      summary: Cancel an event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Cancelled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /api/v1/events/{id}/publish:
+    get:
+      tags: [Events]
+      summary: Publish an event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Published
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  # ── Event Sessions ─────────────────────────────────────────────────────────
+
+  /api/v1/event-sessions/{id}:
+    post:
+      tags: [Event Sessions]
+      summary: Create a session for an event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Event ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEventSessionRequest"
+      responses:
+        "201":
+          description: Session created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+    put:
+      tags: [Event Sessions]
+      summary: Update a session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Session ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEventSessionRequest"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+    delete:
+      tags: [Event Sessions]
+      summary: Delete a session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+    get:
+      tags: [Event Sessions]
+      summary: Get session by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Session details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventSession"
+
+  /api/v1/event-sessions/{id}/list:
+    get:
+      tags: [Event Sessions]
+      summary: List all sessions for an event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Event ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EventSession"
+
+  /api/v1/event-sessions/{id}/details:
+    patch:
+      tags: [Event Sessions]
+      summary: Patch session details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEventSessionRequest"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+    delete:
+      tags: [Event Sessions]
+      summary: Delete session details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  # ── Invitations ────────────────────────────────────────────────────────────
+
+  /api/v1/invitations/{id}:
+    post:
+      tags: [Invitations]
+      summary: Create an invitation for an event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Event ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateInvitationRequest"
+      responses:
+        "201":
+          description: Invitation created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+    put:
+      tags: [Invitations]
+      summary: Update an invitation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Invitation ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateInvitationRequest"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+    delete:
+      tags: [Invitations]
+      summary: Delete an invitation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+    get:
+      tags: [Invitations]
+      summary: Get invitation by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Invitation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invitation"
+
+  /api/v1/invitations/{id}/list:
+    get:
+      tags: [Invitations]
+      summary: List invitations for an event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Event ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of invitations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invitation"
+
+  /api/v1/invitations/{id}/details:
+    get:
+      tags: [Invitations]
+      summary: Get invitation details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Invitation details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invitation"
+
+  # ── Guests ─────────────────────────────────────────────────────────────────
+
+  /api/v1/guests/{id}:
+    post:
+      tags: [Guests]
+      summary: Upload guests from an Excel file URL
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Invitation ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UploadGuestsRequest"
+      responses:
+        "200":
+          description: Guests uploaded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+    get:
+      tags: [Guests]
+      summary: Get all guests for an event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Event ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of guests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Guest"
+    put:
+      tags: [Guests]
+      summary: Update a guest
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Guest ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateGuestRequest"
+      responses:
+        "200":
+          description: Guest updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /api/v1/guests/{id}/manual:
+    post:
+      tags: [Guests]
+      summary: Add guests manually
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Invitation ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ManualGuestsRequest"
+      responses:
+        "200":
+          description: Guests added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /api/v1/guests/{id}/details:
+    get:
+      tags: [Guests]
+      summary: Get a specific guest by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Guest ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Guest details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Guest"
+
+  /api/v1/guests:
+    delete:
+      tags: [Guests]
+      summary: Delete multiple guests
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteMultipleRequest"
+      responses:
+        "200":
+          description: Guests deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  # ── Files ──────────────────────────────────────────────────────────────────
+
+  /api/v1/files/{collection}:
+    post:
+      tags: [Files]
+      summary: Upload a file to a collection
+      description: |
+        A `record_id` UUID is generated server-side and returned in the response.
+        Use the returned `record_id` and `filename` for subsequent GET / DELETE calls.
+        Public collections (qr_codes, event_banners, avatars) do not require auth.
+        Protected collections (guest_lists, attachments) require a Bearer token.
+      parameters:
+        - name: collection
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [qr_codes, event_banners, avatars, guest_lists, attachments]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: File uploaded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FileRecord"
+        "404":
+          description: Unknown collection
+        "413":
+          description: File too large
+        "415":
+          description: MIME type not allowed
+  /api/v1/files/{collection}/{record_id}:
+    get:
+      tags: [Files]
+      summary: List files for a record
+      parameters:
+        - name: collection
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: record_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of files
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FileRecord"
+
+  /api/v1/files/{collection}/{record_id}/{filename}:
+    get:
+      tags: [Files]
+      summary: Download / serve a file
+      parameters:
+        - name: collection
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: record_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: filename
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: File content (streamed)
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        "404":
+          description: File not found
+    delete:
+      tags: [Files]
+      summary: Delete a file
+      parameters:
+        - name: collection
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: record_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: filename
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: File deleted
+        "404":
+          description: File not found
+
+  # ── Event extras ───────────────────────────────────────────────────────────
+
+  /api/v1/events/{id}/complete:
+    patch:
+      tags: [Events]
+      summary: Mark a published event as completed
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Event marked as completed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+        "400":
+          description: Event is not published
+
+  /api/v1/events/{id}/stats:
+    get:
+      tags: [Events]
+      summary: Get aggregate guest and attendance stats for an event
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Event statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventStats"
+
+  # ── Guest extras ───────────────────────────────────────────────────────────
+
+  /api/v1/guests/{id}/check-in:
+    post:
+      tags: [Guests]
+      summary: Check a guest into a session
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Guest ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckInRequest"
+      responses:
+        "200":
+          description: Guest checked in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  # ── Invitation send ────────────────────────────────────────────────────────
+
+  /api/v1/invitations/{id}/send:
+    post:
+      tags: [Invitations]
+      summary: Queue invitations for all unsent guests
+      description: |
+        Publishes invitation messages to RabbitMQ for delivery via email and WhatsApp.
+        Requires the event's bill to be paid — returns **402** otherwise.
+        Only guests whose `invitation_sent` is `false` are queued.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Invitation ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Invitations queued
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvitationSendResponse"
+        "402":
+          description: Payment required — event bill not paid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Invitation not found
+
+  # ── WhatsApp webhook ───────────────────────────────────────────────────────
+
+  /api/v1/webhooks/whatsapp:
+    get:
+      tags: [Webhooks]
+      summary: WhatsApp webhook verification (Meta handshake)
+      description: |
+        Called by Meta/Facebook during webhook registration.
+        Responds with `hub.challenge` when `hub.mode=subscribe` and
+        `hub.verify_token` matches the configured verify token.
+      security: []
+      parameters:
+        - name: hub.mode
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [subscribe]
+        - name: hub.verify_token
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: hub.challenge
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Verification successful — challenge echoed back
+          content:
+            text/plain:
+              schema:
+                type: string
+        "403":
+          description: Token mismatch
+    post:
+      tags: [Webhooks]
+      summary: Receive incoming WhatsApp messages and status updates
+      description: |
+        Facebook posts message and status callback payloads here.
+        Always responds 200 immediately; payloads are processed asynchronously.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Acknowledged

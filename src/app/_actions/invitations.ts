@@ -99,3 +99,45 @@ export async function deleteInvitation(id: string): Promise<APIResponse> {
     return handleError(error, "DELETE", url);
   }
 }
+
+export async function getInvitationDetails(
+  id: string,
+): Promise<APIResponse<Invitation>> {
+  if (!id) return badRequestResponse("Invitation ID required");
+  const url = `/api/v1/invitations/${id}/details`;
+  try {
+    const res = await authenticatedApiClient({
+      url,
+      method: "GET",
+      next: { tags: [CACHE_TAGS.INVITATION(id)], revalidate: 30 },
+    });
+    return fromBackend<Invitation>(res);
+  } catch (error: any) {
+    return handleError(error, "GET", url);
+  }
+}
+
+export type InvitationSendResponse = {
+  message?: string;
+  queued?: number;
+  skipped?: number;
+};
+
+// Queues invitation messages to RabbitMQ for delivery via email/WhatsApp.
+// Backend returns 402 if event bill not paid. Only guests with
+// invitation_sent === false are queued.
+export async function sendInvitation(
+  invitationId: string,
+): Promise<APIResponse<InvitationSendResponse>> {
+  if (!invitationId)
+    return badRequestResponse("Invitation ID required");
+  const url = `/api/v1/invitations/${invitationId}/send`;
+  try {
+    const res = await authenticatedApiClient({ url, method: "POST" });
+    revalidateTag(CACHE_TAGS.INVITATIONS, "max");
+    revalidateTag(CACHE_TAGS.GUESTS, "max");
+    return fromBackend<InvitationSendResponse>(res);
+  } catch (error: any) {
+    return handleError(error, "POST", url);
+  }
+}

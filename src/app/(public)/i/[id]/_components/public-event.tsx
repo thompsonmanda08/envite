@@ -6,8 +6,6 @@ import { Calendar, MapPin, Sparkles } from "lucide-react";
 
 import type { EventRecord, EventSession } from "@/types";
 
-import { RsvpForm } from "./rsvp-form";
-
 const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function PublicEvent({
@@ -210,23 +208,37 @@ export default function PublicEvent({
           transition={{ duration: 0.7, ease }}
           className="mt-24"
         >
-          {acceptingRsvp ? (
-            <RsvpForm eventId={event.id} sessions={sessions} />
-          ) : (
-            <div className="rounded-3xl border border-hairline bg-surface/60 p-12 text-center">
+          <div className="rounded-3xl border border-hairline bg-surface/60 p-12 text-center">
+            {event.status === "cancelled" ? (
               <p className="font-display text-2xl italic text-foreground/70">
-                {event.status === "cancelled"
-                  ? "This event has been cancelled."
-                  : "RSVP is closed."}
+                This event has been cancelled.
               </p>
-              {event.rsvp_deadline && event.status !== "cancelled" && (
-                <p className="font-brand mt-3 text-xs uppercase tracking-[0.32em] text-mute">
-                  Deadline passed{" "}
-                  {format(new Date(event.rsvp_deadline), "MMMM d, yyyy")}
+            ) : !acceptingRsvp ? (
+              <>
+                <p className="font-display text-2xl italic text-foreground/70">
+                  RSVP is closed.
                 </p>
-              )}
-            </div>
-          )}
+                {event.rsvp_deadline && (
+                  <p className="font-brand mt-3 text-xs uppercase tracking-[0.32em] text-mute">
+                    Deadline passed{" "}
+                    {format(new Date(event.rsvp_deadline), "MMMM d, yyyy")}
+                  </p>
+                )}
+              </>
+            ) : (
+              <>
+                <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
+                  Kindly respond
+                </p>
+                <p className="font-display mt-4 text-2xl italic text-foreground/80">
+                  Look out for your invitation by email, SMS, or WhatsApp.
+                </p>
+                <p className="mt-3 text-sm italic text-mute">
+                  Replies are recorded once you receive your personal link.
+                </p>
+              </>
+            )}
+          </div>
         </motion.section>
 
         <Ornament className="mt-20" />

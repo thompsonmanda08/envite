@@ -7,6 +7,7 @@ import {
   deleteInvitation,
   getInvitation,
   getInvitations,
+  sendInvitation,
   updateInvitation,
   type InvitationInput,
 } from "@/app/_actions/invitations";
@@ -64,6 +65,19 @@ export function useUpdateInvitationMutation() {
       if (res.success) {
         qc.invalidateQueries({ queryKey: INVITATIONS_KEYS.all });
         qc.invalidateQueries({ queryKey: INVITATIONS_KEYS.detail(vars.id) });
+      }
+    },
+  });
+}
+
+export function useSendInvitationMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => sendInvitation(id),
+    onSuccess: (res) => {
+      if (res.success) {
+        qc.invalidateQueries({ queryKey: INVITATIONS_KEYS.all });
+        qc.invalidateQueries({ queryKey: ["guests"] });
       }
     },
   });
