@@ -70,7 +70,7 @@ export type AuthSession = {
 };
 
 // ─── Domain ─────────────────────────────────────────────────────────────────
-export type EventStatus = "draft" | "published" | "cancelled";
+export type EventStatus = "draft" | "published" | "completed" | "cancelled";
 
 export type EventRecord = {
   id: string;

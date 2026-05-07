@@ -3,15 +3,17 @@ import { notFound } from "next/navigation";
 import {
   ArrowLeft,
   CalendarRange,
+  CheckCircle2,
   Mail,
   MapPin,
   Phone,
   Users,
 } from "lucide-react";
 
-import { getEvent } from "@/app/_actions/events";
+import { getEvent, getEventStats } from "@/app/_actions/events";
 import { Button } from "@/components/ui/button";
 import { EventActions } from "../_components/event-actions";
+import { StatsPanel } from "../_components/stats-panel";
 
 function fmtLong(d?: string) {
   if (!d) return null;
@@ -47,9 +49,13 @@ export default async function EventDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const res = await getEvent(id);
+  const [res, statsRes] = await Promise.all([
+    getEvent(id),
+    getEventStats(id).catch(() => ({ success: false, data: null })),
+  ]);
   if (!res.success || !res.data) notFound();
   const event = res.data;
+  const stats = statsRes.success ? statsRes.data : null;
 
   const startDate = fmtLong(event.start_date);
   const startTime = fmtTime(event.start_date);
@@ -172,6 +178,8 @@ export default async function EventDetailPage({
         </article>
       </div>
 
+      {stats && <StatsPanel stats={stats} />}
+
       {(event.dress_code || event.special_instructions) && (
         <section className="rounded-3xl border border-hairline bg-surface/40 p-8">
           <h2 className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
@@ -194,15 +202,27 @@ export default async function EventDetailPage({
 
       <nav className="flex flex-wrap gap-3 border-t border-hairline pt-8">
         <Button asChild variant="outline" className="rounded-full">
-          <Link href={`/dashboard/events/${event.id}/guests`}>
-            <Users className="size-4" />
-            Manage guests
+          <Link href={`/dashboard/events/${event.id}/sessions`}>
+            <CalendarRange className="size-4" />
+            Programme
           </Link>
         </Button>
         <Button asChild variant="outline" className="rounded-full">
           <Link href={`/dashboard/events/${event.id}/invitations`}>
             <Mail className="size-4" />
             Invitations
+          </Link>
+        </Button>
+        <Button asChild variant="outline" className="rounded-full">
+          <Link href={`/dashboard/events/${event.id}/guests`}>
+            <Users className="size-4" />
+            Guests
+          </Link>
+        </Button>
+        <Button asChild variant="outline" className="rounded-full">
+          <Link href={`/dashboard/events/${event.id}/check-in`}>
+            <CheckCircle2 className="size-4" />
+            Check-in
           </Link>
         </Button>
         <Button asChild variant="ghost" className="rounded-full">

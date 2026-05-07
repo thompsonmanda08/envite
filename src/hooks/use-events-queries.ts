@@ -4,13 +4,17 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   cancelEvent,
+  completeEvent,
   createEvent,
   deleteEvent,
   getAllEvents,
   getEvent,
+  getEventStats,
   getMyEvents,
+  publishEvent,
   updateEvent,
   type CreateEventInput,
+  type EventStats,
   type UpdateEventInput,
 } from "@/app/_actions/events";
 import { EVENTS_KEYS } from "@/lib/query-keys";
@@ -114,5 +118,45 @@ export function useCancelEventMutation() {
         qc.invalidateQueries({ queryKey: EVENTS_KEYS.detail(id) });
       }
     },
+  });
+}
+
+export function usePublishEventMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => publishEvent(id),
+    onSuccess: (res, id) => {
+      if (res.success) {
+        qc.invalidateQueries({ queryKey: EVENTS_KEYS.all });
+        qc.invalidateQueries({ queryKey: EVENTS_KEYS.detail(id) });
+      }
+    },
+  });
+}
+
+export function useCompleteEventMutation() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => completeEvent(id),
+    onSuccess: (res, id) => {
+      if (res.success) {
+        qc.invalidateQueries({ queryKey: EVENTS_KEYS.all });
+        qc.invalidateQueries({ queryKey: EVENTS_KEYS.detail(id) });
+      }
+    },
+  });
+}
+
+export function useEventStatsQuery(id: string, initialData?: EventStats) {
+  return useQuery({
+    queryKey: [...EVENTS_KEYS.detail(id), "stats"] as const,
+    queryFn: async () => {
+      const res = await getEventStats(id);
+      if (!res.success) throw new Error(res.message);
+      return res.data as EventStats;
+    },
+    enabled: !!id,
+    initialData,
+    staleTime: 30 * 1000,
   });
 }

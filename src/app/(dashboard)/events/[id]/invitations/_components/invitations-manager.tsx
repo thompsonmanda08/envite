@@ -1,7 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Copy, Edit, Link as LinkIcon, Mail, Plus, Trash2 } from "lucide-react";
+import {
+  Copy,
+  Edit,
+  Link as LinkIcon,
+  Mail,
+  Plus,
+  Send,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import type { EventSession, Invitation } from "@/types";
@@ -19,6 +27,7 @@ import {
   useCreateInvitationMutation,
   useDeleteInvitationMutation,
   useInvitationsQuery,
+  useSendInvitationMutation,
   useUpdateInvitationMutation,
 } from "@/hooks/use-invitations-queries";
 import { cn } from "@/lib/utils";
@@ -49,6 +58,7 @@ export function InvitationsManager({
   const createM = useCreateInvitationMutation(eventId);
   const updateM = useUpdateInvitationMutation();
   const deleteM = useDeleteInvitationMutation();
+  const sendM = useSendInvitationMutation();
 
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<DraftState>(EMPTY);
@@ -114,6 +124,24 @@ export function InvitationsManager({
     if (!url) return;
     await navigator.clipboard.writeText(url);
     toast.success("Link copied.");
+  }
+
+  async function onSend(id: string) {
+    if (
+      !confirm(
+        "Queue invitations for all unsent guests? Charges may apply per the event bill.",
+      )
+    )
+      return;
+    const res = await sendM.mutateAsync(id);
+    if (res.success) {
+      const data = res.data as { queued?: number; skipped?: number } | null;
+      const q = data?.queued ?? 0;
+      const s = data?.skipped ?? 0;
+      toast.success(`${q} queued, ${s} skipped.`);
+    } else {
+      toast.error(res.message || "Could not queue invitations.");
+    }
   }
 
   const submitting = createM.isPending || updateM.isPending;
@@ -247,6 +275,14 @@ export function InvitationsManager({
                   </p>
                 </div>
                 <div className="flex gap-1">
+                  <button
+                    onClick={() => onSend(inv.id)}
+                    aria-label="Send invitations"
+                    disabled={sendM.isPending}
+                    className="grid h-9 w-9 place-items-center rounded-full border border-hairline text-mute hover:border-foreground hover:bg-foreground hover:text-background disabled:opacity-50"
+                  >
+                    <Send className="size-3.5" />
+                  </button>
                   <button
                     onClick={() => startEdit(inv)}
                     aria-label="Edit"

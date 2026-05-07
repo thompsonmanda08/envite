@@ -1,7 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Phone, Plus, Trash2, UserPlus, Users } from "lucide-react";
+import {
+  FileSpreadsheet,
+  Mail,
+  Phone,
+  Plus,
+  Trash2,
+  Upload,
+  UserPlus,
+  Users,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import type {
@@ -25,6 +34,7 @@ import {
   useDeleteGuestMutation,
   useGuestsQuery,
   useSetRsvpMutation,
+  useUploadGuestsMutation,
 } from "@/hooks/use-guests-queries";
 import { cn } from "@/lib/utils";
 
@@ -64,10 +74,13 @@ export function GuestsManager({
     invitations[0]?.id ?? "",
   );
   const addM = useAddGuestsManualMutation(invitationId, eventId);
+  const uploadM = useUploadGuestsMutation(invitationId, eventId);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [method, setMethod] = useState<InvitationMethod>("email");
+  const [tab, setTab] = useState<"manual" | "upload">("manual");
+  const [xlsxUrl, setXlsxUrl] = useState("");
 
   const counts = guests.reduce(
     (acc, g) => {
@@ -100,6 +113,23 @@ export function GuestsManager({
       setName("");
       setEmail("");
       setMobile("");
+      setOpen(false);
+    } else toast.error(res.message);
+  }
+
+  async function onUpload() {
+    if (!invitationId) {
+      toast.error("Create an invitation first.");
+      return;
+    }
+    if (!xlsxUrl) {
+      toast.error("Provide a hosted XLSX URL.");
+      return;
+    }
+    const res = await uploadM.mutateAsync(xlsxUrl);
+    if (res.success) {
+      toast.success("Guests imported.");
+      setXlsxUrl("");
       setOpen(false);
     } else toast.error(res.message);
   }
@@ -158,74 +188,116 @@ export function GuestsManager({
               Add guest
             </Button>
           </DialogTrigger>
-          <DialogContent className="rounded-3xl sm:max-w-md">
+          <DialogContent className="rounded-3xl sm:max-w-lg">
             <DialogHeader>
               <DialogTitle className="font-display text-3xl font-medium tracking-tight">
-                Add a guest
+                Add guests
               </DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <p className="font-brand mb-2 text-xs uppercase tracking-[0.32em] text-mute">
-                  Invitation
-                </p>
-                <select
-                  value={invitationId}
-                  onChange={(e) => setInvitationId(e.target.value)}
-                  className="h-11 w-full rounded-full border border-hairline bg-background px-5 text-sm focus:border-foreground/40 focus:outline-none"
-                >
-                  {invitations.map((inv) => (
-                    <option key={inv.id} value={inv.id}>
-                      {inv.invitation_type}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <Input
-                placeholder="Full name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="h-11 rounded-full px-5"
-              />
-              <Input
-                type="email"
-                placeholder="Email (optional)"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="h-11 rounded-full px-5"
-              />
-              <Input
-                type="tel"
-                placeholder="Mobile number (optional)"
-                value={mobile}
-                onChange={(e) => setMobile(e.target.value)}
-                className="h-11 rounded-full px-5"
-              />
-              <div>
-                <p className="font-brand mb-2 text-xs uppercase tracking-[0.32em] text-mute">
-                  Send via
-                </p>
-                <div className="flex gap-2">
-                  {(["email", "sms", "whatsapp"] as InvitationMethod[]).map(
-                    (m) => (
-                      <button
-                        key={m}
-                        type="button"
-                        onClick={() => setMethod(m)}
-                        className={cn(
-                          "font-brand flex-1 rounded-full border px-3 py-2 text-xs uppercase tracking-[0.24em] transition-all",
-                          method === m
-                            ? "border-foreground bg-foreground text-background"
-                            : "border-hairline text-mute hover:border-foreground/40 hover:text-foreground",
-                        )}
-                      >
-                        {METHOD_LABEL[m]}
-                      </button>
-                    ),
+
+            <div className="flex gap-1 rounded-full border border-hairline bg-surface/60 p-1">
+              {(["manual", "upload"] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setTab(t)}
+                  className={cn(
+                    "font-brand flex-1 rounded-full px-4 py-1.5 text-xs uppercase tracking-[0.32em] transition-all",
+                    tab === t
+                      ? "bg-foreground text-background"
+                      : "text-mute hover:text-foreground",
                   )}
+                >
+                  {t === "manual" ? "Manual" : "XLSX"}
+                </button>
+              ))}
+            </div>
+
+            <div>
+              <p className="font-brand mb-2 text-xs uppercase tracking-[0.32em] text-mute">
+                Invitation
+              </p>
+              <select
+                value={invitationId}
+                onChange={(e) => setInvitationId(e.target.value)}
+                className="h-11 w-full rounded-full border border-hairline bg-background px-5 text-sm focus:border-foreground/40 focus:outline-none"
+              >
+                {invitations.map((inv) => (
+                  <option key={inv.id} value={inv.id}>
+                    {inv.invitation_type}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {tab === "manual" ? (
+              <div className="space-y-4">
+                <Input
+                  placeholder="Full name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="h-11 rounded-full px-5"
+                />
+                <Input
+                  type="email"
+                  placeholder="Email (optional)"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="h-11 rounded-full px-5"
+                />
+                <Input
+                  type="tel"
+                  placeholder="Mobile number (optional)"
+                  value={mobile}
+                  onChange={(e) => setMobile(e.target.value)}
+                  className="h-11 rounded-full px-5"
+                />
+                <div>
+                  <p className="font-brand mb-2 text-xs uppercase tracking-[0.32em] text-mute">
+                    Send via
+                  </p>
+                  <div className="flex gap-2">
+                    {(["email", "sms", "whatsapp"] as InvitationMethod[]).map(
+                      (m) => (
+                        <button
+                          key={m}
+                          type="button"
+                          onClick={() => setMethod(m)}
+                          className={cn(
+                            "font-brand flex-1 rounded-full border px-3 py-2 text-xs uppercase tracking-[0.24em] transition-all",
+                            method === m
+                              ? "border-foreground bg-foreground text-background"
+                              : "border-hairline text-mute hover:border-foreground/40 hover:text-foreground",
+                          )}
+                        >
+                          {METHOD_LABEL[m]}
+                        </button>
+                      ),
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="rounded-2xl border border-dashed border-hairline bg-surface/40 p-6 text-center">
+                  <FileSpreadsheet className="mx-auto size-8 text-mute" />
+                  <p className="mt-3 font-display text-base">
+                    Bulk import from XLSX
+                  </p>
+                  <p className="mt-1 text-xs italic text-mute">
+                    Provide a public URL to a hosted spreadsheet. Required
+                    columns: name, email, mobile_number, invitation_method.
+                  </p>
+                </div>
+                <Input
+                  type="url"
+                  placeholder="https://example.com/guests.xlsx"
+                  value={xlsxUrl}
+                  onChange={(e) => setXlsxUrl(e.target.value)}
+                  className="h-11 rounded-full px-5"
+                />
+              </div>
+            )}
+
             <DialogFooter>
               <Button
                 variant="ghost"
@@ -234,14 +306,25 @@ export function GuestsManager({
               >
                 Cancel
               </Button>
-              <Button
-                onClick={onAdd}
-                disabled={addM.isPending}
-                className="rounded-full"
-              >
-                <Plus className="size-4" />
-                Add
-              </Button>
+              {tab === "manual" ? (
+                <Button
+                  onClick={onAdd}
+                  disabled={addM.isPending}
+                  className="rounded-full"
+                >
+                  <Plus className="size-4" />
+                  Add
+                </Button>
+              ) : (
+                <Button
+                  onClick={onUpload}
+                  disabled={uploadM.isPending}
+                  className="rounded-full"
+                >
+                  <Upload className="size-4" />
+                  Import
+                </Button>
+              )}
             </DialogFooter>
           </DialogContent>
         </Dialog>
