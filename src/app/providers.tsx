@@ -9,6 +9,9 @@ import {
 import { type PropsWithChildren, useState } from "react";
 import { Toaster } from "sonner";
 
+import { InstallPrompt } from "@/components/pwa/install-prompt";
+import { SwRegistrar } from "@/components/pwa/sw-registrar";
+
 function Providers({ children }: PropsWithChildren) {
   const [queryClient] = useState(
     () =>
@@ -26,6 +29,8 @@ function Providers({ children }: PropsWithChildren) {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         {children}
+        <SwRegistrar />
+        <InstallPrompt />
         <Toaster richColors position="top-right" />
         {process.env.NODE_ENV === "development" && (
           <ReactQueryDevtools initialIsOpen={false} />

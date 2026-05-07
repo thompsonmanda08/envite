@@ -4,6 +4,12 @@
 /.vscode
 /.vscode/*
 
+# Serwist generated artifacts (regenerated on each build)
+public/sw.js
+public/sw.js.map
+public/swe-worker-*.js
+public/workbox-*.js
+
 # dependencies
 /node_modules
 /.pnp

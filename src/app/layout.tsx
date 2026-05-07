@@ -50,6 +50,22 @@ export default function RootLayout({
     >
       <head>
         <meta content="e-nvite" name="apple-mobile-web-app-title" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta
+          name="apple-mobile-web-app-status-bar-style"
+          content="black-translucent"
+        />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta
+          name="theme-color"
+          content="#fafafa"
+          media="(prefers-color-scheme: light)"
+        />
+        <meta
+          name="theme-color"
+          content="#0e0e0e"
+          media="(prefers-color-scheme: dark)"
+        />
       </head>
       <body className="min-h-screen overflow-x-clip antialiased">
         <Providers>{children}</Providers>
@@ -93,9 +109,9 @@ export const metadata: Metadata = {
       "Create, send, and track stunning digital invitations for any occasion",
     images: [
       {
-        url: "/images/logo/logo.png",
-        width: 1200,
-        height: 630,
+        url: "/web-app-manifest-192x192.png",
+        width: 192,
+        height: 192,
         alt: "e-nvite",
       },
     ],
@@ -105,7 +121,7 @@ export const metadata: Metadata = {
     title: "e-nvite — Digital Invitations Made Beautiful",
     description:
       "Create, send, and track stunning digital invitations for any occasion",
-    images: ["/images/logo/logo.png"],
+    images: ["/web-app-manifest-192x192.png"],
     creator: "@envite_official",
   },
   robots: {
