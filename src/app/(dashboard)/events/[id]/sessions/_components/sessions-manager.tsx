@@ -13,6 +13,7 @@ import { toast } from "sonner";
 
 import type { EventSession } from "@/types";
 import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -168,7 +169,7 @@ export function SessionsManager({
                     setDraft({ ...draft, session_name: e.target.value })
                   }
                   placeholder="Ceremony / Reception / After-party"
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
               </Field>
 
@@ -179,7 +180,7 @@ export function SessionsManager({
                   onChange={(e) =>
                     setDraft({ ...draft, session_date: e.target.value })
                   }
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
               </Field>
 
@@ -194,7 +195,7 @@ export function SessionsManager({
                       session_order: Number(e.target.value) || 1,
                     })
                   }
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
               </Field>
 
@@ -205,7 +206,7 @@ export function SessionsManager({
                   onChange={(e) =>
                     setDraft({ ...draft, start_time: e.target.value })
                   }
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
               </Field>
 
@@ -216,7 +217,7 @@ export function SessionsManager({
                   onChange={(e) =>
                     setDraft({ ...draft, end_time: e.target.value })
                   }
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
               </Field>
 
@@ -225,7 +226,7 @@ export function SessionsManager({
                   value={draft.venue}
                   onChange={(e) => setDraft({ ...draft, venue: e.target.value })}
                   placeholder="Garden Pavilion"
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
               </Field>
 
@@ -235,7 +236,7 @@ export function SessionsManager({
                   onChange={(e) =>
                     setDraft({ ...draft, venue_address: e.target.value })
                   }
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
               </Field>
 
@@ -245,7 +246,7 @@ export function SessionsManager({
                   onChange={(e) =>
                     setDraft({ ...draft, dress_code: e.target.value })
                   }
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
               </Field>
 
@@ -261,7 +262,7 @@ export function SessionsManager({
                         e.target.value === "" ? undefined : Number(e.target.value),
                     })
                   }
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
               </Field>
 
@@ -391,24 +392,3 @@ export function SessionsManager({
   );
 }
 
-function Field({
-  label,
-  required,
-  full,
-  children,
-}: {
-  label: string;
-  required?: boolean;
-  full?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className={`space-y-2 ${full ? "md:col-span-2" : ""}`}>
-      <label className="font-brand block text-xs uppercase tracking-[0.32em] text-mute">
-        {label}
-        {required && <span className="ml-1 text-foreground">*</span>}
-      </label>
-      {children}
-    </div>
-  );
-}

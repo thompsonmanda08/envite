@@ -39,13 +39,14 @@ export function EventsList({ events }: { events: EventRecord[] }) {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="relative w-full md:max-w-md">
-          <Search className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-mute" />
+        <div className="w-full md:max-w-md">
           <Input
+            variant="pill"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search by title, venue, theme…"
-            className="h-11 rounded-full border-hairline bg-surface/60 pl-11"
+            startContent={<Search className="size-4" />}
+            classNames={{ input: "bg-surface/60" }}
           />
         </div>
         <div

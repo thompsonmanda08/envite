@@ -5,51 +5,40 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-import type { EventRecord, EventStatus } from "@/types";
+import type { EventRecord } from "@/types";
 import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import {
   useCreateEventMutation,
   useUpdateEventMutation,
 } from "@/hooks/use-events-queries";
 import { useEventTypesQuery } from "@/hooks/use-event-types-queries";
+import { cn } from "@/lib/utils";
 
 type Mode = "create" | "edit";
 
-function FieldShell({
+const bareSelectCls =
+  "h-12 w-full appearance-none cursor-pointer rounded-none border-0 border-b border-hairline bg-transparent px-0 text-base outline-none focus-visible:border-foreground";
+
+const textareaCls =
+  "rounded-2xl border-hairline bg-surface/40 focus-visible:border-foreground focus-visible:ring-0";
+
+function SectionHeading({
+  numeral,
   label,
-  hint,
-  required,
-  children,
-  htmlFor,
 }: {
+  numeral: string;
   label: string;
-  hint?: string;
-  required?: boolean;
-  htmlFor?: string;
-  children: React.ReactNode;
 }) {
   return (
-    <div className="space-y-2">
-      <label
-        htmlFor={htmlFor}
-        className="font-brand flex items-center justify-between text-xs uppercase tracking-[0.32em] text-mute"
-      >
-        <span>
-          {label}
-          {required && <span className="ml-1 text-foreground">*</span>}
-        </span>
-        {hint && <span className="italic normal-case tracking-normal">{hint}</span>}
-      </label>
-      {children}
-    </div>
+    <h2 className="font-brand border-b border-hairline pb-3 text-xs uppercase tracking-[0.42em] text-mute">
+      {numeral} &middot; {label}
+    </h2>
   );
 }
-
-const inputStyle =
-  "h-12 rounded-none border-0 border-b border-hairline bg-transparent px-0 text-base focus-visible:border-foreground focus-visible:ring-0 placeholder:text-mute/60";
 
 export function EventForm({
   mode,
@@ -114,15 +103,14 @@ export function EventForm({
   return (
     <form onSubmit={onSubmit} className="space-y-12">
       <section className="space-y-8">
-        <h2 className="font-brand border-b border-hairline pb-3 text-xs uppercase tracking-[0.42em] text-mute">
-          I &middot; The Particulars
-        </h2>
-        <FieldShell label="Type of occasion" required htmlFor="event_type_id">
+        <SectionHeading numeral="I" label="The Particulars" />
+
+        <Field label="Type of occasion" required htmlFor="event_type_id">
           <select
             id="event_type_id"
             value={form.event_type_id ?? ""}
             onChange={(e) => set("event_type_id", e.target.value)}
-            className={`${inputStyle} w-full appearance-none cursor-pointer`}
+            className={bareSelectCls}
           >
             <option value="">Select a type…</option>
             {eventTypes.map((t) => (
@@ -131,115 +119,120 @@ export function EventForm({
               </option>
             ))}
           </select>
-        </FieldShell>
+        </Field>
 
-        <FieldShell label="Title" required htmlFor="title">
-          <Input
-            id="title"
-            value={form.title ?? ""}
-            onChange={(e) => set("title", e.target.value)}
-            placeholder="An Evening at the Conservatory"
-            className={`${inputStyle} font-display text-2xl md:text-3xl`}
-          />
-        </FieldShell>
+        <Input
+          variant="bare"
+          size="lg"
+          label="Title"
+          required
+          id="title"
+          name="title"
+          value={form.title ?? ""}
+          onChange={(e) => set("title", e.target.value)}
+          placeholder="An Evening at the Conservatory"
+          className={cn("font-display text-2xl md:text-3xl")}
+        />
 
-        <FieldShell label="Description">
+        <Field label="Description">
           <Textarea
             value={form.description ?? ""}
             onChange={(e) => set("description", e.target.value)}
             placeholder="A few words on the occasion…"
             rows={3}
-            className="rounded-2xl border-hairline bg-surface/40 focus-visible:border-foreground focus-visible:ring-0"
+            className={textareaCls}
           />
-        </FieldShell>
+        </Field>
 
         <div className="grid gap-8 md:grid-cols-2">
-          <FieldShell label="Theme" htmlFor="theme">
-            <Input
-              id="theme"
-              value={form.theme ?? ""}
-              onChange={(e) => set("theme", e.target.value)}
-              placeholder="Garden romantic"
-              className={inputStyle}
-            />
-          </FieldShell>
-          <FieldShell label="Dress code" htmlFor="dress_code">
-            <Input
-              id="dress_code"
-              value={form.dress_code ?? ""}
-              onChange={(e) => set("dress_code", e.target.value)}
-              placeholder="Black tie"
-              className={inputStyle}
-            />
-          </FieldShell>
+          <Input
+            variant="bare"
+            size="lg"
+            label="Theme"
+            id="theme"
+            name="theme"
+            value={form.theme ?? ""}
+            onChange={(e) => set("theme", e.target.value)}
+            placeholder="Garden romantic"
+          />
+          <Input
+            variant="bare"
+            size="lg"
+            label="Dress code"
+            id="dress_code"
+            name="dress_code"
+            value={form.dress_code ?? ""}
+            onChange={(e) => set("dress_code", e.target.value)}
+            placeholder="Black tie"
+          />
         </div>
       </section>
 
       <section className="space-y-8">
-        <h2 className="font-brand border-b border-hairline pb-3 text-xs uppercase tracking-[0.42em] text-mute">
-          II &middot; The Hour
-        </h2>
+        <SectionHeading numeral="II" label="The Hour" />
         <div className="grid gap-8 md:grid-cols-3">
-          <FieldShell label="Start" required htmlFor="start_date">
-            <Input
-              id="start_date"
-              type="datetime-local"
-              value={form.start_date ?? ""}
-              onChange={(e) => set("start_date", e.target.value)}
-              className={inputStyle}
-            />
-          </FieldShell>
-          <FieldShell label="End" htmlFor="end_date">
-            <Input
-              id="end_date"
-              type="datetime-local"
-              value={form.end_date ?? ""}
-              onChange={(e) => set("end_date", e.target.value)}
-              className={inputStyle}
-            />
-          </FieldShell>
-          <FieldShell label="RSVP by" htmlFor="rsvp_deadline">
-            <Input
-              id="rsvp_deadline"
-              type="datetime-local"
-              value={form.rsvp_deadline ?? ""}
-              onChange={(e) => set("rsvp_deadline", e.target.value)}
-              className={inputStyle}
-            />
-          </FieldShell>
+          <Input
+            variant="bare"
+            size="lg"
+            label="Start"
+            required
+            id="start_date"
+            name="start_date"
+            type="datetime-local"
+            value={form.start_date ?? ""}
+            onChange={(e) => set("start_date", e.target.value)}
+          />
+          <Input
+            variant="bare"
+            size="lg"
+            label="End"
+            id="end_date"
+            name="end_date"
+            type="datetime-local"
+            value={form.end_date ?? ""}
+            onChange={(e) => set("end_date", e.target.value)}
+          />
+          <Input
+            variant="bare"
+            size="lg"
+            label="RSVP by"
+            id="rsvp_deadline"
+            name="rsvp_deadline"
+            type="datetime-local"
+            value={form.rsvp_deadline ?? ""}
+            onChange={(e) => set("rsvp_deadline", e.target.value)}
+          />
         </div>
       </section>
 
       <section className="space-y-8">
-        <h2 className="font-brand border-b border-hairline pb-3 text-xs uppercase tracking-[0.42em] text-mute">
-          III &middot; The Setting
-        </h2>
+        <SectionHeading numeral="III" label="The Setting" />
         <div className="grid gap-8 md:grid-cols-2">
-          <FieldShell label="Venue" htmlFor="venue">
-            <Input
-              id="venue"
-              value={form.venue ?? ""}
-              onChange={(e) => set("venue", e.target.value)}
-              placeholder="The Royal Hall"
-              className={inputStyle}
-            />
-          </FieldShell>
-          <FieldShell label="Address" htmlFor="venue_address">
-            <Input
-              id="venue_address"
-              value={form.venue_address ?? ""}
-              onChange={(e) => set("venue_address", e.target.value)}
-              placeholder="12 Park Lane, City"
-              className={inputStyle}
-            />
-          </FieldShell>
+          <Input
+            variant="bare"
+            size="lg"
+            label="Venue"
+            id="venue"
+            name="venue"
+            value={form.venue ?? ""}
+            onChange={(e) => set("venue", e.target.value)}
+            placeholder="The Royal Hall"
+          />
+          <Input
+            variant="bare"
+            size="lg"
+            label="Address"
+            id="venue_address"
+            name="venue_address"
+            value={form.venue_address ?? ""}
+            onChange={(e) => set("venue_address", e.target.value)}
+            placeholder="12 Park Lane, City"
+          />
         </div>
       </section>
 
       <section className="space-y-8">
-        <h2 className="font-brand border-b border-hairline pb-3 text-xs uppercase tracking-[0.42em] text-mute">
-          IV &middot; The Guests
-        </h2>
+        <SectionHeading numeral="IV" label="The Guests" />
         <div className="flex items-center justify-between rounded-2xl border border-hairline bg-surface/40 p-5">
           <div>
             <p className="font-display text-lg">Require an RSVP</p>
@@ -253,48 +246,51 @@ export function EventForm({
           />
         </div>
         <div className="grid gap-8 md:grid-cols-3">
-          <FieldShell label="Max attendees" htmlFor="max_attendees">
-            <Input
-              id="max_attendees"
-              type="number"
-              min={0}
-              value={form.max_attendees ?? ""}
-              onChange={(e) =>
-                set(
-                  "max_attendees",
-                  e.target.value === "" ? undefined : Number(e.target.value),
-                )
-              }
-              className={inputStyle}
-            />
-          </FieldShell>
-          <FieldShell label="Contact email" htmlFor="contact_email">
-            <Input
-              id="contact_email"
-              type="email"
-              value={form.contact_email ?? ""}
-              onChange={(e) => set("contact_email", e.target.value)}
-              className={inputStyle}
-            />
-          </FieldShell>
-          <FieldShell label="Contact phone" htmlFor="contact_phone">
-            <Input
-              id="contact_phone"
-              type="tel"
-              value={form.contact_phone ?? ""}
-              onChange={(e) => set("contact_phone", e.target.value)}
-              className={inputStyle}
-            />
-          </FieldShell>
+          <Input
+            variant="bare"
+            size="lg"
+            label="Max attendees"
+            id="max_attendees"
+            name="max_attendees"
+            type="number"
+            min={0}
+            value={form.max_attendees ?? ""}
+            onChange={(e) =>
+              set(
+                "max_attendees",
+                e.target.value === "" ? undefined : Number(e.target.value),
+              )
+            }
+          />
+          <Input
+            variant="bare"
+            size="lg"
+            label="Contact email"
+            id="contact_email"
+            name="contact_email"
+            type="email"
+            value={form.contact_email ?? ""}
+            onChange={(e) => set("contact_email", e.target.value)}
+          />
+          <Input
+            variant="bare"
+            size="lg"
+            label="Contact phone"
+            id="contact_phone"
+            name="contact_phone"
+            type="tel"
+            value={form.contact_phone ?? ""}
+            onChange={(e) => set("contact_phone", e.target.value)}
+          />
         </div>
-        <FieldShell label="Special instructions">
+        <Field label="Special instructions">
           <Textarea
             value={form.special_instructions ?? ""}
             onChange={(e) => set("special_instructions", e.target.value)}
             rows={3}
-            className="rounded-2xl border-hairline bg-surface/40 focus-visible:border-foreground focus-visible:ring-0"
+            className={textareaCls}
           />
-        </FieldShell>
+        </Field>
       </section>
 
       <div className="flex flex-col-reverse items-stretch gap-3 border-t border-hairline pt-8 md:flex-row md:items-center md:justify-between">
@@ -313,7 +309,8 @@ export function EventForm({
           <Button
             type="submit"
             disabled={submitting}
-            className="rounded-full px-8"
+            variant="solid"
+            size="xl"
           >
             {submitting && <Loader2 className="size-4 animate-spin" />}
             {mode === "create" ? "Compose" : "Save changes"}

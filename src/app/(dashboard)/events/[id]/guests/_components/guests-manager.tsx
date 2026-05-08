@@ -219,7 +219,7 @@ export function GuestsManager({
               <select
                 value={invitationId}
                 onChange={(e) => setInvitationId(e.target.value)}
-                className="h-11 w-full rounded-full border border-hairline bg-background px-5 text-sm focus:border-foreground/40 focus:outline-none"
+                className="h-11 w-full cursor-pointer appearance-none rounded-full border border-hairline bg-background px-5 text-sm outline-none focus-visible:border-foreground/40"
               >
                 {invitations.map((inv) => (
                   <option key={inv.id} value={inv.id}>
@@ -235,21 +235,21 @@ export function GuestsManager({
                   placeholder="Full name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
                 <Input
                   type="email"
                   placeholder="Email (optional)"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
                 <Input
                   type="tel"
                   placeholder="Mobile number (optional)"
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
                 <div>
                   <p className="font-brand mb-2 text-xs uppercase tracking-[0.32em] text-mute">
@@ -293,7 +293,7 @@ export function GuestsManager({
                   placeholder="https://example.com/guests.xlsx"
                   value={xlsxUrl}
                   onChange={(e) => setXlsxUrl(e.target.value)}
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
               </div>
             )}

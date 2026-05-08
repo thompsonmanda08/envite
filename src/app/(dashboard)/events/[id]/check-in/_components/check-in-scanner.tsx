@@ -91,15 +91,15 @@ export function CheckInScanner({
         </div>
       </div>
 
-      <div className="relative">
-        <Search className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-mute" />
-        <Input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Search by name, email, or phone…"
-          className="h-12 rounded-full border-hairline bg-surface/60 pl-11"
-        />
-      </div>
+      <Input
+        variant="pill"
+        size="lg"
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+        placeholder="Search by name, email, or phone…"
+        startContent={<Search className="size-4" />}
+        classNames={{ input: "bg-surface/60" }}
+      />
 
       <p className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
         {eligible.length} confirmed guest{eligible.length === 1 ? "" : "s"}

@@ -5,6 +5,9 @@ import { Edit, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { EventType } from "@/types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   useCreateEventTypeMutation,
   useDeleteEventTypeMutation,
@@ -28,9 +31,6 @@ const EMPTY: Draft = {
   price_per_invitation: 0,
   max_free_invitations: 0,
 };
-
-const inputCls =
-  "rounded-lg border border-hairline bg-surface px-4 py-3 text-sm focus:border-foreground/40 focus:outline-none";
 
 export default function EventTypesList({
   initialData,
@@ -194,7 +194,7 @@ export default function EventTypesList({
               {isEdit ? "Edit template" : "New template"}
             </h2>
             <div className="mt-6 flex flex-col gap-4">
-              <input
+              <Input
                 ref={firstFieldRef}
                 placeholder="Name"
                 required
@@ -202,28 +202,26 @@ export default function EventTypesList({
                 onChange={(e) =>
                   setDraft((d) => ({ ...d, name: e.target.value }))
                 }
-                className={inputCls}
               />
-              <textarea
+              <Textarea
                 placeholder="Description"
                 value={draft.description}
                 onChange={(e) =>
                   setDraft((d) => ({ ...d, description: e.target.value }))
                 }
                 rows={3}
-                className={inputCls}
+                className="rounded-2xl border-hairline bg-surface/40 focus-visible:border-foreground focus-visible:ring-0"
               />
-              <input
+              <Input
                 placeholder="Icon URL"
                 type="url"
                 value={draft.icon_url}
                 onChange={(e) =>
                   setDraft((d) => ({ ...d, icon_url: e.target.value }))
                 }
-                className={inputCls}
               />
               <div className="grid grid-cols-2 gap-3">
-                <input
+                <Input
                   type="number"
                   min={0}
                   step="0.01"
@@ -232,9 +230,8 @@ export default function EventTypesList({
                   onChange={(e) =>
                     setNum("price_per_invitation", e.target.value)
                   }
-                  className={inputCls}
                 />
-                <input
+                <Input
                   type="number"
                   min={0}
                   placeholder="Free invites"
@@ -242,22 +239,23 @@ export default function EventTypesList({
                   onChange={(e) =>
                     setNum("max_free_invitations", e.target.value)
                   }
-                  className={inputCls}
                 />
               </div>
             </div>
             <div className="mt-6 flex justify-end gap-2">
-              <button
+              <Button
                 type="button"
+                variant="outline"
                 onClick={() => setOpen(false)}
-                className="rounded-full border border-hairline px-4 py-2 text-sm"
+                className="rounded-full"
               >
                 Cancel
-              </button>
-              <button
+              </Button>
+              <Button
                 type="submit"
                 disabled={submitting}
-                className="rounded-full bg-foreground px-5 py-2 text-sm font-medium text-background disabled:opacity-50"
+                variant="solid"
+                className="rounded-full"
               >
                 {submitting
                   ? isEdit
@@ -266,7 +264,7 @@ export default function EventTypesList({
                   : isEdit
                     ? "Save"
                     : "Create"}
-              </button>
+              </Button>
             </div>
           </form>
         </div>

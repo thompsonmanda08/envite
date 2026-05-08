@@ -5,6 +5,8 @@ import { motion, useReducedMotion } from "framer-motion";
 import { Lock, UserRound } from "lucide-react";
 import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   useProfileQuery,
   useUpdatePasswordMutation,
@@ -13,9 +15,6 @@ import {
 import type { AuthUser } from "@/types";
 
 const ease = [0.22, 1, 0.36, 1] as const;
-
-const inputCls =
-  "w-full rounded-xl border border-hairline bg-background px-4 py-3 text-sm transition-colors focus:border-foreground/40 focus:outline-none";
 
 const FIELDS = [
   { key: "first_name", label: "First name", autoComplete: "given-name", type: "text" },
@@ -128,20 +127,17 @@ export default function ProfileForm({ initial }: { initial: AuthUser }) {
 
           <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
             {FIELDS.map((f) => (
-              <label key={f.key} className="flex flex-col gap-1.5">
-                <span className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
-                  {f.label}
-                </span>
-                <input
-                  type={f.type}
-                  value={profile[f.key]}
-                  onChange={(e) =>
-                    setProfile((p) => ({ ...p, [f.key]: e.target.value }))
-                  }
-                  autoComplete={f.autoComplete}
-                  className={inputCls}
-                />
-              </label>
+              <Input
+                key={f.key}
+                label={f.label}
+                type={f.type}
+                value={profile[f.key]}
+                onChange={(e) =>
+                  setProfile((p) => ({ ...p, [f.key]: e.target.value }))
+                }
+                autoComplete={f.autoComplete}
+                name={f.key}
+              />
             ))}
           </div>
 
@@ -151,13 +147,13 @@ export default function ProfileForm({ initial }: { initial: AuthUser }) {
                 ? "Last saved just now"
                 : "Changes save manually"}
             </p>
-            <button
+            <Button
               type="submit"
               disabled={updateProfile.isPending}
-              className="group inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-2.5 text-sm font-medium text-background shadow-[0_8px_24px_-12px_color-mix(in_oklch,var(--foreground)_50%,transparent)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-12px_color-mix(in_oklch,var(--foreground)_60%,transparent)] disabled:translate-y-0 disabled:opacity-50 disabled:shadow-none"
+              variant="solid"
             >
               {updateProfile.isPending ? "Saving…" : "Save profile"}
-            </button>
+            </Button>
           </div>
         </motion.form>
 
@@ -184,36 +180,33 @@ export default function ProfileForm({ initial }: { initial: AuthUser }) {
           </div>
 
           <div className="mt-6">
-            <label className="flex flex-col gap-1.5">
-              <span className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
-                New password
-              </span>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="At least eight characters"
-                autoComplete="new-password"
-                className={inputCls}
-              />
-              <span className="mt-1 font-brand text-xs uppercase tracking-[0.28em] text-foreground/50">
-                {password.length === 0
+            <Input
+              label="New password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="At least eight characters"
+              autoComplete="new-password"
+              name="new_password"
+              hint={
+                password.length === 0
                   ? "—"
                   : password.length < 8
                     ? `${8 - password.length} more to go`
-                    : "Strong enough"}
-              </span>
-            </label>
+                    : "Strong enough"
+              }
+            />
           </div>
 
           <div className="mt-8 flex justify-end">
-            <button
+            <Button
               type="submit"
               disabled={updatePassword.isPending || password.length < 8}
-              className="rounded-full border border-hairline px-6 py-2.5 text-sm font-medium text-foreground transition-all duration-300 hover:border-foreground/30 hover:bg-surface disabled:opacity-50"
+              variant="outline"
+              className="rounded-full"
             >
               {updatePassword.isPending ? "Saving…" : "Update password"}
-            </button>
+            </Button>
           </div>
         </motion.form>
 

@@ -177,7 +177,7 @@ export function InvitationsManager({
                     setDraft({ ...draft, invitation_type: e.target.value })
                   }
                   placeholder="All access pass, Reception only…"
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
               </div>
 
@@ -191,7 +191,7 @@ export function InvitationsManager({
                     setDraft({ ...draft, custom_image_url: e.target.value })
                   }
                   placeholder="https://…"
-                  className="h-11 rounded-full px-5"
+                  variant="pill"
                 />
               </div>
 
