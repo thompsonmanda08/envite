@@ -8,6 +8,7 @@ import type { APIResponse, EventRecord, EventStatus } from "@/types";
 import authenticatedApiClient, {
   badRequestResponse,
   fromBackend,
+  fromBackendList,
   handleError,
 } from "./api-config";
 
@@ -44,7 +45,7 @@ export async function getMyEvents(
       params: toQuery(params),
       next: { tags: [CACHE_TAGS.EVENTS], revalidate: 30 },
     });
-    return fromBackend<EventRecord[]>(res);
+    return fromBackendList<EventRecord>(res);
   } catch (error: any) {
     return handleError(error, "GET", url);
   }
@@ -61,7 +62,7 @@ export async function getAllEvents(
       params: toQuery(params),
       next: { tags: [CACHE_TAGS.EVENTS], revalidate: 60 },
     });
-    return fromBackend<EventRecord[]>(res);
+    return fromBackendList<EventRecord>(res);
   } catch (error: any) {
     return handleError(error, "GET", url);
   }

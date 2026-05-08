@@ -23,6 +23,7 @@ import type {
 import authenticatedApiClient, {
   badRequestResponse,
   fromBackend,
+  fromBackendList,
   handleError,
 } from "./api-config";
 
@@ -58,7 +59,7 @@ export async function getGuests(
         revalidate: 30,
       },
     });
-    return fromBackend<Guest[]>(res);
+    return fromBackendList<Guest>(res);
   } catch (error: any) {
     return handleError(error, "GET", url);
   }

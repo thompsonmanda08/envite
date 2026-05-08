@@ -8,6 +8,7 @@ import type { APIResponse, Invitation } from "@/types";
 import authenticatedApiClient, {
   badRequestResponse,
   fromBackend,
+  fromBackendList,
   handleError,
 } from "./api-config";
 
@@ -28,7 +29,7 @@ export async function getInvitations(
       method: "GET",
       next: { tags: [CACHE_TAGS.INVITATIONS], revalidate: 60 },
     });
-    return fromBackend<Invitation[]>(res);
+    return fromBackendList<Invitation>(res);
   } catch (error: any) {
     return handleError(error, "GET", url);
   }

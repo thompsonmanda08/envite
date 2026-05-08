@@ -4,6 +4,7 @@ import { revalidateTag } from "next/cache";
 import type { APIResponse, EventSession } from "@/types";
 import authenticatedApiClient, {
   fromBackend,
+  fromBackendList,
   handleError,
   badRequestResponse,
 } from "./api-config";
@@ -42,7 +43,7 @@ export async function getEventSessions(
       params: toQuery(params),
       next: { tags: [CACHE_TAGS.SESSIONS_BY_EVENT(eventId)], revalidate: 30 },
     });
-    return fromBackend<EventSession[]>(res);
+    return fromBackendList<EventSession>(res);
   } catch (error: any) {
     return handleError(error, "GET", url);
   }

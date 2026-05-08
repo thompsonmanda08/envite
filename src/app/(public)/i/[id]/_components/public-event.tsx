@@ -2,7 +2,7 @@
 
 import { format } from "date-fns";
 import { motion, useReducedMotion } from "framer-motion";
-import { Calendar, MapPin, Sparkles } from "lucide-react";
+import { Asterisk, Calendar, MapPin } from "lucide-react";
 
 import type { EventRecord, EventSession } from "@/types";
 
@@ -44,7 +44,7 @@ export default function PublicEvent({
           className="text-center"
         >
           <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
-            <Sparkles size={11} className="mr-2 inline-block text-secondary" />
+            <Asterisk size={11} className="mr-2 inline-block text-secondary" />
             You are invited
           </p>
           <h1 className="mt-6 font-display text-[clamp(2.75rem,8vw,5.5rem)] font-medium leading-[1.02] tracking-[-0.035em] text-foreground">

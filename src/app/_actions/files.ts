@@ -6,6 +6,7 @@ import authenticatedApiClient, {
   axios,
   badRequestResponse,
   fromBackend,
+  fromBackendList,
   handleError,
 } from "./api-config";
 
@@ -65,7 +66,7 @@ export async function listFiles(
     const res = PROTECTED.includes(collection)
       ? await authenticatedApiClient({ url, method: "GET" })
       : await axios.get(url);
-    return fromBackend<FileRecord[]>(res);
+    return fromBackendList<FileRecord>(res);
   } catch (error: any) {
     return handleError(error, "GET", url);
   }

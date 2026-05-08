@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -24,7 +24,6 @@ export default function LoginPage() {
 
   const initialMode: Mode =
     params.get("signup") === "true" ? "signup" : "signin";
-  const justRegistered = params.get("registered") === "1";
 
   const [mode, setMode] = useState<Mode>(initialMode);
   const login = useLoginMutation();
@@ -37,12 +36,6 @@ export default function LoginPage() {
     last_name: "",
     phone: "",
   });
-
-  useEffect(() => {
-    if (justRegistered) {
-      toast.success("Account created. Sign in to continue.");
-    }
-  }, [justRegistered]);
 
   function bind<K extends keyof typeof form>(k: K) {
     return {
@@ -70,9 +63,10 @@ export default function LoginPage() {
       return toast.error("First and last name are required");
     }
     const res = await register.mutateAsync(form);
-    if (!res.success) return toast.error(res.message);
-    router.replace("/login?registered=1");
+    if (!res.success) return toast.error(res.message || "Registration failed");
+    toast.success("Account created. Sign in to continue.");
     setMode("signin");
+    setForm((f) => ({ ...f, first_name: "", last_name: "", phone: "" }));
   }
 
   const pending = login.isPending || register.isPending;

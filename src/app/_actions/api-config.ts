@@ -196,6 +196,7 @@ export default authenticatedApiClient;
 // `import authenticatedApiClient, { fromBackend, handleError } from "./api-config"`
 export {
   fromBackend,
+  fromBackendList,
   handleError,
   successResponse,
   unauthorizedResponse,

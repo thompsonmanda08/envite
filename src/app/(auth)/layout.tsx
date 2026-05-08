@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { Sparkles } from "lucide-react";
+import { Asterisk } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/components/base/logo";
 
@@ -43,7 +43,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
           </span>
         </div>
         <p className="hidden font-brand text-xs uppercase tracking-[0.32em] text-mute md:block">
-          <Sparkles size={11} className="mr-2 inline-block text-secondary" />
+          <Asterisk size={11} className="mr-2 inline-block text-secondary" />
           Welcome back
         </p>
       </header>

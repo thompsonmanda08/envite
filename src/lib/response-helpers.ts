@@ -27,12 +27,41 @@ export function fromBackend<T = any>(
       }
     : undefined;
 
+  const status = axiosResponse?.status ?? 0;
+  const httpOk = status >= 200 && status < 300;
+
   return {
-    success: body?.success ?? false,
+    success: body?.success ?? httpOk,
     message: message || body?.message || "",
-    data: (body?.data ?? null) as T | null,
+    data: (body?.data ?? body ?? null) as T | null,
     pagination,
   };
+}
+
+/**
+ * List variant — guarantees `data` is always an array, regardless of backend
+ * envelope shape. Accepts `[...]`, `{data:[...]}`, `{events:[...]}`,
+ * `{items:[...]}`, `{results:[...]}`, or any single-array-valued object.
+ */
+export function fromBackendList<T = any>(
+  axiosResponse: any,
+  message?: string,
+): APIResponse<T[]> {
+  const base = fromBackend<any>(axiosResponse, message);
+  const raw: any = base.data;
+  let list: T[] = [];
+  if (Array.isArray(raw)) list = raw as T[];
+  else if (raw && typeof raw === "object") {
+    if (Array.isArray(raw.data)) list = raw.data;
+    else if (Array.isArray(raw.events)) list = raw.events;
+    else if (Array.isArray(raw.items)) list = raw.items;
+    else if (Array.isArray(raw.results)) list = raw.results;
+    else {
+      const arrKey = Object.keys(raw).find((k) => Array.isArray(raw[k]));
+      if (arrKey) list = raw[arrKey];
+    }
+  }
+  return { ...base, data: list };
 }
 
 export function successResponse<T = any>(

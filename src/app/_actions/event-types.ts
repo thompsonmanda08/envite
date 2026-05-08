@@ -8,6 +8,7 @@ import { CACHE_TAGS } from "@/lib/cache-tags";
 
 import authenticatedApiClient, {
   fromBackend,
+  fromBackendList,
   handleError,
   badRequestResponse,
 } from "./api-config";
@@ -22,7 +23,7 @@ export async function getEventTypes(): Promise<APIResponse<EventType[]>> {
       next: { tags: [CACHE_TAGS.EVENT_TYPES], revalidate: 300 },
     });
 
-    return fromBackend<EventType[]>(res);
+    return fromBackendList<EventType>(res);
   } catch (error: any) {
     return handleError(error, "GET", url);
   }

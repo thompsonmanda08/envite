@@ -1,57 +1,41 @@
-import {
-  BarChart3Icon,
-  CalendarIcon,
-  HomeIcon,
-  MailIcon,
-  SettingsIcon,
-  SparklesIcon,
-} from "lucide-react";
-import React, { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 
-// TRIGRR
-
+import { getCurrentUser } from "@/lib/auth";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardLayout as DashboardShell } from "@/components/layout/dashboard-layout";
 import { SiteHeader } from "@/components/layout/header";
 import { UserMenuLoader } from "@/components/layout/header/user-menu-loader";
-import {
-  AppSidebar,
-  type SidebarNavGroup,
-} from "@/components/layout/sidebar/app-sidebar";
+import { AppSidebar } from "@/components/layout/sidebar/app-sidebar";
 
-const navGroups: SidebarNavGroup[] = [
-  {
-    label: "Workspace",
-    items: [
-      { label: "Atelier", href: "/dashboard", icon: HomeIcon },
-      { label: "Events", href: "/dashboard/events", icon: CalendarIcon },
-      { label: "Invitations", href: "/dashboard/invitations", icon: MailIcon },
-    ],
-  },
-  {
-    label: "Library",
-    items: [
-      {
-        label: "Event Types",
-        href: "/dashboard/event-types",
-        icon: SparklesIcon,
-      },
-      { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3Icon },
-      {
-        label: "Settings",
-        href: "/dashboard/settings",
-        icon: SettingsIcon,
-      },
-    ],
-  },
-];
+export default async function DashboardLayoutPage({
+  children,
+}: PropsWithChildren) {
+  const user = await getCurrentUser();
+  const fullName =
+    [user?.first_name, user?.last_name].filter(Boolean).join(" ") ||
+    user?.email ||
+    "";
+  const role = user?.role
+    ? String(user.role).replace(/_/g, " ")
+    : user?.account_type || "Host";
 
-export default function DashboardLayoutPage({ children }: PropsWithChildren) {
   return (
     <SidebarProvider>
       <DashboardShell
         header={<SiteHeader userMenu={<UserMenuLoader />} />}
-        sidebar={<AppSidebar groups={navGroups} />}
+        sidebar={
+          <AppSidebar
+            user={
+              fullName
+                ? {
+                    name: fullName,
+                    role,
+                    avatarUrl: user?.avatar_url,
+                  }
+                : undefined
+            }
+          />
+        }
       >
         {children}
       </DashboardShell>

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowDownRight, Calendar, MapPin, Sparkles } from "lucide-react";
+import { ArrowDownRight, Asterisk, Calendar, MapPin } from "lucide-react";
 import Link from "next/link";
 
 import { Container } from "./section";
@@ -34,7 +34,7 @@ export default function HeroSection() {
           transition={{ duration: 0.6, ease }}
         >
           <Badge>
-            <Sparkles className="text-secondary" size={12} />
+            <Asterisk className="text-secondary" size={12} />
             Now with smart RSVP automation
           </Badge>
         </motion.div>
