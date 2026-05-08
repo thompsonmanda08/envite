@@ -6,12 +6,11 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useRequestPasswordResetMutation } from "@/hooks/use-auth-mutations";
 
 const ease = [0.22, 1, 0.36, 1] as const;
-
-const inputCls =
-  "w-full rounded-xl border border-hairline bg-background px-4 py-3 text-sm transition-colors focus:border-foreground/40 focus:outline-none";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -74,27 +73,25 @@ export default function ForgotPasswordPage() {
         </div>
       ) : (
         <form onSubmit={onSubmit} className="mt-10 flex flex-col gap-4">
-          <label className="flex flex-col gap-1.5">
-            <span className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
-              Email
-            </span>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-              placeholder="you@example.com"
-              className={inputCls}
-            />
-          </label>
-          <button
+          <Input
+            label="Email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
+            placeholder="you@example.com"
+            name="email"
+          />
+          <Button
             type="submit"
             disabled={reset.isPending}
-            className="mt-2 rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background shadow-[0_8px_24px_-12px_color-mix(in_oklch,var(--foreground)_50%,transparent)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-12px_color-mix(in_oklch,var(--foreground)_60%,transparent)] disabled:translate-y-0 disabled:opacity-50 disabled:shadow-none"
+            variant="solid"
+            size="xl"
+            className="mt-2"
           >
             {reset.isPending ? "Sending…" : "Send reset link"}
-          </button>
+          </Button>
         </form>
       )}
     </motion.div>

@@ -6,15 +6,14 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   useLoginMutation,
   useRegisterMutation,
 } from "@/hooks/use-auth-mutations";
 
 const ease = [0.22, 1, 0.36, 1] as const;
-
-const inputCls =
-  "w-full rounded-xl border border-hairline bg-background px-4 py-3 text-sm transition-colors focus:border-foreground/40 focus:outline-none";
 
 type Mode = "signin" | "signup";
 
@@ -135,64 +134,60 @@ export default function LoginPage() {
       <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-4">
         {mode === "signup" && (
           <div className="grid grid-cols-2 gap-3">
-            <Field label="First name" required>
-              <input
-                {...bind("first_name")}
-                required
-                autoComplete="given-name"
-                className={inputCls}
-              />
-            </Field>
-            <Field label="Last name" required>
-              <input
-                {...bind("last_name")}
-                required
-                autoComplete="family-name"
-                className={inputCls}
-              />
-            </Field>
+            <Input
+              {...bind("first_name")}
+              label="First name"
+              required
+              autoComplete="given-name"
+              name="first_name"
+            />
+            <Input
+              {...bind("last_name")}
+              label="Last name"
+              required
+              autoComplete="family-name"
+              name="last_name"
+            />
           </div>
         )}
 
-        <Field label="Email" required>
-          <input
-            {...bind("email")}
-            type="email"
-            required
-            autoComplete="email"
-            placeholder="you@example.com"
-            className={inputCls}
-          />
-        </Field>
+        <Input
+          {...bind("email")}
+          label="Email"
+          type="email"
+          required
+          autoComplete="email"
+          placeholder="you@example.com"
+          name="email"
+        />
 
         {mode === "signup" && (
-          <Field label="Phone" required>
-            <input
-              {...bind("phone")}
-              type="tel"
-              required
-              autoComplete="tel"
-              placeholder="+1 (555) 555-0100"
-              className={inputCls}
-            />
-          </Field>
+          <Input
+            {...bind("phone")}
+            label="Phone"
+            type="tel"
+            required
+            autoComplete="tel"
+            placeholder="+1 (555) 555-0100"
+            name="phone"
+          />
         )}
 
-        <Field
-          label="Password"
-          required
-          hint={
-            mode === "signin" ? (
+        <div className="flex flex-col gap-2">
+          <div className="flex items-baseline justify-between">
+            <span className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
+              Password<span className="ml-1 text-foreground">*</span>
+            </span>
+            {mode === "signin" && (
               <Link
                 href="/forgot-password"
                 className="font-brand text-xs uppercase tracking-[0.28em] text-mute transition-colors hover:text-foreground"
               >
                 Forgot?
               </Link>
-            ) : undefined
-          }
-        >
-          <input
+            )}
+          </div>
+          <Input
             {...bind("password")}
             type="password"
             required
@@ -200,21 +195,24 @@ export default function LoginPage() {
               mode === "signin" ? "current-password" : "new-password"
             }
             placeholder={mode === "signup" ? "Min 8 characters" : ""}
-            className={inputCls}
+            id="password"
+            name="password"
           />
-        </Field>
+        </div>
 
-        <button
+        <Button
           type="submit"
           disabled={pending}
-          className="mt-2 inline-flex items-center justify-center rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background shadow-[0_8px_24px_-12px_color-mix(in_oklch,var(--foreground)_50%,transparent)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_30px_-12px_color-mix(in_oklch,var(--foreground)_60%,transparent)] disabled:translate-y-0 disabled:opacity-50 disabled:shadow-none"
+          variant="solid"
+          size="xl"
+          className="mt-2"
         >
           {pending
             ? "Please wait…"
             : mode === "signin"
               ? "Sign in"
               : "Create account"}
-        </button>
+        </Button>
       </form>
 
       <Ornament className="mt-12" />
@@ -237,31 +235,6 @@ export default function LoginPage() {
         .
       </p>
     </motion.div>
-  );
-}
-
-function Field({
-  label,
-  required,
-  hint,
-  children,
-}: {
-  label: string;
-  required?: boolean;
-  hint?: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <label className="flex flex-col gap-1.5">
-      <span className="flex items-baseline justify-between">
-        <span className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
-          {label}
-          {required ? " ·" : null}
-        </span>
-        {hint}
-      </span>
-      {children}
-    </label>
   );
 }
 

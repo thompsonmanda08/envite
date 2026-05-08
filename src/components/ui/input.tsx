@@ -1,143 +1,144 @@
 import * as React from "react";
-import { motion } from "framer-motion";
+import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  label?: string;
-  name?: string;
-  onError?: boolean;
-  error?: string;
-  errorText?: string;
-  descriptionText?: string;
-  isDisabled?: boolean;
-  isInvalid?: boolean;
-  startContent?: React.ReactNode;
-  endContent?: React.ReactNode;
-  classNames?: {
-    wrapper?: string;
-    input?: string;
+const inputVariants = cva(
+  "w-full bg-transparent text-foreground placeholder:text-mute/60 outline-none transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive",
+  {
+    variants: {
+      variant: {
+        default:
+          "rounded-xl border border-hairline bg-background focus-visible:border-foreground/40",
+        bare:
+          "rounded-none border-0 border-b border-hairline px-0 focus-visible:border-foreground",
+        pill:
+          "rounded-full border border-hairline bg-background focus-visible:border-foreground/40",
+      },
+      size: {
+        sm: "h-9 px-3 text-sm",
+        default: "h-11 px-4 text-sm",
+        lg: "h-12 px-5 text-base",
+      },
+    },
+    compoundVariants: [
+      { variant: "bare", size: "sm", class: "px-0" },
+      { variant: "bare", size: "default", class: "px-0" },
+      { variant: "bare", size: "lg", class: "px-0" },
+      { variant: "pill", size: "default", class: "px-5" },
+      { variant: "pill", size: "lg", class: "px-6" },
+    ],
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  },
+);
+
+export type InputProps = Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "size"
+> &
+  VariantProps<typeof inputVariants> & {
     label?: string;
-    errorText?: string;
-    descriptionText?: string;
+    name?: string;
+    error?: string;
+    hint?: string;
+    isInvalid?: boolean;
+    startContent?: React.ReactNode;
+    endContent?: React.ReactNode;
+    classNames?: {
+      wrapper?: string;
+      input?: string;
+      label?: string;
+      error?: string;
+      hint?: string;
+    };
   };
-};
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
-      startContent,
-      endContent,
+      variant,
+      size,
       className,
-      type,
+      classNames,
       label,
       name,
-      classNames,
-      onError,
+      id,
       error,
-      maxLength,
-      max,
+      hint,
       isInvalid,
-      min,
-      isDisabled,
-      descriptionText,
-      errorText = "",
+      startContent,
+      endContent,
+      type = "text",
       ...props
     },
     ref,
   ) => {
+    const fieldId = id ?? name;
+    const invalid = isInvalid || !!error;
+
     return (
-      <div
-        className={cn("flex w-full flex-col", classNames?.wrapper, {
-          "cursor-not-allowed opacity-50": isDisabled,
-        })}
-      >
+      <div className={cn("flex w-full flex-col gap-2", classNames?.wrapper)}>
         {label && (
           <label
+            htmlFor={fieldId}
             className={cn(
-              "text-sm mb-0.5 font-medium text-slate-700 dark:text-slate-300",
-              {
-                "text-red-500": onError || isInvalid,
-                "opacity-50": isDisabled || props?.disabled,
-              },
+              "font-brand text-xs uppercase tracking-[0.32em] text-mute",
+              invalid && "text-destructive",
               classNames?.label,
             )}
-            htmlFor={name}
           >
-            {label}{" "}
+            {label}
             {props?.required && (
-              <span className="font-bold text-red-500"> *</span>
+              <span className="ml-1 text-foreground">*</span>
             )}
           </label>
         )}
-        <div
-          className={cn("w-full flex items-center relative", {
-            "gap-2 ": startContent || endContent,
-          })}
-        >
-          {startContent ? (
-            <span className="absolute px-2 w-5 h-5 aspect-square grid items-center">
+
+        <div className="relative flex items-center">
+          {startContent && (
+            <span className="pointer-events-none absolute left-3 grid place-items-center text-mute">
               {startContent}
             </span>
-          ) : null}
+          )}
           <input
             ref={ref}
+            id={fieldId}
+            name={name}
+            type={type}
+            aria-invalid={invalid || undefined}
             className={cn(
-              // Base styles
-              "w-full px-4 py-1.75 text-base bg-foreground/5 border border-border rounded-lg transition-all duration-200 outline-none",
-              // Placeholder styles
-              "placeholder:text-slate-400 dark:placeholder:text-foreground/30",
-              // Focus styles with primary color
-              "focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 focus:shadow-lg focus:shadow-primary-500/10",
-              // Hover styles
-              "hover:border-slate-300/50",
-              // Error styles
-              {
-                "border-red-500 focus:border-red-500 focus:ring-red-500/20 focus:shadow-red-500/10":
-                  onError || isInvalid,
-              },
-              // Disabled styles
-              "disabled:bg-slate-50/50 disabled:cursor-not-allowed disabled:dark:bg-slate-50/10 disabled:text-foreground/70",
-              // Text styles
-              "text-slate-900 dark:text-slate-100 selection:bg-primary-100 selection:text-primary-900",
-              { "pl-8 ": startContent },
-              { "pr-8 ": endContent },
+              inputVariants({ variant, size }),
+              startContent && "pl-10",
+              endContent && "pr-10",
               className,
               classNames?.input,
             )}
-            disabled={isDisabled || props?.disabled}
-            id={name}
-            max={max}
-            maxLength={maxLength}
-            min={min}
-            name={name}
-            type={type}
             {...props}
           />
-          {endContent ? (
-            <span className="absolute right-0 px-2 w-5 h-5 aspect-square grid items-center">
+          {endContent && (
+            <span className="absolute right-3 grid place-items-center text-mute">
               {endContent}
             </span>
-          ) : null}
+          )}
         </div>
 
-        {((errorText && (isInvalid || onError)) || descriptionText) && (
-          <motion.span
-            animate={{ scale: 1, opacity: 1 }}
+        {error ? (
+          <p
             className={cn(
-              "ml-1 text-xs text-slate-500 dark:text-slate-400",
-              {
-                "text-red-600 dark:text-red-400": onError || isInvalid,
-              },
-              classNames?.descriptionText,
-              classNames?.errorText,
+              "text-xs italic text-destructive",
+              classNames?.error,
             )}
-            initial={{ scale: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
           >
-            {errorText ? errorText : descriptionText}
-          </motion.span>
-        )}
+            {error}
+          </p>
+        ) : hint ? (
+          <p className={cn("text-xs italic text-mute", classNames?.hint)}>
+            {hint}
+          </p>
+        ) : null}
       </div>
     );
   },
@@ -145,4 +146,4 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
 Input.displayName = "Input";
 
-export { Input };
+export { Input, inputVariants };
