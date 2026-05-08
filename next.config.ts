@@ -10,11 +10,7 @@ const withSerwist = withSerwistInit({
 });
 
 const nextConfig: NextConfig = {
-  // 'standalone' was disabled because Next 16 has an open ENOENT bug copying
-  // page_client-reference-manifest.js for route groups (parens, e.g. (dashboard))
-  // when tracing for the standalone bundle. Vercel does not need standalone.
-  // Re-enable only if self-hosting via Docker, and only after Next patches.
-  // output: "standalone",
+  output: "standalone",
   images: {
     unoptimized: true,
 
