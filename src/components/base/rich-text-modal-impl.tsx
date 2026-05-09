@@ -1,4 +1,3 @@
-// components/RichTextDialog.tsx
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -6,9 +5,7 @@ import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import List from "@editorjs/list";
 import Paragraph from "@editorjs/paragraph";
-// import Marker from "@editorjs/marker";
 import InlineCode from "@editorjs/inline-code";
-// import TextColor from "editorjs-text-color-plugin";
 import Delimiter from "@editorjs/delimiter";
 
 import {
@@ -72,16 +69,13 @@ export function RichTextDialog({
     if (!editorRef.current) {
       const editor = new EditorJS({
         holder: "editorjs",
-        // onReady: () => {
-        //   editor.blocks.getBlockByIndex(0)?.focus();
-        // },
         tools: {
           header: {
             class: Header as any,
             config: {
               placeholder: "Enter a header",
-              levels: [2, 3, 4], // Only allow H2, H3, H4
-              defaultLevel: 2, // Default to H2
+              levels: [2, 3, 4],
+              defaultLevel: 2,
             },
           },
           list: List,
@@ -89,39 +83,10 @@ export function RichTextDialog({
             class: Paragraph as any,
             inlineToolbar: true,
           },
-          // marker: {
-          //   class: Marker,
-          //   shortcut: "CMD+SHIFT+M",
-          // },
           inlineCode: {
             class: InlineCode,
             shortcut: "CMD+SHIFT+C",
           },
-          // Color: {
-          //   class: TextColor,
-          //   config: {
-          //     colorCollections: [
-          //       "#FF1300", // Red
-          //       "#EC7878", // Light Red
-          //       "#9C27B0", // Purple
-          //       "#673AB7", // Deep Purple
-          //       "#3F51B5", // Indigo
-          //       "#007BFF", // Blue
-          //       "#03A9F4", // Light Blue
-          //       "#00BCD4", // Cyan
-          //       "#4CAF50", // Green
-          //       "#8BC34A", // Light Green
-          //       "#CDDC39", // Lime
-          //       "#FFC107", // Amber
-          //       "#FF9800", // Orange
-          //       "#FF5722", // Deep Orange
-          //       "#000000", // Black
-          //       "#757575", // Gray
-          //     ],
-          //     defaultColor: "#000000",
-          //     type: "text", // or 'background'
-          //   },
-          // },
           delimiter: Delimiter,
         },
         data: initialData || { blocks: [] },
