@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import withSerwistInit from "@serwist/next";
+import withBundleAnalyzer from "@next/bundle-analyzer";
 
 const withSerwist = withSerwistInit({
   swSrc: "src/app/sw.ts",
@@ -9,10 +10,13 @@ const withSerwist = withSerwistInit({
   disable: process.env.NODE_ENV === "development",
 });
 
+const analyze = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
+
 const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
-
     remotePatterns: [
       {
         protocol: "https",
@@ -37,11 +41,23 @@ const nextConfig: NextConfig = {
     },
   },
 
-  experimental: {},
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "date-fns",
+      "recharts",
+      "framer-motion",
+      "@radix-ui/react-icons",
+      "cmdk",
+      "@hookform/resolvers",
+      "zod",
+      "react-hook-form",
+    ],
+  },
 
   typescript: {
     ignoreBuildErrors: true,
   },
 };
 
-export default withSerwist(nextConfig);
+export default analyze(withSerwist(nextConfig));
