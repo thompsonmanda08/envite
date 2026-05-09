@@ -49,10 +49,12 @@ export default function RootLayout({
       lang="en"
     >
       <head>
-        <link
-          rel="dns-prefetch"
-          href={process.env.NEXT_PUBLIC_API_HOST ?? ""}
-        />
+        {process.env.NEXT_PUBLIC_API_HOST ? (
+          <link
+            rel="dns-prefetch"
+            href={process.env.NEXT_PUBLIC_API_HOST}
+          />
+        ) : null}
         <link
           rel="preconnect"
           href="https://ik.imagekit.io"

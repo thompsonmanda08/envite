@@ -4,10 +4,7 @@ import { useState, useTransition } from "react";
 
 import { toast } from "sonner";
 
-import {
-  submitPublicRsvp,
-  type PublicRsvpStatus,
-} from "@/app/_actions/public";
+import { submitPublicRsvp, type PublicRsvpStatus } from "@/app/_actions/public";
 
 export default function RsvpForm({ token }: { token: string }) {
   const [status, setStatus] = useState<PublicRsvpStatus | null>(null);
@@ -77,25 +74,29 @@ export default function RsvpForm({ token }: { token: string }) {
           onClick={() => submit("declined")}
           className="rounded-full border border-foreground/30 bg-transparent px-5 py-3 text-sm font-medium text-foreground transition disabled:opacity-50 hover:border-foreground"
         >
-          {pending && status === "declined" ? "Sending…" : "Regretfully decline"}
+          {pending && status === "declined"
+            ? "Sending…"
+            : "Regretfully decline"}
         </button>
       </div>
 
       <div className="mt-8 grid gap-4">
-        <label className="grid gap-2">
-          <span className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
-            Number attending
-          </span>
-          <input
-            type="number"
-            min={1}
-            max={10}
-            value={guestCount}
-            onChange={(e) => setGuestCount(Number(e.target.value) || 1)}
-            disabled={pending}
-            className="rounded-2xl border border-hairline bg-background px-4 py-3 text-base"
-          />
-        </label>
+        {status !== "declined" ? (
+          <label className="grid gap-2">
+            <span className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
+              Number attending
+            </span>
+            <input
+              type="number"
+              min={1}
+              max={10}
+              value={guestCount}
+              onChange={(e) => setGuestCount(Number(e.target.value) || 1)}
+              disabled={pending}
+              className="rounded-2xl border border-hairline bg-background px-4 py-3 text-base"
+            />
+          </label>
+        ) : null}
         <label className="grid gap-2">
           <span className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
             Note to host (optional)

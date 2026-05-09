@@ -119,9 +119,7 @@ export async function createEvent(
   data: CreateEventInput,
 ): Promise<APIResponse<EventRecord>> {
   if (!data?.event_type_id || !data?.title || !data?.start_date) {
-    return badRequestResponse(
-      "event_type_id, title, start_date are required",
-    );
+    return badRequestResponse("event_type_id, title, start_date are required");
   }
   const url = "/api/v1/events/new";
   try {
@@ -129,8 +127,13 @@ export async function createEvent(
       ...data,
       start_date: toBackendDate(data.start_date),
       end_date: toBackendDate(data.end_date),
+      rsvp_deadline: toBackendDate(data.rsvp_deadline),
     };
-    const res = await authenticatedApiClient({ url, method: "POST", data: coerced });
+    const res = await authenticatedApiClient({
+      url,
+      method: "POST",
+      data: coerced,
+    });
     revalidateTag(CACHE_TAGS.EVENTS, "max");
     return fromBackend<EventRecord>(res);
   } catch (error: any) {
@@ -149,8 +152,13 @@ export async function updateEvent(
       ...data,
       start_date: toBackendDate(data.start_date),
       end_date: toBackendDate(data.end_date),
+      rsvp_deadline: toBackendDate(data.rsvp_deadline),
     };
-    const res = await authenticatedApiClient({ url, method: "PUT", data: coerced });
+    const res = await authenticatedApiClient({
+      url,
+      method: "PUT",
+      data: coerced,
+    });
     revalidateTag(CACHE_TAGS.EVENTS, "max");
     revalidateTag(CACHE_TAGS.EVENT(id), "max");
     return fromBackend<EventRecord>(res);
