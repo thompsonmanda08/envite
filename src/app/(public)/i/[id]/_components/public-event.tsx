@@ -6,14 +6,19 @@ import { Asterisk, Calendar, MapPin } from "lucide-react";
 
 import type { EventRecord, EventSession } from "@/types";
 
+import RsvpForm from "./rsvp-form";
+
 const ease = [0.22, 1, 0.36, 1] as const;
+const flagOn = process.env.NEXT_PUBLIC_ENABLE_PUBLIC_RSVP === "true";
 
 export default function PublicEvent({
   event,
   sessions,
+  token,
 }: {
   event: EventRecord;
   sessions: EventSession[];
+  token: string | null;
 }) {
   const reduce = useReducedMotion();
 
@@ -208,37 +213,39 @@ export default function PublicEvent({
           transition={{ duration: 0.7, ease }}
           className="mt-24"
         >
-          <div className="rounded-3xl border border-hairline bg-surface/60 p-12 text-center">
-            {event.status === "cancelled" ? (
+          {event.status === "cancelled" ? (
+            <div className="rounded-3xl border border-hairline bg-surface/60 p-12 text-center">
               <p className="font-display text-2xl italic text-foreground/70">
                 This event has been cancelled.
               </p>
-            ) : !acceptingRsvp ? (
-              <>
-                <p className="font-display text-2xl italic text-foreground/70">
-                  RSVP is closed.
+            </div>
+          ) : !acceptingRsvp ? (
+            <div className="rounded-3xl border border-hairline bg-surface/60 p-12 text-center">
+              <p className="font-display text-2xl italic text-foreground/70">
+                RSVP is closed.
+              </p>
+              {event.rsvp_deadline && (
+                <p className="font-brand mt-3 text-xs uppercase tracking-[0.32em] text-mute">
+                  Deadline passed{" "}
+                  {format(new Date(event.rsvp_deadline), "MMMM d, yyyy")}
                 </p>
-                {event.rsvp_deadline && (
-                  <p className="font-brand mt-3 text-xs uppercase tracking-[0.32em] text-mute">
-                    Deadline passed{" "}
-                    {format(new Date(event.rsvp_deadline), "MMMM d, yyyy")}
-                  </p>
-                )}
-              </>
-            ) : (
-              <>
-                <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
-                  Kindly respond
-                </p>
-                <p className="font-display mt-4 text-2xl italic text-foreground/80">
-                  Look out for your invitation by email, SMS, or WhatsApp.
-                </p>
-                <p className="mt-3 text-sm italic text-mute">
-                  Replies are recorded once you receive your personal link.
-                </p>
-              </>
-            )}
-          </div>
+              )}
+            </div>
+          ) : flagOn && token ? (
+            <RsvpForm token={token} />
+          ) : (
+            <div className="rounded-3xl border border-hairline bg-surface/60 p-12 text-center">
+              <p className="font-brand text-xs uppercase tracking-[0.42em] text-mute">
+                Kindly respond
+              </p>
+              <p className="font-display mt-4 text-2xl italic text-foreground/80">
+                Look out for your invitation by email, SMS, or WhatsApp.
+              </p>
+              <p className="mt-3 text-sm italic text-mute">
+                Replies are recorded once you receive your personal link.
+              </p>
+            </div>
+          )}
         </motion.section>
 
         <Ornament className="mt-20" />

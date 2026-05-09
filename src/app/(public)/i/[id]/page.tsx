@@ -7,10 +7,14 @@ import PublicEvent from "./_components/public-event";
 
 export const dynamic = "force-dynamic";
 
-type Props = { params: Promise<{ id: string }> };
+type Props = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ t?: string }>;
+};
 
-export default async function PublicEventPage({ params }: Props) {
+export default async function PublicEventPage({ params, searchParams }: Props) {
   const { id } = await params;
+  const { t: token } = await searchParams;
   const [evt, sessions] = await Promise.all([
     getEvent(id),
     getEventSessions(id, { sort_by: "session_order", sort_order: "asc" }),
@@ -20,6 +24,7 @@ export default async function PublicEventPage({ params }: Props) {
     <PublicEvent
       event={evt.data}
       sessions={sessions.success ? (sessions.data ?? []) : []}
+      token={token ?? null}
     />
   );
 }
