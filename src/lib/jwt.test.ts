@@ -1,5 +1,4 @@
 // @vitest-environment node
-/// <reference types="vitest" />
 
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -57,7 +56,10 @@ describe("encrypt + decrypt", () => {
 
   it("returns failure shape when token is malformed", async () => {
     const r = await decrypt("not-a-jwt");
-    expect(r).toMatchObject({ success: false, message: "Invalid token format" });
+    expect(r).toMatchObject({
+      success: false,
+      message: "Invalid token format",
+    });
   });
 
   it("returns 'Token expired' when JWT is past expiration", async () => {
