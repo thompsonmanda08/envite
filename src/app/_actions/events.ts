@@ -3,6 +3,7 @@
 import { revalidateTag } from "next/cache";
 
 import { CACHE_TAGS } from "@/lib/cache-tags";
+import { toBackendDate } from "@/lib/format";
 import type { APIResponse, EventRecord, EventStatus } from "@/types";
 
 import authenticatedApiClient, {
@@ -124,7 +125,12 @@ export async function createEvent(
   }
   const url = "/api/v1/events/new";
   try {
-    const res = await authenticatedApiClient({ url, method: "POST", data });
+    const coerced = {
+      ...data,
+      start_date: toBackendDate(data.start_date),
+      end_date: toBackendDate(data.end_date),
+    };
+    const res = await authenticatedApiClient({ url, method: "POST", data: coerced });
     revalidateTag(CACHE_TAGS.EVENTS, "max");
     return fromBackend<EventRecord>(res);
   } catch (error: any) {
@@ -139,7 +145,12 @@ export async function updateEvent(
   if (!id) return badRequestResponse("Event ID required");
   const url = `/api/v1/events/${id}`;
   try {
-    const res = await authenticatedApiClient({ url, method: "PUT", data });
+    const coerced = {
+      ...data,
+      start_date: toBackendDate(data.start_date),
+      end_date: toBackendDate(data.end_date),
+    };
+    const res = await authenticatedApiClient({ url, method: "PUT", data: coerced });
     revalidateTag(CACHE_TAGS.EVENTS, "max");
     revalidateTag(CACHE_TAGS.EVENT(id), "max");
     return fromBackend<EventRecord>(res);
