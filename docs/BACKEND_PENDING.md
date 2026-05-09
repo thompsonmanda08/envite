@@ -2,7 +2,7 @@
 
 Cross-reference of frontend server actions vs `docs/swagger.yaml` (source of truth).
 
-Last audit: 2026-05-07.
+Last audit: 2026-05-09.
 
 ## ✅ Wired correctly
 
@@ -94,15 +94,15 @@ Collections: `qr_codes`, `event_banners`, `avatars` (public) — `guest_lists`, 
 Swagger does not document a public RSVP submission endpoint. RSVP is recorded
 via authenticated `PUT /api/v1/guests/{guestId}` with `{ rsvp_status }`.
 
-Consequence: guests cannot self-respond from the public `/i/[id]` page
-without a signed link or token-bound flow. The public event view shows a
-"look out for your invitation" placeholder. When the backend adds either:
+Frontend status (2026-05-09): `src/app/_actions/public.ts` posts to the
+**assumed** path `POST /api/v1/public/guests/{token}/rsvp` behind feature flag
+`NEXT_PUBLIC_ENABLE_PUBLIC_RSVP`. Default off — flip to `true` once backend
+confirms the endpoint shape. Form lives at
+`src/app/(public)/i/[id]/_components/rsvp-form.tsx`.
 
-1. An anonymous endpoint like `POST /api/v1/public/guests/{token}/rsvp`, or
-2. A magic-link flow returning a short-lived token from the invitation
-   email, then verifying it server-side before allowing PUT
-
-…wire up a new `_actions/public.ts` that posts there and reinstate the form.
+Token transport currently assumed to be `?t=<opaque>` query string. If backend
+chooses path-bound (`/i/<token>`), update `_actions/public.ts` and the page's
+`searchParams` plumbing accordingly.
 
 ## 🔌 Not yet integrated in frontend
 
@@ -119,5 +119,7 @@ These belong on the backend, not this repo.
   `going / maybe / declined`). Frontend `RsvpStatus` matches.
 - `Guest.invitation_method` enum: `email | sms | whatsapp`.
 - `start_date` / `end_date` accepted as `YYYY-MM-DD` per swagger examples.
-  Frontend `event-form.tsx` emits `datetime-local` (`YYYY-MM-DDTHH:mm`);
-  backend may need to accept either or frontend may need to trim time.
+  Frontend `_actions/events.ts` calls `toBackendDate()` (from `@/lib/format`)
+  on both fields before POST/PUT, so the form's `datetime-local` input always
+  reaches the backend as `YYYY-MM-DD` (time component dropped at the action
+  boundary).
