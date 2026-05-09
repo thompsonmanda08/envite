@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build --webpack",
+    "analyze": "cross-env ANALYZE=true bun run build",
     "start": "next start",
     "lint": "eslint ./src --fix",
     "type-check": "tsc",
@@ -88,6 +89,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
+    "@next/bundle-analyzer": "^16.2.6",
     "@next/eslint-plugin-next": "^16.2.4",
     "@tanstack/react-query-devtools": "^5.90.2",
     "@testing-library/jest-dom": "^6.9.1",
@@ -101,6 +103,7 @@
     "@vitejs/plugin-react": "^6.0.1",
     "@vitest/ui": "^4.1.5",
     "autoprefixer": "^10.4.21",
+    "cross-env": "^10.1.0",
     "eslint": "^9.29.0",
     "eslint-config-next": "^16.2.4",
     "eslint-config-prettier": "^10.1.5",
