@@ -57,8 +57,7 @@ export function EventActions({
   }
 
   async function onCancel() {
-    if (!confirm("Cancel this event? Guests will see it as cancelled."))
-      return;
+    if (!confirm("Cancel this event? Guests will see it as cancelled.")) return;
     const res = await cancelM.mutateAsync(id);
     if (res.success) {
       toast.success("Event cancelled.");

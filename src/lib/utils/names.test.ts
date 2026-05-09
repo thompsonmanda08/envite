@@ -40,10 +40,7 @@ describe("formatUserName", () => {
 
   it("formats initials from structured fields", () => {
     expect(
-      formatUserName(
-        { first_name: "Edward", last_name: "Mwape" },
-        "initials",
-      ),
+      formatUserName({ first_name: "Edward", last_name: "Mwape" }, "initials"),
     ).toBe("EM");
   });
 
@@ -59,10 +56,7 @@ describe("formatUserName", () => {
 
   it("handles camelCase aliases firstName / lastName", () => {
     expect(
-      formatUserName(
-        { firstName: "Edward", lastName: "Mwape" },
-        "full",
-      ),
+      formatUserName({ firstName: "Edward", lastName: "Mwape" }, "full"),
     ).toBe("Edward Mwape");
   });
 

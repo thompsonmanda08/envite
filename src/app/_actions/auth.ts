@@ -48,7 +48,10 @@ function decodeJwtExpiry(token: string): number | undefined {
     const [, payload] = token.split(".");
     if (!payload) return;
     const json = JSON.parse(
-      Buffer.from(payload.replace(/-/g, "+").replace(/_/g, "/"), "base64").toString("utf-8"),
+      Buffer.from(
+        payload.replace(/-/g, "+").replace(/_/g, "/"),
+        "base64",
+      ).toString("utf-8"),
     );
     if (typeof json?.expiresAt === "number") return json.expiresAt;
     if (typeof json?.exp === "number") return json.exp;
@@ -58,7 +61,9 @@ function decodeJwtExpiry(token: string): number | undefined {
   }
 }
 
-export async function loginUser(data: LoginData): Promise<APIResponse<AuthUser>> {
+export async function loginUser(
+  data: LoginData,
+): Promise<APIResponse<AuthUser>> {
   if (!data?.email || !data?.password) {
     return badRequestResponse("Email and password are required");
   }
@@ -69,7 +74,11 @@ export async function loginUser(data: LoginData): Promise<APIResponse<AuthUser>>
     const token: string | undefined =
       body?.token || body?.access_token || body?.accessToken;
     if (!token) {
-      return { success: false, message: "Token missing in response", data: null };
+      return {
+        success: false,
+        message: "Token missing in response",
+        data: null,
+      };
     }
 
     await createAuthSession({
@@ -85,7 +94,9 @@ export async function loginUser(data: LoginData): Promise<APIResponse<AuthUser>>
   }
 }
 
-export async function registerUser(data: SignUpData): Promise<APIResponse<AuthUser>> {
+export async function registerUser(
+  data: SignUpData,
+): Promise<APIResponse<AuthUser>> {
   if (!data?.email || !data?.password) {
     return badRequestResponse("Email and password are required");
   }
@@ -186,7 +197,8 @@ export async function resetPassword(_data: {
   );
   return {
     success: false,
-    message: "Password reset is temporarily unavailable. Please try again later.",
+    message:
+      "Password reset is temporarily unavailable. Please try again later.",
     data: null,
   };
 }

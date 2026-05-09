@@ -1,14 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Calendar,
-  Clock,
-  Edit3,
-  MapPin,
-  Plus,
-  Trash2,
-} from "lucide-react";
+import { Calendar, Clock, Edit3, MapPin, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import type { EventSession } from "@/types";
@@ -134,7 +127,11 @@ export function SessionsManager({
   }
 
   async function onDelete(id: string) {
-    if (!confirm("Delete this session? Invitations referencing it must be re-saved."))
+    if (
+      !confirm(
+        "Delete this session? Invitations referencing it must be re-saved.",
+      )
+    )
       return;
     const res = await deleteM.mutateAsync({ id });
     if (res.success) toast.success("Session removed.");
@@ -224,7 +221,9 @@ export function SessionsManager({
               <Field label="Venue" full>
                 <Input
                   value={draft.venue}
-                  onChange={(e) => setDraft({ ...draft, venue: e.target.value })}
+                  onChange={(e) =>
+                    setDraft({ ...draft, venue: e.target.value })
+                  }
                   placeholder="Garden Pavilion"
                   variant="pill"
                 />
@@ -259,7 +258,9 @@ export function SessionsManager({
                     setDraft({
                       ...draft,
                       max_attendees:
-                        e.target.value === "" ? undefined : Number(e.target.value),
+                        e.target.value === ""
+                          ? undefined
+                          : Number(e.target.value),
                     })
                   }
                   variant="pill"
@@ -391,4 +392,3 @@ export function SessionsManager({
     </div>
   );
 }
-

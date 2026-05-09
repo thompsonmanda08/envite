@@ -9,11 +9,9 @@ export function SwRegistrar() {
     if (process.env.NODE_ENV !== "production") return;
 
     const onLoad = () => {
-      navigator.serviceWorker
-        .register("/sw.js", { scope: "/" })
-        .catch(() => {
-          /* swallow — install prompt and offline still degrade gracefully */
-        });
+      navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {
+        /* swallow — install prompt and offline still degrade gracefully */
+      });
     };
 
     if (document.readyState === "complete") onLoad();

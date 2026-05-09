@@ -13,12 +13,7 @@
 import { revalidateTag } from "next/cache";
 
 import { CACHE_TAGS } from "@/lib/cache-tags";
-import type {
-  APIResponse,
-  Guest,
-  InvitationMethod,
-  RsvpStatus,
-} from "@/types";
+import type { APIResponse, Guest, InvitationMethod, RsvpStatus } from "@/types";
 
 import authenticatedApiClient, {
   badRequestResponse,

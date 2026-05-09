@@ -148,7 +148,7 @@ export default async function EventDetailPage({
           <p className="font-brand text-xs uppercase tracking-[0.32em] text-mute">
             Reach
           </p>
-          {(event.contact_email || event.contact_phone) ? (
+          {event.contact_email || event.contact_phone ? (
             <ul className="mt-4 space-y-2 text-sm">
               {event.contact_email && (
                 <li className="flex items-center gap-2">
@@ -195,7 +195,9 @@ export default async function EventDetailPage({
           )}
           {event.special_instructions && (
             <div className="mt-4">
-              <p className="font-display text-lg italic">Special instructions</p>
+              <p className="font-display text-lg italic">
+                Special instructions
+              </p>
               <p className="text-sm text-mute">{event.special_instructions}</p>
             </div>
           )}

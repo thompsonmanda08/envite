@@ -137,7 +137,8 @@ export function InstallPrompt() {
                 <span className="font-brand rounded-full bg-foreground px-2 py-0.5 text-[10px] uppercase tracking-[0.24em] text-background">
                   2
                 </span>
-                Choose <em className="not-italic font-medium">Add to Home Screen</em>
+                Choose{" "}
+                <em className="not-italic font-medium">Add to Home Screen</em>
               </p>
             </div>
           ) : (

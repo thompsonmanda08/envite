@@ -50,8 +50,7 @@ export function useAddGuestsManualMutation(
 ) {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (guests: GuestData[]) =>
-      addGuestsManual(invitationId, guests),
+    mutationFn: (guests: GuestData[]) => addGuestsManual(invitationId, guests),
     onSuccess: (res) => {
       if (res.success) {
         qc.invalidateQueries({ queryKey: ["guests"] });

@@ -130,8 +130,7 @@ export type InvitationSendResponse = {
 export async function sendInvitation(
   invitationId: string,
 ): Promise<APIResponse<InvitationSendResponse>> {
-  if (!invitationId)
-    return badRequestResponse("Invitation ID required");
+  if (!invitationId) return badRequestResponse("Invitation ID required");
   const url = `/api/v1/invitations/${invitationId}/send`;
   try {
     const res = await authenticatedApiClient({ url, method: "POST" });

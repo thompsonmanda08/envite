@@ -43,8 +43,8 @@ export default async function EventSessionsPage({
           The order of <span className="italic">things.</span>
         </h1>
         <p className="max-w-xl italic text-mute">
-          Sessions sequence the day — ceremony, reception, after-party. Each
-          can carry its own venue, dress code, and capacity.
+          Sessions sequence the day — ceremony, reception, after-party. Each can
+          carry its own venue, dress code, and capacity.
         </p>
       </header>
 

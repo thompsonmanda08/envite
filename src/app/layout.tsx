@@ -50,10 +50,7 @@ export default function RootLayout({
     >
       <head>
         {process.env.NEXT_PUBLIC_API_HOST ? (
-          <link
-            rel="dns-prefetch"
-            href={process.env.NEXT_PUBLIC_API_HOST}
-          />
+          <link rel="dns-prefetch" href={process.env.NEXT_PUBLIC_API_HOST} />
         ) : null}
         <link
           rel="preconnect"

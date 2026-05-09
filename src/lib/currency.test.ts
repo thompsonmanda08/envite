@@ -73,7 +73,11 @@ describe("fetchLiveExchangeRate", () => {
 
   it("falls back when HTTP status is not ok", async () => {
     vi.stubGlobal("fetch", () =>
-      Promise.resolve({ ok: false, status: 503, json: () => Promise.resolve({}) }),
+      Promise.resolve({
+        ok: false,
+        status: 503,
+        json: () => Promise.resolve({}),
+      }),
     );
 
     expect(await fetchLiveExchangeRate("ZMW", "USD")).toBe(0.0364);

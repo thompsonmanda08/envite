@@ -25,11 +25,7 @@ export function Field({
 }: FieldProps) {
   return (
     <div
-      className={cn(
-        "flex flex-col gap-2",
-        full && "md:col-span-2",
-        className,
-      )}
+      className={cn("flex flex-col gap-2", full && "md:col-span-2", className)}
     >
       {label && (
         <label

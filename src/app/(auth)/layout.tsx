@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 
 import { Asterisk } from "lucide-react";
-import Link from "next/link";
 import Logo from "@/components/base/logo";
 
 export const dynamic = "force-dynamic";

@@ -60,13 +60,8 @@ export function useUpdateEventTypeMutation() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      id,
-      data,
-    }: {
-      id: string;
-      data: Partial<EventTypeInput>;
-    }) => updateEventType(id, data),
+    mutationFn: ({ id, data }: { id: string; data: Partial<EventTypeInput> }) =>
+      updateEventType(id, data),
     onSuccess: (res, vars) => {
       if (res.success) {
         qc.invalidateQueries({ queryKey: EVENT_TYPES_KEYS.all });

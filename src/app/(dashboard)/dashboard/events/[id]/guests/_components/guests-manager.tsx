@@ -13,12 +13,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-import type {
-  Guest,
-  Invitation,
-  InvitationMethod,
-  RsvpStatus,
-} from "@/types";
+import type { Guest, Invitation, InvitationMethod, RsvpStatus } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -183,7 +178,10 @@ export function GuestsManager({
         </p>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button className="rounded-full" disabled={invitations.length === 0}>
+            <Button
+              className="rounded-full"
+              disabled={invitations.length === 0}
+            >
               <UserPlus className="size-4" />
               Add guest
             </Button>

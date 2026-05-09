@@ -51,11 +51,7 @@ export default async function CheckInPage({
         </p>
       </header>
 
-      <CheckInScanner
-        eventId={id}
-        sessions={sessions}
-        guests={guests}
-      />
+      <CheckInScanner eventId={id} sessions={sessions} guests={guests} />
     </div>
   );
 }

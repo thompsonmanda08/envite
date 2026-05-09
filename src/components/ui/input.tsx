@@ -10,10 +10,8 @@ const inputVariants = cva(
       variant: {
         default:
           "rounded-xl border border-hairline bg-background focus-visible:border-foreground/40",
-        bare:
-          "rounded-none border-0 border-b border-hairline px-0 focus-visible:border-foreground",
-        pill:
-          "rounded-full border border-hairline bg-background focus-visible:border-foreground/40",
+        bare: "rounded-none border-0 border-b border-hairline px-0 focus-visible:border-foreground",
+        pill: "rounded-full border border-hairline bg-background focus-visible:border-foreground/40",
       },
       size: {
         sm: "h-9 px-3 text-sm",
@@ -91,9 +89,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             )}
           >
             {label}
-            {props?.required && (
-              <span className="ml-1 text-foreground">*</span>
-            )}
+            {props?.required && <span className="ml-1 text-foreground">*</span>}
           </label>
         )}
 
@@ -127,10 +123,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
         {error ? (
           <p
-            className={cn(
-              "text-xs italic text-destructive",
-              classNames?.error,
-            )}
+            className={cn("text-xs italic text-destructive", classNames?.error)}
           >
             {error}
           </p>

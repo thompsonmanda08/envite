@@ -14,7 +14,10 @@ import {
 import { INVITATIONS_KEYS } from "@/lib/query-keys";
 import type { Invitation } from "@/types";
 
-export function useInvitationsQuery(eventId: string, initialData?: Invitation[]) {
+export function useInvitationsQuery(
+  eventId: string,
+  initialData?: Invitation[],
+) {
   return useQuery({
     queryKey: INVITATIONS_KEYS.list(eventId),
     queryFn: async () => {

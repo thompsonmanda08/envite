@@ -164,4 +164,3 @@ export type Invitation = {
   created_at?: string;
   updated_at?: string;
 };
-

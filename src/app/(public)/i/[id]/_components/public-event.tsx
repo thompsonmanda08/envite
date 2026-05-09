@@ -138,7 +138,11 @@ export default function PublicEvent({
           />
           {event.dress_code ? (
             <Row
-              icon={<span aria-hidden className="text-xs">✦</span>}
+              icon={
+                <span aria-hidden className="text-xs">
+                  ✦
+                </span>
+              }
               label="Dress code"
               value={event.dress_code}
               delay={0.15}

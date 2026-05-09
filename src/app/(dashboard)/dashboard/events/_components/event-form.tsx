@@ -306,12 +306,7 @@ export function EventForm({
           >
             Discard
           </Button>
-          <Button
-            type="submit"
-            disabled={submitting}
-            variant="solid"
-            size="xl"
-          >
+          <Button type="submit" disabled={submitting} variant="solid" size="xl">
             {submitting && <Loader2 className="size-4 animate-spin" />}
             {mode === "create" ? "Compose" : "Save changes"}
           </Button>

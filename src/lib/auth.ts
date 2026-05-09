@@ -3,7 +3,6 @@ import "server-only";
 
 import type { AuthSession, AuthUser, UserType } from "@/types";
 
-
 import { cookies } from "next/headers";
 
 import { SESSION_CONFIG } from "@/lib/session-config";

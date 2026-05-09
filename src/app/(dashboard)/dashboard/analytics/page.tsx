@@ -22,8 +22,7 @@ export default async function AnalyticsPage() {
   const total = events.length;
   const published = events.filter((e: any) => e?.status === "published").length;
   const upcoming = events.filter(
-    (e: any) =>
-      e?.start_date && new Date(e.start_date).getTime() >= Date.now(),
+    (e: any) => e?.start_date && new Date(e.start_date).getTime() >= Date.now(),
   ).length;
   const drafts = events.filter((e: any) => e?.status === "draft").length;
 

@@ -94,9 +94,7 @@ export function DashboardHero({
               {nextEvent.title}
             </h3>
             {nextEvent.venue && (
-              <p className="mt-1 text-sm italic text-mute">
-                {nextEvent.venue}
-              </p>
+              <p className="mt-1 text-sm italic text-mute">{nextEvent.venue}</p>
             )}
             <div className="mt-6 flex items-baseline gap-3">
               <span className="font-display text-6xl font-semibold tabular-nums leading-none">
@@ -112,11 +110,7 @@ export function DashboardHero({
                 {dateLong}
               </p>
             )}
-            <Button
-              asChild
-              variant="ghost"
-              className="mt-6 -ml-3 rounded-full"
-            >
+            <Button asChild variant="ghost" className="mt-6 -ml-3 rounded-full">
               <Link href={`/dashboard/events/${nextEvent.id}`}>
                 Open event
                 <ArrowUpRight className="size-3.5" />

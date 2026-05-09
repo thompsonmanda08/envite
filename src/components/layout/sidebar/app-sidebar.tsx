@@ -101,8 +101,7 @@ function NavItem({
 }) {
   const { state } = useSidebar();
   const Icon = item.icon;
-  const active =
-    pathname === item.href || pathname.startsWith(item.href + "/");
+  const active = pathname === item.href || pathname.startsWith(item.href + "/");
   const hasChildren = !!item.children?.length;
   const collapsed = state === "collapsed";
   const [open, setOpen] = useState(active);

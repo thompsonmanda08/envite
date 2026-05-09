@@ -44,11 +44,7 @@ export default async function EventGuestsPage({
         </h1>
       </header>
 
-      <GuestsManager
-        eventId={id}
-        initial={guests}
-        invitations={invitations}
-      />
+      <GuestsManager eventId={id} initial={guests} invitations={invitations} />
     </div>
   );
 }

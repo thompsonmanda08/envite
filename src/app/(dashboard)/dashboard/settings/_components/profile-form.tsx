@@ -17,8 +17,18 @@ import type { AuthUser } from "@/types";
 const ease = [0.22, 1, 0.36, 1] as const;
 
 const FIELDS = [
-  { key: "first_name", label: "First name", autoComplete: "given-name", type: "text" },
-  { key: "last_name", label: "Last name", autoComplete: "family-name", type: "text" },
+  {
+    key: "first_name",
+    label: "First name",
+    autoComplete: "given-name",
+    type: "text",
+  },
+  {
+    key: "last_name",
+    label: "Last name",
+    autoComplete: "family-name",
+    type: "text",
+  },
   { key: "email", label: "Email", autoComplete: "email", type: "email" },
   { key: "phone", label: "Phone", autoComplete: "tel", type: "tel" },
 ] as const;
@@ -65,7 +75,9 @@ export default function ProfileForm({ initial }: { initial: AuthUser }) {
     setPassword("");
   }
 
-  const initials = `${profile.first_name?.[0] ?? ""}${profile.last_name?.[0] ?? ""}`.toUpperCase() || "•";
+  const initials =
+    `${profile.first_name?.[0] ?? ""}${profile.last_name?.[0] ?? ""}`.toUpperCase() ||
+    "•";
 
   return (
     <div className="relative isolate">
@@ -89,7 +101,8 @@ export default function ProfileForm({ initial }: { initial: AuthUser }) {
               Your account, <span className="italic">refined.</span>
             </h1>
             <p className="max-w-md text-base italic text-mute md:text-lg">
-              Particulars worth preserving — name, contact, the keys to the door.
+              Particulars worth preserving — name, contact, the keys to the
+              door.
             </p>
           </div>
           <div className="relative">
