@@ -49,6 +49,16 @@ export default function RootLayout({
       lang="en"
     >
       <head>
+        <link
+          rel="dns-prefetch"
+          href={process.env.NEXT_PUBLIC_API_HOST ?? ""}
+        />
+        <link
+          rel="preconnect"
+          href="https://ik.imagekit.io"
+          crossOrigin="anonymous"
+        />
+        <link rel="dns-prefetch" href="https://ik.imagekit.io" />
         <meta content="e-nvite" name="apple-mobile-web-app-title" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta
